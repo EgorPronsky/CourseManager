@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
+         version="4.0">
+
+    <!-- Listeners !-->
+    <listener>
+        <listener-class>listeners.ApplicationStartUpListener</listener-class>
+    </listener>
+
+    <!-- Filters !-->
+    <filter>
+        <filter-name>RegistrationInputFilter</filter-name>
+        <filter-class>web.filter.access.RegistrationInputFilter</filter-class>
+    </filter>
+    <filter>
+        <filter-name>LoginInputFilter</filter-name>
+        <filter-class>web.filter.access.LoginInputFilter</filter-class>
+    </filter>
+
+    <!-- Filters mapping !-->
+    <filter-mapping>
+        <filter-name>RegistrationInputFilter</filter-name>
+        <servlet-name>SignUpServlet</servlet-name>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>LoginInputFilter</filter-name>
+        <servlet-name>SignInServlet</servlet-name>
+    </filter-mapping>
+
+    <!-- Servlets !-->
+    <servlet>
+        <servlet-name>SignInServlet</servlet-name>
+        <servlet-class>web.servlet.access.SignInServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>SignUpServlet</servlet-name>
+        <servlet-class>web.servlet.access.SignUpServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>SubmitNewCourseServlet</servlet-name>
+        <servlet-class>web.servlet.core.course_actions.SubmitNewCourseServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>JoinNewCoursesServlet</servlet-name>
+        <servlet-class>web.servlet.core.course_actions.JoinNewCoursesServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>LoginPageServlet</servlet-name>
+        <jsp-file>/view/access/login.jsp</jsp-file>
+    </servlet>
+    <servlet>
+        <servlet-name>JoinNewCoursesPageServlet</servlet-name>
+        <servlet-class>web.servlet.core.course_actions.GetAvailableCoursesServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>UserCurrentCoursesServlet</servlet-name>
+        <servlet-class>web.servlet.core.get_courses.UserCurrentCoursesServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>UserFutureCoursesServlet</servlet-name>
+        <servlet-class>web.servlet.core.get_courses.UserFutureCoursesServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>StudentCompletedCoursesServlet</servlet-name>
+        <servlet-class>web.servlet.core.get_courses.StudentCompletedCoursesServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>TeacherNotGradedCoursesServlet</servlet-name>
+        <servlet-class>web.servlet.core.get_courses.TeacherNotGradedCoursesServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>CourseStudentsServlet</servlet-name>
+        <servlet-class>web.servlet.core.students_actions.GetCourseStudentsServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>GradeStudentsServlet</servlet-name>
+        <servlet-class>web.servlet.core.students_actions.GradeStudentsServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>LeaveCourseServlet</servlet-name>
+        <servlet-class>web.servlet.core.course_actions.LeaveCourseServlet</servlet-class>
+    </servlet>
+
+    <!-- Servlets mapping !-->
+    <servlet-mapping>
+        <servlet-name>LeaveCourseServlet</servlet-name>
+        <url-pattern>/leave-course</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>GradeStudentsServlet</servlet-name>
+        <url-pattern>/grade-students</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CourseStudentsServlet</servlet-name>
+        <url-pattern>/course-students</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>UserCurrentCoursesServlet</servlet-name>
+        <url-pattern>/user-current-courses</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>UserFutureCoursesServlet</servlet-name>
+        <url-pattern>/user-future-courses</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>StudentCompletedCoursesServlet</servlet-name>
+        <url-pattern>/student-completed-courses</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>TeacherNotGradedCoursesServlet</servlet-name>
+        <url-pattern>/teacher-not-graded-courses</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SignInServlet</servlet-name>
+        <url-pattern>/sign-in</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SignUpServlet</servlet-name>
+        <url-pattern>/sign-up</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SubmitNewCourseServlet</servlet-name>
+        <url-pattern>/submit-new-course</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>JoinNewCoursesServlet</servlet-name>
+        <url-pattern>/join-new-courses</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>LoginPageServlet</servlet-name>
+        <url-pattern>/login</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>JoinNewCoursesPageServlet</servlet-name>
+        <url-pattern>/join-new-courses-page</url-pattern>
+    </servlet-mapping>
+
+</web-app>
