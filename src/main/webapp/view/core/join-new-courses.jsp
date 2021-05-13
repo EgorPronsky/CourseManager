@@ -1,5 +1,5 @@
-<%@ page import="static web.servlet.core.course_actions.GetAvailableCoursesServlet.AVAILABLE_COURSES_ATTR" %>
-<%@ page import="static web.servlet.core.course_actions.JoinNewCoursesServlet.COURSES_TO_JOIN_ID_PARAM" %>
+<%@ page import="static servlet.core.get_courses.GetAvailableCoursesServlet.AVAILABLE_COURSES_ATTR" %>
+<%@ page import="static servlet.core.course_actions.JoinNewCoursesServlet.COURSES_TO_JOIN_ID_PARAM" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
@@ -74,7 +74,6 @@
                                 <hr/>
 
                             </form>
-                            <hr/>
                         </c:otherwise>
 
                     </c:choose>

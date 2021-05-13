@@ -1,7 +1,6 @@
-<%@ page import="domain.user.User" %>
 <%@ page import="domain.user.UserRole" %>
-<%@ page import="static web.servlet.access.SignInServlet.CURRENT_USER_SESSION_ATTR" %>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page import="static servlet.access.SignInServlet.CURRENT_USER_INFO_SESSION_ATTR" %>
+<%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <html>
@@ -12,7 +11,7 @@
 </head>
 
 <%-- Prepare variables --%>
-<c:set var="current_user" value="<%=session.getAttribute(CURRENT_USER_SESSION_ATTR)%>" />
+<c:set var="current_user_info" value="<%=session.getAttribute(CURRENT_USER_INFO_SESSION_ATTR)%>" />
 
 <body>
 <div class="container">
@@ -37,15 +36,15 @@
 
                     <c:choose>
                         <%--Special button for students--%>
-                        <c:when test="${current_user.userInfo.userRole == UserRole.STUDENT}">
+                        <c:when test="${current_user_info.userRole == UserRole.STUDENT}">
                             <form action="student-completed-courses" method="get">
                                 <input class="btn btn-lg btn-primary btn-block" type="submit" value="Completed courses">
                             </form>
                         </c:when>
 
                         <%--Special button for teachers--%>
-                        <c:when test="${current_user.userInfo.userRole == UserRole.TEACHER}">
-                            <form action="${pageContext.request.contextPath}/teacher-not-graded-courses" method="get">
+                        <c:when test="${current_user_info.userRole == UserRole.TEACHER}">
+                            <form action="teacher-not-graded-courses" method="get">
                                 <input class="btn btn-lg btn-primary btn-block" type="submit" value="Not graded courses">
                             </form>
                         </c:when>

@@ -5,17 +5,13 @@ import org.hibernate.cfg.Configuration;
 
 public class HibernateUtil {
 
-    private static volatile SessionFactory sessionFactory;
+    // Init on-demand
+    private static class SessionFactoryHolder {
+        public static final SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
+    }
 
     public static SessionFactory getSessionFactory() {
-        if (sessionFactory == null) {
-            synchronized (HibernateUtil.class) {
-                if (sessionFactory == null) {
-                    sessionFactory = new Configuration().configure().buildSessionFactory();
-                }
-            }
-        }
-        return sessionFactory;
+        return SessionFactoryHolder.sessionFactory;
     }
 
 }

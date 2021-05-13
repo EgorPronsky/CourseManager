@@ -1,4 +1,4 @@
-<%@ page import="static web.servlet.access.SignInServlet.*" %>
+<%@ page import="static filter.SignInFilter.*" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 

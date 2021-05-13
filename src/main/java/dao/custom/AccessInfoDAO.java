@@ -8,6 +8,5 @@ import java.util.Optional;
 public interface AccessInfoDAO extends GenericDAO<AccessInfo> {
 
     Optional<AccessInfo> findAccessInfoByEmail(String email);
-    Optional<AccessInfo> findAccessInfoByEmailAndPasswordHash(String email, int passwordHash);
 
 }

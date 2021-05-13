@@ -1,6 +1,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ page import="static web.servlet.core.students_actions.GetCourseStudentsServlet.COURSE_ATTR" %>
+<%@ page import="static servlet.core.students_actions.GetCourseStudentsServlet.COURSE_ATTR" %>
 <%@ page import="domain.archive.CourseResult" %>
+<%@ page import="static servlet.core.students_actions.GradeStudentsServlet.COURSE_ID_TO_GRADE_STUDENTS_PARAM" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 
@@ -15,6 +16,9 @@
 <c:set var="excellent" value="<%=String.valueOf(CourseResult.EXCELLENT)%>" />
 <c:set var="OK" value="<%=String.valueOf(CourseResult.OK)%>" />
 <c:set var="bad" value="<%=String.valueOf(CourseResult.BAD)%>" />
+
+<c:set var="course_id" value="<%=COURSE_ID_TO_GRADE_STUDENTS_PARAM%>" />
+
 
 <body>
 
@@ -31,7 +35,7 @@
                 <%-- Body --%>
                 <c:choose>
                     <%--If courses list is empty--%>
-                    <c:when test="${course.students.size() == 0}">
+                    <c:when test="${course.getStudentsList().size() == 0}">
                         <hr/>
                         <center><h3 class="panel-title">No students yet</h3></center>
                         <hr/>
@@ -40,7 +44,7 @@
                     <c:otherwise>
 
                         <div class="card-body">
-                            <form action="${pageContext.request.contextPath}/grade-students" method="post">
+                            <form action="grade-students" method="post">
 
                                 <table class="table">
                                     <thead class="thead-dark">
@@ -52,21 +56,21 @@
                                     </thead>
 
                                     <tbody>
-                                        <c:forEach var="student" items="${course.students}">
+                                        <c:forEach var="student" items="${course.getStudentsList()}">
                                             <tr>
                                                 <td>${student.userInfo.firstName}</td>
                                                 <td>${student.userInfo.lastName}</td>
                                                 <td>
                                                     <div class="form-check form-check-inline">
-                                                        <input class="form-check-input" type="radio" name="${student.id}" id="result_bad${student.id}" value="${bad}">
+                                                        <input class="form-check-input" type="radio" name="${student.id}" id="result_bad${student.id}" value="${CourseResult.BAD}">
                                                         <label class="form-check-label" for="result_bad${student.id}">${bad}</label>
                                                     </div>
                                                     <div class="form-check form-check-inline">
-                                                        <input class="form-check-input" type="radio" name="${student.id}" id="result_ok${student.id}" value="${OK}" checked>
+                                                        <input class="form-check-input" type="radio" name="${student.id}" id="result_ok${student.id}" value="${CourseResult.OK}" checked>
                                                         <label class="form-check-label" for="result_ok${student.id}">${OK}</label>
                                                     </div>
                                                     <div class="form-check form-check-inline">
-                                                        <input class="form-check-input" type="radio" name="${student.id}" id="result_perfect${student.id}" value="${excellent}" >
+                                                        <input class="form-check-input" type="radio" name="${student.id}" id="result_perfect${student.id}" value="${CourseResult.EXCELLENT}" >
                                                         <label class="form-check-label" for="result_perfect${student.id}">${excellent}</label>
                                                     </div>
                                                 </td>
@@ -76,7 +80,7 @@
                                     </tbody>
                                 </table>
                                 <hr/>
-                                <button class="btn btn-lg btn-primary btn-block" name="course_id" type="submit" value="${course.id}">Submit</button>
+                                <button class="btn btn-lg btn-primary btn-block" type="submit"  name="${course_id}" value="${course.id}">Submit</button>
                                 <hr/>
                             </form>
 

@@ -26,11 +26,9 @@ public class CourseInfo {
     private String description;
 
     @Column(name = "start_date")
-    @Temporal(TemporalType.DATE)
     private LocalDate startDate;
 
     @Column(name = "end_date")
-    @Temporal(TemporalType.DATE)
     private LocalDate endDate;
 
     @Column(name = "time_table")

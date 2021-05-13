@@ -3,12 +3,18 @@ package dao.custom.impl;
 import dao.custom.AccessInfoDAO;
 import dao.generic.impl.HibernateGenericDAO;
 import domain.user.AccessInfo;
+import domain.user.AccessInfo_;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 import util.HibernateUtil;
 
+import javax.persistence.NoResultException;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import java.util.Optional;
 
 @Slf4j
@@ -24,56 +30,31 @@ public class HibernateAccessInfoDAO extends HibernateGenericDAO<AccessInfo> impl
         Transaction tr = null;
 
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            // Prepare
+            CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+            CriteriaQuery<AccessInfo> query = criteriaBuilder.createQuery(AccessInfo.class);
+            Root<AccessInfo> root = query.from(AccessInfo.class);
+
+            // Predicate for WHERE clause
+            Predicate predicateForEmail =
+                    criteriaBuilder.equal(root.get(AccessInfo_.EMAIL), email);
+
+            query.select(root)
+                    .where(predicateForEmail);
+
+            // Executing query and saving result
             tr = session.beginTransaction();
-
-            // Fetch access info by email
-            String hqlQuery = "FROM AccessInfo inf WHERE inf.email=:email";
-
-            Query<AccessInfo> query = session.createQuery(hqlQuery);
-            query.setParameter("email", email);
-
-            // Try to find access info
             try {
-                accessInfo = (AccessInfo) query.getSingleResult();
-            } catch (Exception e) {
-                log.debug("Access info wasn't found");
+                accessInfo = session.createQuery(query).getSingleResult();
+            } catch (NoResultException e) {
+                log.debug("User wasn't found by given email and password hash");
             }
             tr.commit();
         } catch (Exception e) {
-            log.error("Error occurred while finding access info by email");
+            log.error("Error occurred during finding access info by email");
             e.printStackTrace();
             if (tr != null && tr.isActive()) tr.rollback();
         }
         return Optional.ofNullable(accessInfo);
-    }
-
-    @Override
-    public Optional<AccessInfo> findAccessInfoByEmailAndPasswordHash(String email, int passwordHash) {
-        AccessInfo usersAccessInfo = null;
-        Transaction tr = null;
-
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            tr = session.beginTransaction();
-
-            // Fetch access info by email and password hash
-            String hqlQuery = "FROM AccessInfo inf WHERE inf.email=:email AND inf.passwordHash=:password_hash";
-
-            Query<AccessInfo> query = session.createQuery(hqlQuery);
-            query.setParameter("email", email);
-            query.setParameter("password_hash", passwordHash);
-
-            // Try to find access info
-            try {
-                usersAccessInfo = (AccessInfo) query.getSingleResult();
-            } catch (Exception e) {
-                log.debug("Access info wasn't found");
-            }
-            tr.commit();
-        } catch (Exception e) {
-            log.error("Error occurred while finding access info by email and password hash");
-            e.printStackTrace();
-            if (tr != null && tr.isActive()) tr.rollback();
-        }
-        return Optional.ofNullable(usersAccessInfo);
     }
 }

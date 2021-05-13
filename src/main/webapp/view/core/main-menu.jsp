@@ -1,4 +1,4 @@
-<%@ page import="static web.servlet.access.SignInServlet.CURRENT_USER_SESSION_ATTR" %>
+<%@ page import="static servlet.access.SignInServlet.CURRENT_USER_SESSION_ATTR" %>
 <%@ page import="domain.user.UserRole" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
@@ -27,7 +27,7 @@
 
                 <%-- Body--%>
                 <div class="card-body">
-                    <form action="view/core/select-my-courses.jsp" method="get">
+                    <form action="select-my-courses" method="get">
                         <input class="btn btn-lg btn-primary btn-block" type="submit" value="View my courses">
                     </form>
                     <hr/>
@@ -35,7 +35,7 @@
                     <c:choose>
                         <%--Special button for students--%>
                         <c:when test="${current_user.userInfo.userRole == UserRole.STUDENT}">
-                            <form action="${pageContext.request.contextPath}/join-new-courses-page" method="get">
+                            <form action="join-new-courses-page" method="get">
                                 <input class="btn btn-lg btn-primary btn-block" type="submit" value="Sign up for a new courses">
                             </form>
                         </c:when>

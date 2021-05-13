@@ -1,10 +1,11 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ page import="web.servlet.core.students_actions.GetCourseStudentsServlet" %>
-<%@ page import="static web.servlet.core.get_courses.UserCurrentCoursesServlet.SELECTED_COURSES_ATTR" %>
-<%@ page import="static web.servlet.core.get_courses.UserCurrentCoursesServlet.COURSES_STATE_ATTR" %>
-<%@ page import="static web.servlet.access.SignInServlet.CURRENT_USER_SESSION_ATTR" %>
+<%@ page contentType="text/html;charset=UTF-8" %>
+<%@ page import="static servlet.core.get_courses.UserCurrentCoursesServlet.SELECTED_COURSES_ATTR" %>
+<%@ page import="static servlet.core.get_courses.UserCurrentCoursesServlet.COURSES_STATE_ATTR" %>
 <%@ page import="domain.user.UserRole" %>
+<%@ page import="static servlet.core.students_actions.GetCourseStudentsServlet.COURSE_ID_TO_GET_STUDENTS_PARAM" %>
+<%@ page import="static servlet.core.course_actions.LeaveCourseServlet.COURSE_TO_LEAVE_ID_PARAM" %>
+<%@ page import="static servlet.access.SignInServlet.CURRENT_USER_INFO_SESSION_ATTR" %>
 <html>
 
 <head>
@@ -13,7 +14,7 @@
 </head>
 
 <%-- Prepare variables --%>
-<c:set var="current_user" value="<%=session.getAttribute(CURRENT_USER_SESSION_ATTR)%>" />
+<c:set var="current_user_info" value="<%=session.getAttribute(CURRENT_USER_INFO_SESSION_ATTR)%>" />
 <c:set var="courses_state" value="<%=request.getAttribute(COURSES_STATE_ATTR)%>" />
 <c:set var="selected_courses" value="<%=request.getAttribute(SELECTED_COURSES_ATTR)%>" />
 
@@ -53,16 +54,16 @@
                                     <th scope="col">Description</th>
 
                                     <%-- Special columns for students --%>
-                                    <c:if test="${current_user.userInfo.userRole == UserRole.STUDENT}">
+                                    <c:if test="${current_user_info.userRole == UserRole.STUDENT}">
                                         <th scope="col">Teacher</th>
                                         <th scope="col">Leave course</th>
                                     </c:if>
 
                                     <%-- Speacial columns for teachers --%>
-                                    <c:if test="${current_user.userInfo.userRole == UserRole.TEACHER && courses_state == 'not graded'}">
+                                    <c:if test="${current_user_info.userRole == UserRole.TEACHER && courses_state == 'not graded'}">
                                         <th scope="col">Grade students</th>
                                     </c:if>
-                                    <c:if test="${current_user.userInfo.userRole == UserRole.TEACHER && courses_state != 'not graded'}">
+                                    <c:if test="${current_user_info.userRole == UserRole.TEACHER && courses_state != 'not graded'}">
                                         <th scope="col">Delete course</th>
                                     </c:if>
                                 </tr>
@@ -105,30 +106,32 @@
                                             </div>
                                         </td>
 
-                                        <c:if test="${sessionScope.user.userInfo.userRole == 'STUDENT'}">
+                                        <c:if test="${current_user_info.userRole == UserRole.STUDENT}">
                                             <td>${course.teacher.userInfo.firstName} ${course.teacher.userInfo.lastName}</td>
                                         </c:if>
 
                                         <%-- Special actions for students --%>
-                                        <c:if test="${sessionScope.user.userInfo.userRole == 'STUDENT' && requestScope.courses_state != 'completed'}">
+                                        <c:if test="${current_user_info.userRole == UserRole.STUDENT && courses_state != 'completed'}">
+                                            <c:set var="course_to_leave_id" value="<%=COURSE_TO_LEAVE_ID_PARAM%>" />
                                             <td>
-                                                <form action="${pageContext.request.contextPath}/leave-course" method="post">
-                                                    <button class="btn btn-primary btn-block" type="submit" name="course_id_to_delete" value="${course.id}">Leave</button>
+                                                <form action="leave-course" method="post">
+                                                    <button class="btn btn-primary btn-block" type="submit" name="${course_to_leave_id}" value="${course.id}">Leave</button>
                                                 </form>
                                             </td>
                                         </c:if>
 
                                         <%-- Special actions for teachers --%>
-                                        <c:if test="${requestScope.courses_state == 'not graded'}">
+                                        <c:if test="${courses_state == 'not graded'}">
+                                            <c:set var="course_to_get_students_id" value="<%=COURSE_ID_TO_GET_STUDENTS_PARAM%>" />
                                             <td>
-                                                <form action="${pageContext.request.contextPath}/course-students" method="get">
-                                                    <button class="btn btn-primary btn-block" type="submit" name="<%=GetCourseStudentsServlet.COURSE_ID_TO_GRADE%>" value="${course.id}">Grade</button>
+                                                <form action="course-students" method="get">
+                                                    <button class="btn btn-primary btn-block" type="submit" name="${course_to_get_students_id}" value="${course.id}">Grade</button>
                                                 </form>
                                             </td>
                                         </c:if>
-                                        <c:if test="${sessionScope.user.userInfo.userRole == 'TEACHER' && requestScope.courses_state != 'not graded'}">
+                                        <c:if test="${current_user_info.userRole == UserRole.TEACHER && courses_state != 'not graded'}">
                                             <td>
-                                                <form action="${pageContext.request.contextPath}/course-students" method="get">
+                                                <form action="course-students" method="get">
                                                     <button class="btn btn-primary btn-block" type="submit" name="grade_course" value="${course.id}">Delete</button>
                                                 </form>
                                             </td>
@@ -140,8 +143,7 @@
 
                         </table>
                     </c:otherwise>
-
-                </c:set>
+                </c:choose>
                 </div>
             </div>
         </div>

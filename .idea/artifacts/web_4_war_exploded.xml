@@ -35,6 +35,7 @@
           <element id="library" level="project" name="Maven: org.jvnet.staxex:stax-ex:1.8" />
           <element id="library" level="project" name="Maven: com.sun.xml.fastinfoset:FastInfoset:1.2.15" />
           <element id="library" level="project" name="Maven: org.hibernate:hibernate-entitymanager:5.4.10.Final" />
+          <element id="library" level="project" name="Maven: org.hibernate:hibernate-jpamodelgen:5.4.10.Final" />
           <element id="library" level="project" name="Maven: org.slf4j:slf4j-api:1.7.30" />
           <element id="library" level="project" name="Maven: org.apache.logging.log4j:log4j-slf4j-impl:2.12.1" />
           <element id="library" level="project" name="Maven: org.apache.logging.log4j:log4j-api:2.12.1" />

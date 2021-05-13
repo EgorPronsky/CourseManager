@@ -20,7 +20,6 @@ public class HibernateGenericDAO<T> implements GenericDAO<T> {
     @Override
     public void save(T entity) {
         Transaction tr = null;
-
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             tr = session.beginTransaction();
             session.save(entity);
@@ -50,26 +49,22 @@ public class HibernateGenericDAO<T> implements GenericDAO<T> {
     }
 
     @Override
-    public T merge(T entity) {
-        T updatedEntity = null;
+    public void update(T entity) {
         Transaction tr = null;
-
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             tr = session.beginTransaction();
-            updatedEntity = (T)session.merge(entity);
+            session.update(entity);
             tr.commit();
         } catch (Exception e) {
             log.error("Error occurred while updating an entity");
             e.printStackTrace();
             if (tr != null && tr.isActive()) tr.rollback();
         }
-        return updatedEntity;
     }
 
     @Override
     public void delete(T entity) {
         Transaction tr = null;
-
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             tr = session.beginTransaction();
             session.delete(entity);

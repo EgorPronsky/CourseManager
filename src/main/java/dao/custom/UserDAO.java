@@ -7,5 +7,5 @@ import java.util.Optional;
 
 public interface UserDAO extends GenericDAO<User> {
 
-    Optional<User> findUserByAccessInfoId(long accessInfoId);
+    Optional<User> findUserByEmailAndPasswordHash(String email, int passwordHash);
 }

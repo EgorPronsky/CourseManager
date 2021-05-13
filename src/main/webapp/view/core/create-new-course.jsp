@@ -1,8 +1,8 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ page import="static web.servlet.core.course_actions.SubmitNewCourseServlet.*" %>
-<%@ page import="static util.CourseInputHandler.MONDAY_PARAM" %>
-<%@ page import="static util.CourseInputHandler.MONDAY_START_TIME_PARAM" %>
-<%@ page import="static util.CourseInputHandler.*" %>
+<%@ page import="static servlet.core.course_actions.SubmitNewCourseServlet.*" %>
+<%@ page import="static handlers.input_handlers.CourseInputHandler.MONDAY_PARAM" %>
+<%@ page import="static handlers.input_handlers.CourseInputHandler.MONDAY_START_TIME_PARAM" %>
+<%@ page import="static handlers.input_handlers.CourseInputHandler.*" %>
 <html>
 
 <head>
@@ -45,13 +45,13 @@
                                         <!--Start date-->
                                         <div class="form-group col">
                                             <label for="start_date">Start date</label>
-                                            <input class="form-control" placeholder="dd-MM-yyyy" id="start_date" name="${course_start_date}" type="text" required>
+                                            <input class="form-control" placeholder="dd-MM-yyyy" id="start_date" name="${course_start_date}" type="text" pattern="[12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]$" required>
                                         </div>
 
                                         <!--End date-->
                                         <div class="form-group col">
                                             <label for="end_date">End date</label>
-                                            <input class="form-control" placeholder="dd-MM-yyyy" id="end_date" name="${course_end_date}" type="text" required>
+                                            <input class="form-control" placeholder="dd-MM-yyyy" id="end_date" name="${course_end_date}" type="text" pattern="[12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]$" required>
                                         </div>
                                     </div>
 
@@ -93,7 +93,7 @@
                                             <td>Monday</td>
                                             <td>
                                                 <div class="checkbox">
-                                                    <input class="form-control form-control-sm" placeholder="12:00" name="${monday_start_time}" type="text">
+                                                    <input class="form-control form-control-sm" placeholder="12:00" name="${monday_start_time}" pattern="/([012]?(\d):(0-5)(\d)/" type="text">
                                                 </div>
                                             </td>
                                             <td>
