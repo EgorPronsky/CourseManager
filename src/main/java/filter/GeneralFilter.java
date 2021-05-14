@@ -20,6 +20,7 @@ public class GeneralFilter implements Filter {
                 !((HttpServletRequest) req).getRequestURI().endsWith("/registration-page") &&
                 !((HttpServletRequest) req).getRequestURI().endsWith("/sign-up")) {
 
+            // Necessary attrs in session
             Object userId = ((HttpServletRequest)req).getSession().
                     getAttribute(CURRENT_USER_ID_SESSION_ATTR);
             Object userInfo = ((HttpServletRequest)req).getSession()

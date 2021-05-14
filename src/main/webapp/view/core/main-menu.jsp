@@ -51,6 +51,13 @@
                             <p>Undefined</p>
                         </c:otherwise>
                     </c:choose>
+
+                    <%-- Log out button --%>
+                    <hr/>
+                    <form action="log-out" method="get">
+                        <input class="btn btn-lg btn-success btn-block" type="submit" value="Log out">
+                    </form>
+
                 </div>
             </div>
         </div>

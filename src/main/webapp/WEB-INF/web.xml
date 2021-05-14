@@ -112,8 +112,16 @@
         <servlet-name>RegistrationPageServlet</servlet-name>
         <jsp-file>/view/access/registration.jsp</jsp-file>
     </servlet>
+    <servlet>
+        <servlet-name>LogoutServlet</servlet-name>
+        <servlet-class>servlet.access.LogoutServlet</servlet-class>
+    </servlet>
 
     <!-- Servlets mapping !-->
+    <servlet-mapping>
+        <servlet-name>LogoutServlet</servlet-name>
+        <url-pattern>/log-out</url-pattern>
+    </servlet-mapping>
     <servlet-mapping>
         <servlet-name>SelectMyCoursesServlet</servlet-name>
         <url-pattern>/select-my-courses</url-pattern>

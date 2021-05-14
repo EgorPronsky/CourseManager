@@ -5,13 +5,11 @@ import org.hibernate.cfg.Configuration;
 
 public class HibernateUtil {
 
-    // Init on-demand
-    private static class SessionFactoryHolder {
-        public static final SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
-    }
+    public static final SessionFactory sessionFactory =
+            new Configuration().configure("META-INF/hibernate.cfg.xml").buildSessionFactory();
 
     public static SessionFactory getSessionFactory() {
-        return SessionFactoryHolder.sessionFactory;
+        return sessionFactory;
     }
 
 }

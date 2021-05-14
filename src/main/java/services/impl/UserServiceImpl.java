@@ -36,12 +36,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Optional<User> findUserByEmailAndPassword(String email, String password) {
-        int passwordHash = password.hashCode();
-        return dao.findUserByEmailAndPasswordHash(email, passwordHash);
-    }
-
-    @Override
     public User findUserById_OrThrowEx(long userId) {
         Optional<User> userOpt = findUserById(userId);
         if (!userOpt.isPresent()) throw new IllegalStateException("User wasn't received");
@@ -60,6 +54,12 @@ public class UserServiceImpl implements UserService {
         Optional<Long> userIdOpt = getCurrentUserIdFromSession(request);
         if (!userIdOpt.isPresent()) throw new IllegalStateException("User id wasn't received");
         return userIdOpt.get();
+    }
+
+    @Override
+    public Optional<User> findUserByEmailAndPassword(String email, String password) {
+        int passwordHash = password.hashCode();
+        return dao.findUserByEmailAndPasswordHash(email, passwordHash);
     }
 
     @Override
