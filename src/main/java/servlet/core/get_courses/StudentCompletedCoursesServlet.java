@@ -39,12 +39,15 @@ public class StudentCompletedCoursesServlet extends HttpServlet {
                 StudentCourseResultServiceImpl.getService()
                         .getCoursesResultsByStudentId(currentUserId);
 
+        User user = UserServiceImpl.getService()
+                .findUserById_OrThrowEx(currentUserId);
+
         log.debug("Getting student ungraded finished courses");
         List<StudentCourseResult> ungradedCourses = CourseServiceImpl.getService()
                 .getUserFinishedUngradedCourses(currentUserId)
                 .stream()
                 .map(course -> StudentCourseResultCreator
-                                .createStudentCourseResult(student, course, CourseResult.NOT_GRADED))
+                                .createStudentCourseResult(user, course, CourseResult.NOT_GRADED))
                 .collect(Collectors.toList());
 
 

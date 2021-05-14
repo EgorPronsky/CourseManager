@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import services.impl.UserServiceImpl;
 
 import javax.servlet.*;
+import javax.servlet.http.Cookie;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -15,9 +16,10 @@ import java.util.Optional;
 @Slf4j
 public class SignInFilter implements Filter {
 
-    public static final String SIGN_IN_USER_ATTR = "sign_in_user";
     public static final String EMAIL_PARAM = "email";
     public static final String PASSWORD_PARAM = "password";
+
+    public static final String SIGN_IN_USER_ATTR = "sign_in_user";
     public static final String INVALID_EMAIL_OR_PASSWORD_MESSAGE_ATTR = "invalid_email_or_password_message";
 
     public void init(FilterConfig config) throws ServletException { }

@@ -8,11 +8,13 @@ import domain.course.Course;
 import domain.course.Course_;
 import domain.user.User_;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 import util.HibernateUtil;
 
+import javax.persistence.PersistenceException;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
@@ -33,7 +35,7 @@ public class HibernateStudentCourseResultDAO extends HibernateGenericDAO<Student
             tr = session.beginTransaction();
             scrList.forEach(session::save);
             tr.commit();
-        } catch (Exception e) {
+        } catch (HibernateException e) {
             log.debug("Error while saving SCR entities");
             e.printStackTrace();
             if (tr != null && tr.isActive()) tr.rollback();
@@ -65,7 +67,7 @@ public class HibernateStudentCourseResultDAO extends HibernateGenericDAO<Student
             scrList.addAll(session.createQuery(query).getResultList());
 
             tr.commit();
-        } catch (Exception e) {
+        } catch (PersistenceException e) {
             log.debug("Error while finding student course result by course id");
             e.printStackTrace();
             if (tr != null && tr.isActive()) tr.rollback();
@@ -98,7 +100,7 @@ public class HibernateStudentCourseResultDAO extends HibernateGenericDAO<Student
             scrList.addAll(session.createQuery(query).getResultList());
 
             tr.commit();
-        } catch (Exception e) {
+        } catch (PersistenceException e) {
             log.debug("Error while finding student courses with results");
             e.printStackTrace();
             if (tr != null && tr.isActive()) tr.rollback();

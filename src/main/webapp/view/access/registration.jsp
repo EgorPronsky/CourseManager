@@ -1,7 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page import="static servlet.access.SignUpServlet.*" %>
-<%@ page import="static filter.RegistrationInputFilter.EMAIL_EXISTS_MESSAGE_ATTR" %>
-<%@ page import="static filter.RegistrationInputFilter.PASSWORD_MISMATCH_MESSAGE_ATTR" %>
+<%@ page import="static filter.RegistrationFilter.EMAIL_EXISTS_MESSAGE_ATTR" %>
+<%@ page import="static filter.RegistrationFilter.PASSWORD_MISMATCH_MESSAGE_ATTR" %>
 <%@ page import="static filter.SignInFilter.EMAIL_PARAM" %>
 <%@ page import="static filter.SignInFilter.PASSWORD_PARAM" %>
 
@@ -44,7 +44,7 @@
 
         <%-- Body --%>
         <div class="card-body">
-          <form accept-charset="UTF-8" action="${pageContext.request.contextPath}/sign-up" method="post">
+          <form accept-charset="UTF-8" action="sign-up" method="post">
             <fieldset>
 
               <%--First name--%>

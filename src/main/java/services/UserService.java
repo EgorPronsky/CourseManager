@@ -15,6 +15,7 @@ public interface UserService {
     Optional<Long> getCurrentUserIdFromSession(HttpServletRequest request);
     Optional<User> findUserByEmailAndPassword(String email, String password);
 
+    User findUserById_OrThrowEx(long userId);
     User getCurrentUserFromDB_OrThrowEx(HttpServletRequest request);
     long getCurrentUserIdFromSession_OrThrowEx(HttpServletRequest request);
 

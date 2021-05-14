@@ -14,6 +14,8 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import util.HibernateUtil;
 
+import javax.persistence.Persistence;
+import javax.persistence.PersistenceException;
 import javax.persistence.criteria.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -48,7 +50,7 @@ public class HibernateCourseDAO extends HibernateGenericDAO<Course> implements C
             tr = session.beginTransaction();
             courses.addAll(session.createQuery(query).getResultList());
             tr.commit();
-        } catch (Exception e) {
+        } catch (PersistenceException e) {
             log.error("Error while getting all courses started after given date");
             e.printStackTrace();
             if (tr != null && tr.isActive()) tr.rollback();
@@ -79,7 +81,7 @@ public class HibernateCourseDAO extends HibernateGenericDAO<Course> implements C
             tr = session.beginTransaction();
             courses.addAll(session.createQuery(query).getResultList());
             tr.commit();
-        } catch (Exception e) {
+        } catch (PersistenceException e) {
             log.error("Error while getting all courses started after given date");
             e.printStackTrace();
             if (tr != null && tr.isActive()) tr.rollback();
@@ -112,7 +114,7 @@ public class HibernateCourseDAO extends HibernateGenericDAO<Course> implements C
             tr = session.beginTransaction();
             courses.addAll(session.createQuery(query).getResultList());
             tr.commit();
-        } catch (Exception e) {
+        } catch (PersistenceException e) {
             log.error("Error while getting all courses started after given date");
             e.printStackTrace();
             if (tr != null && tr.isActive()) tr.rollback();
@@ -160,8 +162,8 @@ public class HibernateCourseDAO extends HibernateGenericDAO<Course> implements C
             requiredCourses.addAll(session.createQuery(query).getResultList());
 
             tr.commit();
-        } catch (Exception e) {
-            log.error("Error while getting user ungraded courses ended before given date");
+        } catch (PersistenceException e) {
+            log.error("Error during getting user ungraded courses ended before given date");
             e.printStackTrace();
             if (tr != null && tr.isActive()) tr.rollback();
         }
@@ -188,7 +190,7 @@ public class HibernateCourseDAO extends HibernateGenericDAO<Course> implements C
             tr = session.beginTransaction();
             courses.addAll(session.createQuery(query).getResultList());
             tr.commit();
-        } catch (Exception e) {
+        } catch (PersistenceException e) {
             log.error("Error while getting all courses by id");
             e.printStackTrace();
             if (tr != null && tr.isActive()) tr.rollback();
@@ -225,7 +227,7 @@ public class HibernateCourseDAO extends HibernateGenericDAO<Course> implements C
             courses.addAll(session.createQuery(query).getResultList());
 
             tr.commit();
-        } catch (Exception e) {
+        } catch (PersistenceException e) {
             log.error("Error while getting all courses started after given date");
             e.printStackTrace();
             if (tr != null && tr.isActive()) tr.rollback();

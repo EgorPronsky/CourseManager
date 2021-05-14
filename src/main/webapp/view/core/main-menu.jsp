@@ -1,5 +1,5 @@
-<%@ page import="static servlet.access.SignInServlet.CURRENT_USER_SESSION_ATTR" %>
 <%@ page import="domain.user.UserRole" %>
+<%@ page import="static servlet.access.SignInServlet.CURRENT_USER_INFO_SESSION_ATTR" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
@@ -12,7 +12,7 @@
 </head>
 
 <%-- Prepare variables --%>
-<c:set var="current_user" value="<%=session.getAttribute(CURRENT_USER_SESSION_ATTR)%>" />
+<c:set var="current_user_info" value="<%=session.getAttribute(CURRENT_USER_INFO_SESSION_ATTR)%>" />
 
 <body>
 <div class="container">
@@ -22,7 +22,7 @@
 
                 <%-- Header --%>
                 <div class="card-header">
-                    <h3 class="panel-title">Welcome, ${current_user.userInfo.firstName}!</h3>
+                    <h3 class="panel-title">Welcome, ${current_user_info.firstName}!</h3>
                 </div>
 
                 <%-- Body--%>
@@ -34,14 +34,14 @@
 
                     <c:choose>
                         <%--Special button for students--%>
-                        <c:when test="${current_user.userInfo.userRole == UserRole.STUDENT}">
+                        <c:when test="${current_user_info.userRole == UserRole.STUDENT}">
                             <form action="join-new-courses-page" method="get">
                                 <input class="btn btn-lg btn-primary btn-block" type="submit" value="Sign up for a new courses">
                             </form>
                         </c:when>
 
                         <%--Special button for teachers--%>
-                        <c:when test="${current_user.userInfo.userRole == UserRole.TEACHER}">
+                        <c:when test="${current_user_info.userRole == UserRole.TEACHER}">
                             <form action="view/core/create-new-course.jsp" method="get">
                                 <input class="btn btn-lg btn-primary btn-block" type="submit" value="Create a new course">
                             </form>

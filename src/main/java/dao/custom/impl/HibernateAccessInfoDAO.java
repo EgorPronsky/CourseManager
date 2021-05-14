@@ -5,12 +5,14 @@ import dao.generic.impl.HibernateGenericDAO;
 import domain.user.AccessInfo;
 import domain.user.AccessInfo_;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 import util.HibernateUtil;
 
 import javax.persistence.NoResultException;
+import javax.persistence.PersistenceException;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
@@ -50,7 +52,7 @@ public class HibernateAccessInfoDAO extends HibernateGenericDAO<AccessInfo> impl
                 log.debug("User wasn't found by given email and password hash");
             }
             tr.commit();
-        } catch (Exception e) {
+        } catch (PersistenceException e) {
             log.error("Error occurred during finding access info by email");
             e.printStackTrace();
             if (tr != null && tr.isActive()) tr.rollback();

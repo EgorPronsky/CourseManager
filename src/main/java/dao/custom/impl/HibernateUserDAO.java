@@ -16,6 +16,7 @@ import org.hibernate.query.Query;
 import util.HibernateUtil;
 
 import javax.persistence.NoResultException;
+import javax.persistence.PersistenceException;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
@@ -57,7 +58,7 @@ public class HibernateUserDAO extends HibernateGenericDAO<User> implements UserD
                 log.debug("User wasn't found by given email and password hash");
             }
             tr.commit();
-        } catch (Exception e) {
+        } catch (PersistenceException e) {
             log.error("Error occurred during finding user by email and password hash");
             e.printStackTrace();
             if (tr != null && tr.isActive()) tr.rollback();

@@ -43,7 +43,7 @@ public class SignUpServlet extends HttpServlet {
         log.debug("Saving new user");
         UserServiceImpl.getService().saveUser(user);
 
-        response.sendRedirect("/login");
+        response.sendRedirect("login-page");
     }
 
 }

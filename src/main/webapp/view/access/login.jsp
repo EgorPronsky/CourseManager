@@ -1,4 +1,5 @@
 <%@ page import="static filter.SignInFilter.*" %>
+<%@ page import="static servlet.access.SignInServlet.REMEMBER_USER_PARAM" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 
@@ -10,6 +11,7 @@
 <%-- Prepare variables --%>
 <c:set var="email" value="<%=EMAIL_PARAM%>" />
 <c:set var="password" value="<%=PASSWORD_PARAM%>" />
+<c:set var="remember_user" value="<%=REMEMBER_USER_PARAM%>" />
 <c:set var="email_value" value="<%=request.getAttribute(EMAIL_PARAM)%>" />
 <c:set var="invalid_email_or_password_message" value="<%=request.getAttribute(INVALID_EMAIL_OR_PASSWORD_MESSAGE_ATTR)%>" />
 
@@ -75,7 +77,7 @@
 
                             <%--"Remember me" checkbox--%>
                             <div class="form-check mb-3">
-                                <input class="form-check-input" name="remember_me" id="remember_me" type="checkbox" value="Remember me">
+                                <input class="form-check-input" name="${remember_user}" id="remember_me" type="checkbox" value="Remember me">
                                 <label class="form-check-label" for="remember_me">Remember me</label>
                             </div>
 
@@ -89,7 +91,7 @@
                     <center><h5>OR</h5></center>
 
                     <%--Sign up button--%>
-                    <form action="view/access/registration.jsp" method="get">
+                    <form action="registration-page" method="get">
                         <input class="btn btn-lg btn-primary btn-block" type="submit" value="Sign Up">
                     </form>
                 </div>

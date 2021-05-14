@@ -10,6 +10,7 @@ import services.StudentCourseResultService;
 import services.UserService;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.swing.text.html.Option;
 import java.util.Optional;
 
 import static servlet.access.SignInServlet.CURRENT_USER_ID_SESSION_ATTR;
@@ -38,6 +39,13 @@ public class UserServiceImpl implements UserService {
     public Optional<User> findUserByEmailAndPassword(String email, String password) {
         int passwordHash = password.hashCode();
         return dao.findUserByEmailAndPasswordHash(email, passwordHash);
+    }
+
+    @Override
+    public User findUserById_OrThrowEx(long userId) {
+        Optional<User> userOpt = findUserById(userId);
+        if (!userOpt.isPresent()) throw new IllegalStateException("User wasn't received");
+        return userOpt.get();
     }
 
     @Override

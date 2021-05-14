@@ -11,14 +11,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Slf4j
-public class RegistrationInputFilter implements Filter {
+public class RegistrationFilter implements Filter {
 
     public static final String PASSWORD_MISMATCH_MESSAGE_ATTR = "password_mismatch_message";
     public static final String EMAIL_EXISTS_MESSAGE_ATTR = "email_exists_message";
 
     public void init(FilterConfig config) throws ServletException {}
 
-    public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain) throws ServletException, IOException {
+    public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain)
+            throws ServletException, IOException {
         log.debug("Receiving user input");
         String email = req.getParameter("email");
         String password = req.getParameter("password");
@@ -37,7 +38,6 @@ public class RegistrationInputFilter implements Filter {
             respAttrs.put(EMAIL_EXISTS_MESSAGE_ATTR, "This email already exists");
         }
 
-        // If all input is valid
         if (isInputValid) {
             log.debug("User input is valid");
             chain.doFilter(req, resp);
