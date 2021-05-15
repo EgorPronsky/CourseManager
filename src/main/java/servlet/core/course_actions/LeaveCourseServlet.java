@@ -14,6 +14,8 @@ import java.io.IOException;
 import java.security.InvalidParameterException;
 import java.util.Optional;
 
+import static filter.SessionFilter.APP_DOMAIN_NAME;
+
 @Slf4j
 public class LeaveCourseServlet extends HttpServlet {
 
@@ -38,6 +40,6 @@ public class LeaveCourseServlet extends HttpServlet {
         currentUser.getCourses().remove(courseToLeave);
         UserServiceImpl.getService().updateUser(currentUser);
 
-        response.sendRedirect("main-menu");
+        response.sendRedirect(String.format("/%s/main-menu", APP_DOMAIN_NAME));
     }
 }

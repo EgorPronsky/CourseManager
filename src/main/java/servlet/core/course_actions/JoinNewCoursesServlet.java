@@ -17,6 +17,8 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static filter.SessionFilter.APP_DOMAIN_NAME;
+
 @Slf4j
 public class JoinNewCoursesServlet extends HttpServlet {
 
@@ -42,6 +44,6 @@ public class JoinNewCoursesServlet extends HttpServlet {
         currentUser.getCourses().addAll(coursesToJoin);
         UserServiceImpl.getService().updateUser(currentUser);
 
-        response.sendRedirect("main-menu");
+        response.sendRedirect(String.format("/%s/main-menu", APP_DOMAIN_NAME));
     }
 }

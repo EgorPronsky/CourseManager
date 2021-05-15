@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+import static filter.SessionFilter.APP_DOMAIN_NAME;
 import static filter.SignInFilter.EMAIL_PARAM;
 import static filter.SignInFilter.PASSWORD_PARAM;
 
@@ -33,17 +34,14 @@ public class SignUpServlet extends HttpServlet {
 
         log.debug("Creating new user from received params");
         User user = UserCreator.createUserFromStrParams(
-                firstName,
-                lastName,
-                isTeacher,
-                email,
-                password
+                firstName, lastName, isTeacher,
+                email, password
         );
 
         log.debug("Saving new user");
         UserServiceImpl.getService().saveUser(user);
 
-        response.sendRedirect("login-page");
+        response.sendRedirect(String.format("/%s/login-page", APP_DOMAIN_NAME));
     }
 
 }

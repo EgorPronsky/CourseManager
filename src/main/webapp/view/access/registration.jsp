@@ -4,7 +4,7 @@
 <%@ page import="static filter.RegistrationFilter.PASSWORD_MISMATCH_MESSAGE_ATTR" %>
 <%@ page import="static filter.SignInFilter.EMAIL_PARAM" %>
 <%@ page import="static filter.SignInFilter.PASSWORD_PARAM" %>
-
+<%@ page session="false" %>
 <html>
 
 <head>

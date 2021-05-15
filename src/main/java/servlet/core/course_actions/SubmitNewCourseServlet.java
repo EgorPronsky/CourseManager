@@ -12,7 +12,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Optional;
 
 @Slf4j
 public class SubmitNewCourseServlet extends HttpServlet {
@@ -27,12 +26,12 @@ public class SubmitNewCourseServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         log.debug("Receiving course info from request");
-        String name = request.getParameter(COURSE_TITLE_PARAM);
+        String name         = request.getParameter(COURSE_TITLE_PARAM);
         String startDateStr = request.getParameter(COURSE_START_DATE_PARAM);
-        String endDateStr = request.getParameter(COURSE_END_DATE_PARAM);
-        String uri = request.getParameter(COURSE_URI_PARAM);
-        String description = request.getParameter(COURSE_DESCRIPTION_PARAM);
-        String timeTable = CourseInputHandler.getTimeTableFromRequest(request);
+        String endDateStr   = request.getParameter(COURSE_END_DATE_PARAM);
+        String uri          = request.getParameter(COURSE_URI_PARAM);
+        String description  = request.getParameter(COURSE_DESCRIPTION_PARAM);
+        String timeTable    = CourseInputHandler.getTimeTableFromRequest(request);
 
         log.debug("Getting current user from DB");
         User currentUser = UserServiceImpl.getService()
@@ -40,10 +39,8 @@ public class SubmitNewCourseServlet extends HttpServlet {
 
         log.debug("Creating new course from received params");
         Course course = CourseCreator.createCourseFromStrParams(
-                name,
-                description,
-                startDateStr,
-                endDateStr,
+                name, description,
+                startDateStr, endDateStr,
                 timeTable,
                 uri
         );

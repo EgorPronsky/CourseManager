@@ -10,6 +10,7 @@ import javax.servlet.http.*;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
+import static filter.SessionFilter.APP_DOMAIN_NAME;
 import static filter.SignInFilter.SIGN_IN_USER_ATTR;
 
 @Slf4j
@@ -44,6 +45,6 @@ public class SignInServlet extends HttpServlet {
             response.addCookie(cookie);
         }
 
-        response.sendRedirect("main-menu");
+        response.sendRedirect(String.format("/%s/main-menu", APP_DOMAIN_NAME));
     }
 }

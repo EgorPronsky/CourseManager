@@ -1,5 +1,6 @@
 <%@ page import="static filter.SignInFilter.*" %>
 <%@ page import="static servlet.access.SignInServlet.REMEMBER_USER_PARAM" %>
+<%@ page session="false" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 
