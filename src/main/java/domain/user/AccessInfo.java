@@ -19,7 +19,6 @@ public class AccessInfo {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @Column(name = "ID")
     private long id;
 
     private String email;

@@ -1,8 +1,11 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ page import="static servlet.core.course_actions.SubmitNewCourseServlet.*" %>
+<%@ page import="static servlet.core.course_actions.SaveOrUpdateCourseServlet.*" %>
 <%@ page import="static handlers.input_handlers.CourseInputHandler.MONDAY_PARAM" %>
 <%@ page import="static handlers.input_handlers.CourseInputHandler.MONDAY_START_TIME_PARAM" %>
 <%@ page import="static handlers.input_handlers.CourseInputHandler.*" %>
+<%@ page import="static servlet.core.students_actions.GetCourseStudentsServlet.COURSE_ATTR" %>
+<%@ page import="static servlet.core.get_courses.GetCourseToEditServlet.COURSE_ID_PARAM" %>
+<%@ page import="domain.course.Course" %>
 <html>
 
 <head>
@@ -16,6 +19,9 @@
 <c:set var="course_start_date" value="<%=COURSE_START_DATE_PARAM%>" />
 <c:set var="course_end_date" value="<%=COURSE_END_DATE_PARAM%>" />
 <c:set var="course_uri" value="<%=COURSE_URI_PARAM%>" />
+<c:set var="course_id" value="<%=COURSE_ID_PARAM%>" />
+
+<c:set var="course" value="<%=request.getAttribute(COURSE_ATTR)%>" />
 
 <body>
 <div class="container">
@@ -28,7 +34,7 @@
                 </div>
 
                 <div class="card-body">
-                    <form accept-charset="UTF-8" role="form" action="${pageContext.request.contextPath}/submit-new-course" method="post">
+                    <form accept-charset="UTF-8" role="form" action="${pageContext.request.contextPath}/main-menu/create-or-update-course" method="post">
                         <fieldset>
 
                             <div class="row">
@@ -38,33 +44,86 @@
                                     <!--Title-->
                                     <div class="form-group">
                                         <label for="title">Title</label>
-                                        <input class="form-control" id="title" name="${course_title}" type="text" required>
+                                        <input
+                                                class="form-control"
+                                                id="title"
+                                                name="${course_title}"
+                                                type="text"
+                                                <c:if test="${not empty course.courseInfo.name}">
+                                                        value="${course.courseInfo.name}"
+                                                </c:if>
+                                                <c:if test="${empty course.courseInfo.name}">
+                                                        value="Course#"
+                                                </c:if>
+                                                required>
                                     </div>
 
                                     <div class="form-row">
                                         <!--Start date-->
                                         <div class="form-group col">
                                             <label for="start_date">Start date</label>
-                                            <input class="form-control" placeholder="dd-MM-yyyy" id="start_date" name="${course_start_date}" type="text" pattern="[12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]$" required>
+                                            <input
+                                                    class="form-control"
+                                                    placeholder="dd-MM-yyyy"
+                                                    id="start_date"
+                                                    name="${course_start_date}"
+                                                    type="text"
+                                                    <c:if test="${not empty course.courseInfo.startDate}">
+                                                        value="${course.courseInfo.startDate}"
+                                                    </c:if>
+                                                    <c:if test="${empty course.courseInfo.startDate}">
+                                                        value="18-06-2021"
+                                                    </c:if>
+                                                    required>
                                         </div>
 
                                         <!--End date-->
                                         <div class="form-group col">
                                             <label for="end_date">End date</label>
-                                            <input class="form-control" placeholder="dd-MM-yyyy" id="end_date" name="${course_end_date}" type="text" pattern="[12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]$" required>
+                                            <input
+                                                    class="form-control"
+                                                    placeholder="dd-MM-yyyy"
+                                                    id="end_date"
+                                                    name="${course_end_date}"
+                                                    type="text"
+                                                    <c:if test="${not empty course.courseInfo.endDate}">
+                                                            value="${course.courseInfo.endDate}"
+                                                    </c:if>
+                                                    <c:if test="${empty course.courseInfo.endDate}">
+                                                            value="25-07-2021"
+                                                    </c:if>
+                                                    required>
                                         </div>
                                     </div>
 
                                     <!--URI for connection-->
                                     <div class="form-group">
                                         <label for="uri">URI for connection</label>
-                                        <input class="form-control" id="uri" name="${course_uri}" type="text" required>
+                                        <input
+                                                class="form-control"
+                                                id="uri"
+                                                name="${course_uri}"
+                                                type="text"
+                                                <c:if test="${not empty course.courseInfo.uri}">
+                                                    value="${course.courseInfo.uri}"
+                                                </c:if>
+                                                <c:if test="${empty course.courseInfo.uri}">
+                                                    value="http://www.random.com/random-uri/abc"
+                                                </c:if>
+                                                required>
                                     </div>
 
                                     <!--Description-->
                                     <div class="form-group">
                                         <label for="description">Description</label>
-                                        <textarea class="form-control" id="description" name="${course_description}" type="text" rows="6" required></textarea>
+                                        <textarea
+                                                class="form-control"
+                                                id="description"
+                                                name="${course_description}"
+                                                type="text"
+                                                rows="6"
+                                                required><c:if test="${not empty course.courseInfo.startDate}">${course.courseInfo.description}</c:if><c:if test="${empty course.courseInfo.startDate}">Some description</c:if>
+                                        </textarea>
                                     </div>
                                 </div>
 
@@ -93,12 +152,12 @@
                                             <td>Monday</td>
                                             <td>
                                                 <div class="checkbox">
-                                                    <input class="form-control form-control-sm" placeholder="12:00" name="${monday_start_time}" pattern="/([012]?(\d):(0-5)(\d)/" type="text">
+                                                    <input class="form-control form-control-sm" placeholder="12:00" name="${monday_start_time}" value="12:00" type="text">
                                                 </div>
                                             </td>
                                             <td>
                                                 <div class="checkbox">
-                                                    <input class="form-control form-control-sm" placeholder="14:00" name="${monday_end_time}" type="text">
+                                                    <input class="form-control form-control-sm" placeholder="14:00" name="${monday_end_time}" value="14:00" type="text">
                                                 </div>
                                             </td>
                                         </tr>
@@ -114,12 +173,12 @@
                                             <td>Tuesday</td>
                                             <td>
                                                 <div class="checkbox">
-                                                    <input class="form-control form-control-sm" placeholder="12:00" name="${tuesday_start_time}" type="text">
+                                                    <input class="form-control form-control-sm" placeholder="12:00" name="${tuesday_start_time}" value="12:00" type="text">
                                                 </div>
                                             </td>
                                             <td>
                                                 <div class="checkbox">
-                                                    <input class="form-control form-control-sm" placeholder="14:00" name="${tuesday_end_time}" type="text">
+                                                    <input class="form-control form-control-sm" placeholder="14:00" name="${tuesday_end_time}" value="14:00" type="text">
                                                 </div>
                                             </td>
                                         </tr>
@@ -135,12 +194,12 @@
                                             <td>Wednesday</td>
                                             <td>
                                                 <div class="checkbox">
-                                                    <input class="form-control form-control-sm" placeholder="12:00" name="${wednesday_start_time}" type="text">
+                                                    <input class="form-control form-control-sm" placeholder="12:00" name="${wednesday_start_time}" value="12:00" type="text">
                                                 </div>
                                             </td>
                                             <td>
                                                 <div class="checkbox">
-                                                    <input class="form-control form-control-sm" placeholder="14:00" name="${wednesday_end_time}" type="text">
+                                                    <input class="form-control form-control-sm" placeholder="14:00" name="${wednesday_end_time}" value="14:00" type="text">
                                                 </div>
                                             </td>
                                         </tr>
@@ -156,12 +215,12 @@
                                             <td>Thursday</td>
                                             <td>
                                                 <div class="checkbox">
-                                                    <input class="form-control form-control-sm" placeholder="12:00" name="${thursday_start_time}" type="text">
+                                                    <input class="form-control form-control-sm" placeholder="12:00" name="${thursday_start_time}" value="12:00" type="text">
                                                 </div>
                                             </td>
                                             <td>
                                                 <div class="checkbox">
-                                                    <input class="form-control form-control-sm" placeholder="14:00" name="${thursday_end_time}" type="text">
+                                                    <input class="form-control form-control-sm" placeholder="14:00" name="${thursday_end_time}" value="14:00" type="text">
                                                 </div>
                                             </td>
                                         </tr>
@@ -177,12 +236,12 @@
                                             <td>Friday</td>
                                             <td>
                                                 <div class="checkbox">
-                                                    <input class="form-control form-control-sm" placeholder="12:00" name="${friday_start_time}" type="text">
+                                                    <input class="form-control form-control-sm" placeholder="12:00" name="${friday_start_time}" value="12:00" type="text">
                                                 </div>
                                             </td>
                                             <td>
                                                 <div class="checkbox">
-                                                    <input class="form-control form-control-sm" placeholder="14:00" name="${friday_end_time}" type="text">
+                                                    <input class="form-control form-control-sm" placeholder="14:00" name="${friday_end_time}" value="14:00" type="text">
                                                 </div>
                                             </td>
                                         </tr>
@@ -198,12 +257,12 @@
                                             <td>Saturday</td>
                                             <td>
                                                 <div class="checkbox">
-                                                    <input class="form-control form-control-sm" placeholder="12:00" name="${saturday_start_time}" type="text">
+                                                    <input class="form-control form-control-sm" placeholder="12:00" name="${saturday_start_time}" value="12:00" type="text">
                                                 </div>
                                             </td>
                                             <td>
                                                 <div class="checkbox">
-                                                    <input class="form-control form-control-sm" placeholder="14:00" name="${saturday_end_time}" type="text">
+                                                    <input class="form-control form-control-sm" placeholder="14:00" name="${saturday_end_time}" value="14:00" type="text">
                                                 </div>
                                             </td>
                                         </tr>
@@ -219,12 +278,12 @@
                                             <td>Sunday</td>
                                             <td>
                                                 <div class="checkbox">
-                                                    <input class="form-control form-control-sm" placeholder="12:00" name="${sunday_start_time}" type="text">
+                                                    <input class="form-control form-control-sm" placeholder="12:00" name="${sunday_start_time}" value="12:00" type="text">
                                                 </div>
                                             </td>
                                             <td>
                                                 <div class="checkbox">
-                                                    <input class="form-control form-control-sm" placeholder="14:00" name="${sunday_end_time}" type="text">
+                                                    <input class="form-control form-control-sm" placeholder="14:00" name="${sunday_end_time}" value="14:00" type="text">
                                                 </div>
                                             </td>
                                         </tr>
@@ -234,9 +293,23 @@
                                 </div>
                             </div>
 
+                            <%-- Hidden course id --%>
+                            <c:if test="${not empty course}">
+                                <input type="hidden" name="${course_id}" value="${course.id}"/>
+                            </c:if>
+
+
                             <%-- Submit button --%>
                             <hr/>
-                            <input class="btn btn-lg btn-success btn-block" type="submit" value="Submit">
+                            <input
+                                    class="btn btn-lg btn-success btn-block"
+                                    type="submit"
+                                    <c:if test="${empty course}">
+                                        value="Submit"
+                                    </c:if>
+                                    <c:if test="${not empty course}">
+                                        value="Save changes"
+                                    </c:if>>
 
                         </fieldset>
                     </form>

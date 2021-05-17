@@ -1,21 +1,17 @@
 package domain.course;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.Type;
 
-import javax.persistence.Column;
-import javax.persistence.Embeddable;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import javax.persistence.*;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 
 @Embeddable
 
 @Builder
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class CourseInfo {
@@ -37,4 +33,5 @@ public class CourseInfo {
 
     @Type(type="text")
     private String uri;
+
 }

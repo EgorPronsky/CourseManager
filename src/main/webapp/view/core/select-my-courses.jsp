@@ -24,12 +24,12 @@
                 </div>
 
                 <div class="card-body">
-                    <form action="user-current-courses" method="get">
+                    <form action="${pageContext.request.requestURI}/my-current-courses" method="get">
                         <input class="btn btn-lg btn-primary btn-block" type="submit" value="Current courses">
                     </form>
                     <hr/>
 
-                    <form action="user-future-courses" method="get">
+                    <form action="${pageContext.request.requestURI}/my-future-courses" method="get">
                         <input class="btn btn-lg btn-primary btn-block" type="submit" value="Future courses">
                     </form>
                     <hr/>
@@ -37,14 +37,14 @@
                     <c:choose>
                         <%--Special button for students--%>
                         <c:when test="${current_user_info.userRole == UserRole.STUDENT}">
-                            <form action="student-completed-courses" method="get">
+                            <form action="${pageContext.request.requestURI}/my-completed-courses" method="get">
                                 <input class="btn btn-lg btn-primary btn-block" type="submit" value="Completed courses">
                             </form>
                         </c:when>
 
                         <%--Special button for teachers--%>
                         <c:when test="${current_user_info.userRole == UserRole.TEACHER}">
-                            <form action="teacher-not-graded-courses" method="get">
+                            <form action="${pageContext.request.requestURI}/my-not-graded-courses" method="get">
                                 <input class="btn btn-lg btn-primary btn-block" type="submit" value="Not graded courses">
                             </form>
                         </c:when>

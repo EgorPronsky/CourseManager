@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 
@@ -28,6 +29,7 @@ public class StudentCourseResult {
     @OneToOne
     private Course course;
 
+    @Enumerated(EnumType.STRING)
     private CourseResult result;
 
 }

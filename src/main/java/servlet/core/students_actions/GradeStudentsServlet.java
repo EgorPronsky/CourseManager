@@ -17,6 +17,8 @@ import java.security.InvalidParameterException;
 import java.util.Map;
 import java.util.Optional;
 
+import static filter.SessionFilter.APP_DOMAIN_NAME;
+
 @Slf4j
 public class GradeStudentsServlet extends HttpServlet {
 
@@ -27,14 +29,10 @@ public class GradeStudentsServlet extends HttpServlet {
         long courseId = Long.parseLong(request.getParameter(COURSE_ID_TO_GRADE_STUDENTS_PARAM));
 
         log.debug("Finding course by received id");
-        Optional<Course> courseOpt = CourseServiceImpl.getService().getCourseById(courseId);
+        Course course = CourseServiceImpl.getService()
+                .getCourseById_OrThrowEx(courseId);
 
-        if (!courseOpt.isPresent()) {
-            throw new InvalidParameterException("Course wasn't found by given id");
-        }
-        Course course = courseOpt.get();
-
-        log.debug("Receiving student results from request");
+        log.debug("Receiving student results from request and saving in map");
         Map<User, CourseResult> studentResults =
                 CourseInputHandler.getStudentResultsFromRequest(course, request);
 
@@ -42,6 +40,6 @@ public class GradeStudentsServlet extends HttpServlet {
         StudentCourseResultServiceImpl.getService()
                 .saveStudentCourseResults(course, studentResults);
 
-        response.sendRedirect("main-menu");
+        response.sendRedirect(String.format("/%s/main-menu", APP_DOMAIN_NAME));
     }
 }

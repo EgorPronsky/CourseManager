@@ -36,8 +36,7 @@ public class HibernateStudentCourseResultDAO extends HibernateGenericDAO<Student
             scrList.forEach(session::save);
             tr.commit();
         } catch (HibernateException e) {
-            log.debug("Error while saving SCR entities");
-            e.printStackTrace();
+            log.debug("Error while saving SCR entities", e);
             if (tr != null && tr.isActive()) tr.rollback();
         }
     }
@@ -48,28 +47,21 @@ public class HibernateStudentCourseResultDAO extends HibernateGenericDAO<Student
         Transaction tr = null;
 
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            tr = session.beginTransaction();
-
-            /*// Fetch all students results by course id
-            String hqlQuery = "FROM StudentCourseResult scr WHERE scr.course.id=:course_id";
-
-            Query<StudentCourseResult> query = session.createQuery(hqlQuery);
-            query.setParameter("course_id", courseId);*/
-
+            // Prepare
             CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
-
             CriteriaQuery<StudentCourseResult> query = criteriaBuilder.createQuery(StudentCourseResult.class);
             Root<StudentCourseResult> scr = query.from(StudentCourseResult.class);
 
             query.select(scr)
-                    .where(criteriaBuilder.equal(scr.get(StudentCourseResult_.COURSE).get(Course_.ID), courseId));
+                    .where(criteriaBuilder
+                            .equal(scr.get(StudentCourseResult_.course).get(Course_.id), courseId));
 
+            // Executing query and saving result
+            tr = session.beginTransaction();
             scrList.addAll(session.createQuery(query).getResultList());
-
             tr.commit();
         } catch (PersistenceException e) {
-            log.debug("Error while finding student course result by course id");
-            e.printStackTrace();
+            log.debug("Error while finding course students results", e);
             if (tr != null && tr.isActive()) tr.rollback();
         }
         return scrList;
@@ -81,28 +73,21 @@ public class HibernateStudentCourseResultDAO extends HibernateGenericDAO<Student
         Transaction tr = null;
 
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            tr = session.beginTransaction();
-
-            /*// Fetch all courses results by student id
-            String hqlQuery = "FROM StudentCourseResult scr WHERE scr.student.id=:student_id";
-
-            Query query = session.createQuery(hqlQuery);
-            query.setParameter("student_id", studentId);*/
-
+            // Prepare
             CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
-
             CriteriaQuery<StudentCourseResult> query = criteriaBuilder.createQuery(StudentCourseResult.class);
             Root<StudentCourseResult> scr = query.from(StudentCourseResult.class);
 
             query.select(scr)
-                    .where(criteriaBuilder.equal(scr.get(StudentCourseResult_.STUDENT).get(Course_.ID), studentId));
+                    .where(criteriaBuilder
+                            .equal(scr.get(StudentCourseResult_.student).get(User_.id), studentId));
 
+            // Executing query and saving result
+            tr = session.beginTransaction();
             scrList.addAll(session.createQuery(query).getResultList());
-
             tr.commit();
         } catch (PersistenceException e) {
-            log.debug("Error while finding student courses with results");
-            e.printStackTrace();
+            log.debug("Error while finding student courses results", e);
             if (tr != null && tr.isActive()) tr.rollback();
         }
         return scrList;

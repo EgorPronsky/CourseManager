@@ -27,7 +27,7 @@
 
                 <%-- Body--%>
                 <div class="card-body">
-                    <form action="select-my-courses" method="get">
+                    <form action="${pageContext.request.requestURI}/select-courses" method="get">
                         <input class="btn btn-lg btn-primary btn-block" type="submit" value="View my courses">
                     </form>
                     <hr/>
@@ -35,14 +35,14 @@
                     <c:choose>
                         <%--Special button for students--%>
                         <c:when test="${current_user_info.userRole == UserRole.STUDENT}">
-                            <form action="join-new-courses-page" method="get">
-                                <input class="btn btn-lg btn-primary btn-block" type="submit" value="Sign up for a new courses">
+                            <form action="${pageContext.request.requestURI}/join-new-courses" method="get">
+                                <input class="btn btn-lg btn-primary btn-block" type="submit" value="Join new courses">
                             </form>
                         </c:when>
 
                         <%--Special button for teachers--%>
                         <c:when test="${current_user_info.userRole == UserRole.TEACHER}">
-                            <form action="view/core/create-new-course.jsp" method="get">
+                            <form action="${pageContext.request.requestURI}/create-new-course" method="get">
                                 <input class="btn btn-lg btn-primary btn-block" type="submit" value="Create a new course">
                             </form>
                         </c:when>
@@ -54,7 +54,7 @@
 
                     <%-- Log out button --%>
                     <hr/>
-                    <form action="log-out" method="get">
+                    <form action="${pageContext.request.requestURI}/log-out" method="get">
                         <input class="btn btn-lg btn-success btn-block" type="submit" value="Log out">
                     </form>
 

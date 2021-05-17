@@ -10,9 +10,14 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import static filter.SignInFilter.EMAIL_PARAM;
+import static filter.SignInFilter.PASSWORD_PARAM;
+
 @Slf4j
 public class RegistrationFilter implements Filter {
 
+    // Parameter and attribute names
+    public static final String PASSWORD_CONFIRM_PARAM = "password_confirm";
     public static final String PASSWORD_MISMATCH_MESSAGE_ATTR = "password_mismatch_message";
     public static final String EMAIL_EXISTS_MESSAGE_ATTR = "email_exists_message";
 
@@ -21,9 +26,9 @@ public class RegistrationFilter implements Filter {
     public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain)
             throws ServletException, IOException {
         log.debug("Receiving user input");
-        String email = req.getParameter("email");
-        String password = req.getParameter("password");
-        String passwordConfirm = req.getParameter("password_confirm");
+        String email = req.getParameter(EMAIL_PARAM);
+        String password = req.getParameter(PASSWORD_PARAM);
+        String passwordConfirm = req.getParameter(PASSWORD_CONFIRM_PARAM);
 
         log.debug("Checking user input on validity");
         boolean isInputValid = true;
@@ -44,7 +49,7 @@ public class RegistrationFilter implements Filter {
         } else {
             log.debug("User input invalid");
             ViewHandler viewHandler = new JspViewHandler();
-            viewHandler.renderView("/view/access/registration.jsp", respAttrs, req, resp);
+            viewHandler.renderView("/registration-page", respAttrs, req, resp);
         }
     }
 

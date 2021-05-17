@@ -1,13 +1,11 @@
 package servlet.core.get_courses;
 
 import domain.course.Course;
-import domain.user.User;
 import lombok.extern.slf4j.Slf4j;
 import services.impl.CourseServiceImpl;
 import handlers.view_handlers.impl.JspViewHandler;
 import handlers.view_handlers.ViewHandler;
 import services.impl.UserServiceImpl;
-import servlet.access.SignInServlet;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -17,10 +15,13 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
+
+import static servlet.core.get_courses.UserCurrentCoursesServlet.*;
 
 @Slf4j
 public class UserFutureCoursesServlet extends HttpServlet {
+
+    public static final String FUTURE_COURSES_STATE_ATTR_VALUE = "future";
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         log.debug("Receiving current user id from session");
@@ -33,8 +34,8 @@ public class UserFutureCoursesServlet extends HttpServlet {
 
         log.debug("Preparing attributes for response");
         Map<String, Object> respAttrs = new HashMap<>();
-        respAttrs.put(UserCurrentCoursesServlet.COURSES_STATE_ATTR, "future");
-        respAttrs.put(UserCurrentCoursesServlet.SELECTED_COURSES_ATTR, currentCourses);
+        respAttrs.put(COURSES_STATE_ATTR, FUTURE_COURSES_STATE_ATTR_VALUE);
+        respAttrs.put(COURSES_ATTR, currentCourses);
 
         log.debug("Invoking view handler");
         ViewHandler viewHandler = new JspViewHandler();

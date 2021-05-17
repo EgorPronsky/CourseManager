@@ -32,9 +32,9 @@ public class JoinNewCoursesServlet extends HttpServlet {
                 .map(Long::valueOf)
                 .collect(Collectors.toList());
 
-        log.debug("Getting courses to join from DB by id");
+        log.debug("Getting courses to join by id from DB");
         List<Course> coursesToJoin = CourseServiceImpl.getService()
-                .getAllCoursesById(coursesIdList);
+                .getCoursesById(coursesIdList);
 
         log.debug("Getting current user from DB");
         User currentUser = UserServiceImpl.getService()

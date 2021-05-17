@@ -26,8 +26,7 @@ public class HibernateGenericDAO<T> implements GenericDAO<T> {
             session.save(entity);
             tr.commit();
         } catch (HibernateException e) {
-            log.error("Error occurred while saving an entity");
-            e.printStackTrace();
+            log.error("Error occurred during saving an entity", e);
             if (tr != null && tr.isActive()) tr.rollback();
         }
     }
@@ -42,8 +41,7 @@ public class HibernateGenericDAO<T> implements GenericDAO<T> {
             entity = session.get(type, id);
             tr.commit();
         } catch (HibernateException e) {
-            log.error("Error occurred while finding an entity by id");
-            e.printStackTrace();
+            log.error("Error occurred during finding an entity by id", e);
             if (tr != null && tr.isActive()) tr.rollback();
         }
         return Optional.ofNullable(entity);
@@ -57,8 +55,7 @@ public class HibernateGenericDAO<T> implements GenericDAO<T> {
             session.update(entity);
             tr.commit();
         } catch (HibernateException e) {
-            log.error("Error occurred while updating an entity");
-            e.printStackTrace();
+            log.error("Error occurred during updating an entity", e);
             if (tr != null && tr.isActive()) tr.rollback();
         }
     }
@@ -71,8 +68,7 @@ public class HibernateGenericDAO<T> implements GenericDAO<T> {
             session.delete(entity);
             tr.commit();
         } catch (HibernateException e) {
-            log.error("Error occurred while deleting an entity");
-            e.printStackTrace();
+            log.error("Error occurred during deleting an entity", e);
             if (tr != null && tr.isActive()) tr.rollback();
         }
     }

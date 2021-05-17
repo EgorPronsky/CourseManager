@@ -6,13 +6,14 @@ import domain.course.Course;
 import lombok.extern.slf4j.Slf4j;
 import services.CourseService;
 
+import java.security.InvalidParameterException;
 import java.time.LocalDate;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Slf4j
 public class CourseServiceImpl implements CourseService {
 
+    private static final CourseServiceImpl service;
     private final CourseDAO dao;
 
     private CourseServiceImpl() {
@@ -21,22 +22,17 @@ public class CourseServiceImpl implements CourseService {
         log.info("{} was initialized", CourseServiceImpl.class.getName());
     }
 
-    // Init on-demand
-    private static class ServiceHolder {
-        static final CourseServiceImpl service = new CourseServiceImpl();
+    static {
+        service = new CourseServiceImpl();
     }
 
     public static CourseServiceImpl getService() {
-        return ServiceHolder.service;
+        return service;
     }
 
     public List<Course> getUserFutureCourses(long userId) {
         LocalDate today = LocalDate.now();
         return dao.getUserCoursesStartAfterDate(userId, today);
-    }
-
-    public List<Course> getAllCoursesById(List<Long> idList) {
-        return dao.getAllById(idList);
     }
 
     public List<Course> getUserCurrentCourses(long userId) {
@@ -45,42 +41,54 @@ public class CourseServiceImpl implements CourseService {
     }
 
     /**
-     * @return courses that start tomorrow or later
+     * @return student finished but ungraded courses
      */
     @Override
-    public List<Course> getAllFutureCourses() {
+    public List<Course> getStudentFinishedUngradedCourses(long userId) {
         LocalDate today = LocalDate.now();
-        return dao.getAllStartedAfterDate(today);
-    }
-
-    @Override
-    public List<Course> getAllCourses() {
-        LocalDate date = LocalDate.of(2000, 1, 8);
-        return dao.getAllStartedAfterDate(date);
+        return dao.getStudentUngradedCoursesEndedBeforeDate(userId, today);
     }
 
     /**
-     * @return user finished and ungraded courses
+     * @return teacher finished but ungraded courses
      */
     @Override
-    public List<Course> getUserFinishedUngradedCourses(long userId) {
+    public List<Course> getTeacherFinishedNotGradedCourses(long userId) {
         LocalDate today = LocalDate.now();
-        return dao.getUserUngradedCoursesEndedBeforeDate(userId, today);
+        return dao.getTeacherNotGradedCoursesEndedBeforeDate(userId, today);
     }
 
     @Override
-    public Optional<Course> getCourseById(long id) {
-        return dao.findById(id);
+    public List<Course> getStudentAvailableToJoinCourses(long userId) {
+        LocalDate today = LocalDate.now();
+        return dao.getStudentNotSubscribedCoursesStartAfterDate(userId, today);
     }
 
     @Override
-    public void saveCourse(Course course) {
-        dao.save(course);
+    public Course getCourseById_OrThrowEx(long courseId) {
+        Optional<Course> courseOpt = getCourseById(courseId);
+        if (!courseOpt.isPresent()) throw new InvalidParameterException("Course wasn't found");
+        return courseOpt.get();
     }
 
     @Override
-    public void updateCourse(Course course) {
-        dao.update(course);
+    public Optional<Course> getCourseById(long courseId) {
+        return dao.findById(courseId);
+    }
+
+    @Override
+    public List<Course> getCoursesById(Collection<Long> idCollection) {
+        return dao.getCoursesById(idCollection);
+    }
+
+    @Override
+    public void saveOrUpdateCourse(Course course) {
+        dao.saveOrUpdate(course);
+    }
+
+    @Override
+    public void deleteCourse(Course course) {
+        dao.delete(course);
     }
 
 }

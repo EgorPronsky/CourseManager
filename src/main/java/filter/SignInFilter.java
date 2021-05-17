@@ -16,10 +16,11 @@ import java.util.Optional;
 @Slf4j
 public class SignInFilter implements Filter {
 
+    // Parameter and attribute names
     public static final String EMAIL_PARAM = "email";
     public static final String PASSWORD_PARAM = "password";
-
     public static final String SIGN_IN_USER_ATTR = "sign_in_user";
+
     public static final String INVALID_EMAIL_OR_PASSWORD_MESSAGE_ATTR = "invalid_email_or_password_message";
 
     public void init(FilterConfig config) throws ServletException { }

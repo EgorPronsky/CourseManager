@@ -20,7 +20,7 @@ public class CourseCreator {
 
         // Converting string to date
         LocalDate startDate = LocalDate.parse(startDateStr, DateTimeFormatter.ofPattern(datePattern));
-        LocalDate endDate = LocalDate.parse(endDateStr, DateTimeFormatter.ofPattern(datePattern));
+        LocalDate endDate =   LocalDate.parse(endDateStr, DateTimeFormatter.ofPattern(datePattern));
 
         return Course.builder()
                 .courseInfo(CourseInfo.builder()

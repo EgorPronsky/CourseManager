@@ -4,12 +4,12 @@
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
          version="4.0">
 
-    <!-- Listeners !-->
+    <!-- Listeners -->
     <listener>
-        <listener-class>listeners.ApplicationStartUpListener</listener-class>
+        <listener-class>listener.ApplicationStartUpListener</listener-class>
     </listener>
 
-    <!-- Filters !-->
+    <!-- Filters -->
     <filter>
         <filter-name>SessionFilter</filter-name>
         <filter-class>filter.SessionFilter</filter-class>
@@ -27,7 +27,7 @@
         <filter-class>filter.SignInFilter</filter-class>
     </filter>
 
-    <!-- Filters mapping !-->
+    <!-- Filters mapping -->
     <filter-mapping>
         <filter-name>SessionFilter</filter-name>
         <url-pattern>/*</url-pattern>
@@ -45,7 +45,7 @@
         <url-pattern>/sign-in</url-pattern>
     </filter-mapping>
 
-    <!-- Servlets !-->
+    <!-- Servlets -->
     <servlet>
         <servlet-name>SignInServlet</servlet-name>
         <servlet-class>servlet.access.SignInServlet</servlet-class>
@@ -55,14 +55,13 @@
         <servlet-class>servlet.access.SignUpServlet</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>SubmitNewCourseServlet</servlet-name>
-        <servlet-class>servlet.core.course_actions.SubmitNewCourseServlet</servlet-class>
+        <servlet-name>SaveOrUpdateCourseServlet</servlet-name>
+        <servlet-class>servlet.core.course_actions.SaveOrUpdateCourseServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>JoinNewCoursesServlet</servlet-name>
         <servlet-class>servlet.core.course_actions.JoinNewCoursesServlet</servlet-class>
     </servlet>
-
     <servlet>
         <servlet-name>JoinNewCoursesPageServlet</servlet-name>
         <servlet-class>servlet.core.get_courses.GetAvailableCoursesServlet</servlet-class>
@@ -95,7 +94,20 @@
         <servlet-name>LeaveCourseServlet</servlet-name>
         <servlet-class>servlet.core.course_actions.LeaveCourseServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>LogoutServlet</servlet-name>
+        <servlet-class>servlet.access.LogoutServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>DeleteCourseServlet</servlet-name>
+        <servlet-class>servlet.core.course_actions.DeleteCourseServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>EditCoursePageServlet</servlet-name>
+        <servlet-class>servlet.core.get_courses.GetCourseToEditServlet</servlet-class>
+    </servlet>
 
+    <!-- JSP -->
     <servlet>
         <servlet-name>LoginPageServlet</servlet-name>
         <jsp-file>/view/access/login.jsp</jsp-file>
@@ -113,18 +125,27 @@
         <jsp-file>/view/access/registration.jsp</jsp-file>
     </servlet>
     <servlet>
-        <servlet-name>LogoutServlet</servlet-name>
-        <servlet-class>servlet.access.LogoutServlet</servlet-class>
+        <servlet-name>CreateNewCoursePageServlet</servlet-name>
+        <jsp-file>/view/core/create-new-course.jsp</jsp-file>
     </servlet>
 
-    <!-- Servlets mapping !-->
+
+    <!-- Servlets mapping -->
+    <servlet-mapping>
+        <servlet-name>CreateNewCoursePageServlet</servlet-name>
+        <url-pattern>/main-menu/create-new-course</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>EditCoursePageServlet</servlet-name>
+        <url-pattern>/main-menu/select-courses/edit-course</url-pattern>
+    </servlet-mapping>
     <servlet-mapping>
         <servlet-name>LogoutServlet</servlet-name>
-        <url-pattern>/log-out</url-pattern>
+        <url-pattern>/main-menu/log-out</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>SelectMyCoursesServlet</servlet-name>
-        <url-pattern>/select-my-courses</url-pattern>
+        <url-pattern>/main-menu/select-courses</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>MainMenuPageServlet</servlet-name>
@@ -132,31 +153,39 @@
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>LeaveCourseServlet</servlet-name>
-        <url-pattern>/leave-course</url-pattern>
+        <url-pattern>/main-menu/select-courses/leave-course</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DeleteCourseServlet</servlet-name>
+        <url-pattern>/main-menu/select-courses/delete-course</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SaveOrUpdateCourseServlet</servlet-name>
+        <url-pattern>/main-menu/create-or-update-course</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>GradeStudentsServlet</servlet-name>
-        <url-pattern>/grade-students</url-pattern>
+        <url-pattern>/main-menu/select-courses/my-not-graded-courses/students/grade-students</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>CourseStudentsServlet</servlet-name>
-        <url-pattern>/course-students</url-pattern>
+        <url-pattern>/main-menu/select-courses/my-not-graded-courses/students</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>UserCurrentCoursesServlet</servlet-name>
-        <url-pattern>/user-current-courses</url-pattern>
+        <url-pattern>/main-menu/select-courses/my-current-courses</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>UserFutureCoursesServlet</servlet-name>
-        <url-pattern>/user-future-courses</url-pattern>
+        <url-pattern>/main-menu/select-courses/my-future-courses</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>StudentCompletedCoursesServlet</servlet-name>
-        <url-pattern>/student-completed-courses</url-pattern>
+        <url-pattern>/main-menu/select-courses/my-completed-courses</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>TeacherNotGradedCoursesServlet</servlet-name>
-        <url-pattern>/teacher-not-graded-courses</url-pattern>
+        <url-pattern>/main-menu/select-courses/my-not-graded-courses</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>SignInServlet</servlet-name>
@@ -167,12 +196,8 @@
         <url-pattern>/sign-up</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>SubmitNewCourseServlet</servlet-name>
-        <url-pattern>/submit-new-course</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
         <servlet-name>JoinNewCoursesServlet</servlet-name>
-        <url-pattern>/join-new-courses</url-pattern>
+        <url-pattern>/main-menu/join-new-courses/join-selected-courses</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>LoginPageServlet</servlet-name>
@@ -184,7 +209,7 @@
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>JoinNewCoursesPageServlet</servlet-name>
-        <url-pattern>/join-new-courses-page</url-pattern>
+        <url-pattern>/main-menu/join-new-courses</url-pattern>
     </servlet-mapping>
 
 </web-app>

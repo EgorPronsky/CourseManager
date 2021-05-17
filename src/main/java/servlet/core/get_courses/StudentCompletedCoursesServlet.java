@@ -34,7 +34,7 @@ public class StudentCompletedCoursesServlet extends HttpServlet {
         long currentUserId = UserServiceImpl.getService()
                 .getCurrentUserIdFromSession_OrThrowEx(request);
 
-        log.debug("Getting student graded courses with results");
+        log.debug("Getting student finished graded courses");
         List<StudentCourseResult> gradedCourses =
                 StudentCourseResultServiceImpl.getService()
                         .getCoursesResultsByStudentId(currentUserId);
@@ -42,10 +42,9 @@ public class StudentCompletedCoursesServlet extends HttpServlet {
         User user = UserServiceImpl.getService()
                 .findUserById_OrThrowEx(currentUserId);
 
-        log.debug("Getting student ungraded finished courses");
+        log.debug("Getting student finished ungraded courses");
         List<StudentCourseResult> ungradedCourses = CourseServiceImpl.getService()
-                .getUserFinishedUngradedCourses(currentUserId)
-                .stream()
+                .getStudentFinishedUngradedCourses(currentUserId).stream()
                 .map(course -> StudentCourseResultCreator
                                 .createStudentCourseResult(user, course, CourseResult.NOT_GRADED))
                 .collect(Collectors.toList());

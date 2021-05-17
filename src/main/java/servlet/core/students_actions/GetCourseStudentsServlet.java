@@ -27,12 +27,8 @@ public class GetCourseStudentsServlet extends HttpServlet {
         long courseId = Long.parseLong(request.getParameter(COURSE_ID_TO_GET_STUDENTS_PARAM));
 
         log.debug("Finding course by received id");
-        Optional<Course> courseOpt = CourseServiceImpl.getService().getCourseById(courseId);
-
-        if (!courseOpt.isPresent()) {
-            throw new InvalidParameterException("Course wasn't found by given id");
-        }
-        Course course = courseOpt.get();
+        Course course = CourseServiceImpl.getService()
+                .getCourseById_OrThrowEx(courseId);
 
         log.debug("Preparing attributes for response");
         Map<String, Object> respAttrs = new HashMap<>();

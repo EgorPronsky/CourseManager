@@ -10,6 +10,7 @@ import domain.course.Course_;
 import domain.user.User;
 import domain.user.User_;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import util.HibernateUtil;
@@ -19,6 +20,7 @@ import javax.persistence.PersistenceException;
 import javax.persistence.criteria.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 @Slf4j
@@ -29,10 +31,45 @@ public class HibernateCourseDAO extends HibernateGenericDAO<Course> implements C
     }
 
     @Override
-    public List<Course> getTeacherUngradedCoursesEndedBeforeDate(long userId, LocalDate date) {
-        return null;
+    public void saveOrUpdate(Course course) {
+        Transaction tr = null;
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            tr = session.beginTransaction();
+            session.saveOrUpdate(course);
+            tr.commit();
+        } catch (HibernateException e) {
+            log.error("Error occurred while saving or updating course", e);
+            if (tr != null && tr.isActive()) tr.rollback();
+        }
     }
 
+
+    @Override
+    public List<Course> getCoursesById(Collection<Long> idCollection) {
+        List<Course> courses = new ArrayList<>();
+        Transaction tr = null;
+
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            // Prepare
+            CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+            CriteriaQuery<Course> query = criteriaBuilder.createQuery(Course.class);
+            Root<Course> course = query.from(Course.class);
+
+            query.select(course)
+                    .where(course.get(Course_.id).in(idCollection));
+
+            // Executing query and saving result
+            tr = session.beginTransaction();
+            courses.addAll(session.createQuery(query).getResultList());
+            tr.commit();
+        } catch (PersistenceException e) {
+            log.error("Error while getting courses by id", e);
+            if (tr != null && tr.isActive()) tr.rollback();
+        }
+        return courses;
+    }
+
+    @Override
     public List<Course> getStudentNotSubscribedCoursesStartAfterDate(long userId, LocalDate date) {
         List<Course> courses = new ArrayList<>();
         Transaction tr = null;
@@ -41,31 +78,31 @@ public class HibernateCourseDAO extends HibernateGenericDAO<Course> implements C
             // Prepare
             CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
             CriteriaQuery<Course> rootQuery = criteriaBuilder.createQuery(Course.class);
-            Root<Course> course = rootQuery.from(Course.class);
+            Root<Course> courseRoot = rootQuery.from(Course.class);
 
-            // Sub query to get user graded courses
+            // Sub query to get user subscribed courses
             Subquery<Course> subQuery = rootQuery.subquery(Course.class);
-            Root<StudentCourseResult> scr = subQuery.from(StudentCourseResult.class);
-            Join<StudentCourseResult, User> user = scr.join(StudentCourseResult_.student);
+            Root<Course> courseSubRoot = subQuery.from(Course.class);
+            Join<Course, User> userSubJoin = courseSubRoot.join(Course_.teacherAndStudents);
 
-            subQuery.select(scr.get(StudentCourseResult_.course))
-                    .where(criteriaBuilder.equal(user.get(User_.id), userId));
+            subQuery.select(courseSubRoot)
+                    .where(criteriaBuilder.equal(userSubJoin.get(User_.id), userId));
 
-            // Predicates for WHERE clause
-            Predicate predicateForUserId = course.in(subQuery).not();
+            // Predicates for WHERE clause of root query
+            Predicate predicateForUserNotSubscribedCourses = courseRoot.in(subQuery).not();
             Predicate predicateForDate = criteriaBuilder.greaterThan(
-                    course.get(Course_.courseInfo).get(CourseInfo_.startDate), date);
+                    courseRoot.get(Course_.courseInfo).get(CourseInfo_.startDate), date);
 
-            rootQuery.select(course)
-                    .where(criteriaBuilder.and(predicateForUserId, predicateForDate));
+            rootQuery.select(courseRoot)
+                    .where(criteriaBuilder
+                            .and(predicateForUserNotSubscribedCourses, predicateForDate));
 
             // Executing query and saving result
             tr = session.beginTransaction();
             courses.addAll(session.createQuery(rootQuery).getResultList());
             tr.commit();
         } catch (PersistenceException e) {
-            log.error("Error while getting all courses started after given date");
-            e.printStackTrace();
+            log.error("Error while getting all courses started after given date", e);
             if (tr != null && tr.isActive()) tr.rollback();
         }
         return courses;
@@ -81,14 +118,14 @@ public class HibernateCourseDAO extends HibernateGenericDAO<Course> implements C
             CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
             CriteriaQuery<Course> query = criteriaBuilder.createQuery(Course.class);
             Root<User> userRoot = query.from(User.class);
-            Join<User, Course> course = userRoot.join(User_.courses);
+            Join<User, Course> courseJoin = userRoot.join(User_.courses);
 
             // Predicates for WHERE clause
             Predicate predicateForUserId = criteriaBuilder.equal(userRoot.get(User_.id), userId);
             Predicate predicateForDate = criteriaBuilder.greaterThan(
-                    course.get(Course_.courseInfo).get(CourseInfo_.startDate), date);
+                    courseJoin.get(Course_.courseInfo).get(CourseInfo_.startDate), date);
 
-            query.select(course)
+            query.select(courseJoin)
                     .where(criteriaBuilder.and(predicateForUserId, predicateForDate));
 
             // Executing query and saving result
@@ -96,8 +133,7 @@ public class HibernateCourseDAO extends HibernateGenericDAO<Course> implements C
             courses.addAll(session.createQuery(query).getResultList());
             tr.commit();
         } catch (PersistenceException e) {
-            log.error("Error while getting all courses started after given date");
-            e.printStackTrace();
+            log.error("Error while getting all courses started after given date", e);
             if (tr != null && tr.isActive()) tr.rollback();
         }
         return courses;
@@ -113,16 +149,16 @@ public class HibernateCourseDAO extends HibernateGenericDAO<Course> implements C
             CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
             CriteriaQuery<Course> query = criteriaBuilder.createQuery(Course.class);
             Root<User> userRoot = query.from(User.class);
-            Join<User, Course> course = userRoot.join(User_.courses);
+            Join<User, Course> courseJoin = userRoot.join(User_.courses);
 
             // Predicates for WHERE clause
             Predicate predicateForUserId = criteriaBuilder.equal(userRoot.get(User_.id), userId);
             Predicate predicateForStartDate = criteriaBuilder.lessThanOrEqualTo(
-                    course.get(Course_.courseInfo).get(CourseInfo_.startDate), date);
+                    courseJoin.get(Course_.courseInfo).get(CourseInfo_.startDate), date);
             Predicate predicateForEndDate = criteriaBuilder.greaterThanOrEqualTo(
-                    course.get(Course_.courseInfo).get(CourseInfo_.endDate), date);
+                    courseJoin.get(Course_.courseInfo).get(CourseInfo_.endDate), date);
 
-            query.select(course)
+            query.select(courseJoin)
                     .where(criteriaBuilder
                             .and(predicateForUserId, predicateForStartDate, predicateForEndDate));
 
@@ -131,8 +167,7 @@ public class HibernateCourseDAO extends HibernateGenericDAO<Course> implements C
             courses.addAll(session.createQuery(query).getResultList());
             tr.commit();
         } catch (PersistenceException e) {
-            log.error("Error while getting all courses started after given date");
-            e.printStackTrace();
+            log.error("Error while getting all courses started after given date", e);
             if (tr != null && tr.isActive()) tr.rollback();
         }
         return courses;
@@ -147,98 +182,81 @@ public class HibernateCourseDAO extends HibernateGenericDAO<Course> implements C
             // Prepare
             CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
             CriteriaQuery<Course> rootQuery = criteriaBuilder.createQuery(Course.class);
-            Root<Course> courseRoot = rootQuery.from(Course.class);
+            Root<User> userRoot = rootQuery.from(User.class);
+            Join<User, Course> courseJoin = userRoot.join(User_.courses);
 
-            // Sub query to get user graded courses
+            // Sub query to get student graded courses
             Subquery<Course> subQuery = rootQuery.subquery(Course.class);
-            Root<StudentCourseResult> scr = subQuery.from(StudentCourseResult.class);
+            Root<StudentCourseResult> scrSubRoot = subQuery.from(StudentCourseResult.class);
 
             // Predicate for sub query
-            Predicate predicateForUserId = criteriaBuilder
-                    .equal(scr.get(StudentCourseResult_.student).get(User_.id), userId);
+            Predicate subPredicateForUserId = criteriaBuilder
+                    .equal(scrSubRoot.get(StudentCourseResult_.student).get(User_.id), userId);
 
-            subQuery.select(scr.get(StudentCourseResult_.course))
-                    .where(predicateForUserId);
+            subQuery.select(scrSubRoot.get(StudentCourseResult_.course))
+                    .where(subPredicateForUserId);
 
-            // Predicates for WHERE clause in root query
-            Predicate predicateForUserCourses = courseRoot.in(subQuery).not();
+            // Predicates for WHERE clause of root query
+            Predicate predicateForUserId = criteriaBuilder.equal(userRoot.get(User_.id), userId);
+            Predicate predicateForUserNotGradedCourses = courseJoin.in(subQuery).not();
             Predicate predicateForDate = criteriaBuilder
-                    .lessThan(courseRoot.get(Course_.courseInfo).get(CourseInfo_.endDate), date);
+                    .lessThan(courseJoin.get(Course_.courseInfo).get(CourseInfo_.endDate), date);
 
-            rootQuery.select(courseRoot)
-                    .where(criteriaBuilder.and(predicateForUserCourses, predicateForDate));
+            rootQuery.select(courseJoin)
+                    .where(criteriaBuilder
+                            .and(predicateForUserId, predicateForUserNotGradedCourses, predicateForDate));
 
             // Executing query and saving result
             tr = session.beginTransaction();
             requiredCourses.addAll(session.createQuery(rootQuery).getResultList());
             tr.commit();
         } catch (PersistenceException e) {
-            log.error("Error during getting user ungraded courses ended before given date");
-            e.printStackTrace();
+            log.error("Error while getting user ungraded courses ended before given date", e);
             if (tr != null && tr.isActive()) tr.rollback();
         }
         return requiredCourses;
     }
 
     @Override
-    public List<Course> getAllById(List<Long> idList) {
-        List<Course> courses = new ArrayList<>();
+    public List<Course> getTeacherNotGradedCoursesEndedBeforeDate(long userId, LocalDate date) {
+        List<Course> requiredCourses = new ArrayList<>();
         Transaction tr = null;
 
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             // Prepare
             CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
-            CriteriaQuery<Course> query = criteriaBuilder.createQuery(Course.class);
-            Root<Course> root = query.from(Course.class);
+            CriteriaQuery<Course> rootQuery = criteriaBuilder.createQuery(Course.class);
+            Root<User> userRoot = rootQuery.from(User.class);
+            Join<User, Course> courseJoin = userRoot.join(User_.courses);
 
-            query.select(root).where(root.<Long>get(Course_.ID).in(idList));
+            // Sub query to get all graded courses
+            Subquery<Course> subQuery = rootQuery.subquery(Course.class);
+            Root<StudentCourseResult> scrSubRoot = subQuery.from(StudentCourseResult.class);
+
+            subQuery.select(scrSubRoot.get(StudentCourseResult_.course))
+                    .distinct(true);
+
+            // Predicates for WHERE clause of root query
+            Predicate predicateForUserId = criteriaBuilder.equal(userRoot.get(User_.id), userId);
+            Predicate predicateForUserNotGradedCourses = courseJoin.in(subQuery).not();
+            Predicate predicateForDate = criteriaBuilder
+                    .lessThan(courseJoin.get(Course_.courseInfo).get(CourseInfo_.endDate), date);
+
+            rootQuery.select(courseJoin)
+                    .where(criteriaBuilder
+                            .and(predicateForUserId, predicateForUserNotGradedCourses, predicateForDate));
 
             // Executing query and saving result
             tr = session.beginTransaction();
-            courses.addAll(session.createQuery(query).getResultList());
+            requiredCourses.addAll(session.createQuery(rootQuery).getResultList());
             tr.commit();
         } catch (PersistenceException e) {
-            log.error("Error while getting all courses by id");
-            e.printStackTrace();
+            log.error("Error while getting user ungraded courses ended before given date", e);
             if (tr != null && tr.isActive()) tr.rollback();
         }
-        return courses;
+        return requiredCourses;
     }
 
 
 
-    @Override
-    public List<Course> getAllStartedAfterDate(LocalDate date) {
-        List<Course> courses = new ArrayList<>();
-        Transaction tr = null;
-
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            tr = session.beginTransaction();
-
-            /*// Fetch all courses started after given date
-            String hqlQuery = "FROM Course crs WHERE crs.courseInfo.startDate > :date";
-
-            Query<Course> query = session.createQuery(hqlQuery);
-            query.setParameter("date", date, TemporalType.DATE);*/
-
-
-            CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
-
-            CriteriaQuery<Course> query = criteriaBuilder.createQuery(Course.class);
-            Root<Course> root = query.from(Course.class);
-
-            query.select(root)
-                    .where(criteriaBuilder.greaterThan(
-                            root.<LocalDate>get(Course_.COURSE_INFO).get(CourseInfo_.START_DATE), date));
-
-            courses.addAll(session.createQuery(query).getResultList());
-
-            tr.commit();
-        } catch (PersistenceException e) {
-            log.error("Error while getting all courses started after given date");
-            e.printStackTrace();
-            if (tr != null && tr.isActive()) tr.rollback();
-        }
-        return courses;
-    }
 }

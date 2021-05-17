@@ -12,6 +12,7 @@ import java.util.Optional;
 @Slf4j
 public class AccessInfoServiceImpl implements AccessInfoService {
 
+    private static final AccessInfoServiceImpl service;
     private final AccessInfoDAO dao;
 
     private AccessInfoServiceImpl(){
@@ -20,13 +21,12 @@ public class AccessInfoServiceImpl implements AccessInfoService {
         log.info("{} was initialized", AccessInfoServiceImpl.class.getName());
     }
 
-    // Init on-demand
-    private static class ServiceHolder {
-        static final AccessInfoServiceImpl service = new AccessInfoServiceImpl();
+    static {
+        service = new AccessInfoServiceImpl();
     }
 
     public static AccessInfoServiceImpl getService() {
-        return ServiceHolder.service;
+        return service;
     }
 
     @Override

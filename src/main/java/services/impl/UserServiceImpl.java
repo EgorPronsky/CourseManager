@@ -11,6 +11,8 @@ import services.UserService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.swing.text.html.Option;
+import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 import static servlet.access.SignInServlet.CURRENT_USER_ID_SESSION_ATTR;
@@ -18,6 +20,7 @@ import static servlet.access.SignInServlet.CURRENT_USER_ID_SESSION_ATTR;
 @Slf4j
 public class UserServiceImpl implements UserService {
 
+    private static final UserServiceImpl service;
     private final UserDAO dao;
 
     private UserServiceImpl(){
@@ -26,34 +29,30 @@ public class UserServiceImpl implements UserService {
         log.info("{} was initialized", UserServiceImpl.class.getName());
     }
 
-    // Init on-demand
-    private static class ServiceHolder {
-        static final UserServiceImpl service = new UserServiceImpl();
+    static {
+        service = new UserServiceImpl();
     }
 
     public static UserServiceImpl getService() {
-        return ServiceHolder.service;
+        return service;
     }
 
     @Override
     public User findUserById_OrThrowEx(long userId) {
-        Optional<User> userOpt = findUserById(userId);
-        if (!userOpt.isPresent()) throw new IllegalStateException("User wasn't received");
-        return userOpt.get();
+        return findUserById(userId)
+                .orElseThrow(() -> new IllegalStateException("User wasn't found by id"));
     }
 
     @Override
     public User getCurrentUserFromDB_OrThrowEx(HttpServletRequest request) throws IllegalStateException{
-        Optional<User> userOpt = getCurrentUserFromDB(request);
-        if (!userOpt.isPresent()) throw new IllegalStateException("User wasn't received");
-        return userOpt.get();
+        return getCurrentUserFromDB(request)
+                .orElseThrow(() -> new IllegalStateException("User wasn't received"));
     }
 
     @Override
     public long getCurrentUserIdFromSession_OrThrowEx(HttpServletRequest request) throws IllegalStateException{
-        Optional<Long> userIdOpt = getCurrentUserIdFromSession(request);
-        if (!userIdOpt.isPresent()) throw new IllegalStateException("User id wasn't received");
-        return userIdOpt.get();
+        return getCurrentUserIdFromSession(request)
+                .orElseThrow(() -> new IllegalStateException("User id wasn't received from session"));
     }
 
     @Override
@@ -71,7 +70,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Optional<Long> getCurrentUserIdFromSession(HttpServletRequest request) {
-        return Optional.ofNullable((Long)request.getSession()
+        return Optional.ofNullable((Long)request.getSession(false)
                 .getAttribute(CURRENT_USER_ID_SESSION_ATTR));
     }
 
@@ -88,6 +87,16 @@ public class UserServiceImpl implements UserService {
     @Override
     public void updateUser(User user) {
         dao.update(user);
+    }
+
+    @Override
+    public void updateAllUsers(Collection<User> users) {
+        dao.updateUsers(users);
+    }
+
+    @Override
+    public List<User> getUsersById(Collection<Long> usersId) {
+        return dao.getUsersById(usersId);
     }
 
 }

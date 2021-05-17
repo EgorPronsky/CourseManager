@@ -31,7 +31,7 @@ public class SessionFilter implements Filter {
 
             String uri = httpReq.getRequestURI();
             Optional<String> allowedPath = Arrays.stream(allowedPathsWithNoSession)
-                    .filter(uri::contains).findAny();
+                    .filter(uri::endsWith).findAny();
 
             if (!allowedPath.isPresent()) {
                 ((HttpServletResponse)resp).sendRedirect(String.format("/%s/login-page", APP_DOMAIN_NAME));

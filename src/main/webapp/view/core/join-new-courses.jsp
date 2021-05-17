@@ -1,5 +1,5 @@
-<%@ page import="static servlet.core.get_courses.GetAvailableCoursesServlet.AVAILABLE_COURSES_ATTR" %>
 <%@ page import="static servlet.core.course_actions.JoinNewCoursesServlet.COURSES_TO_JOIN_ID_PARAM" %>
+<%@ page import="static servlet.core.get_courses.UserCurrentCoursesServlet.COURSES_ATTR" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
@@ -11,7 +11,7 @@
 
 <%-- Prepare variables --%>
 <c:set var="courses_to_join" value="<%=COURSES_TO_JOIN_ID_PARAM%>" />
-<c:set var="available_courses" value="<%=request.getAttribute(AVAILABLE_COURSES_ATTR)%>" />
+<c:set var="available_courses" value="<%=request.getAttribute(COURSES_ATTR)%>" />
 
 <body>
 <div class="container">
@@ -36,7 +36,7 @@
                         </c:when>
 
                         <c:otherwise>
-                            <form action="${pageContext.request.contextPath}/join-new-courses" method="post">
+                            <form action="${pageContext.request.contextPath}/main-menu/join-new-courses/join-selected-courses" method="post">
                                 <table class="table">
 
                                     <thead class="thead-dark">

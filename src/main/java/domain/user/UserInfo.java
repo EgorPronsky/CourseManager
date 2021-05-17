@@ -8,6 +8,8 @@ import org.hibernate.annotations.Type;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 
 @Embeddable
 
@@ -24,5 +26,6 @@ public class UserInfo {
     private String lastName;
 
     @Column(name = "user_role")
+    @Enumerated(EnumType.STRING)
     private UserRole userRole;
 }

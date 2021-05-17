@@ -29,7 +29,7 @@
 
                 <%-- Header --%>
                 <div class="card-header">
-                    <h3 class="panel-title">${course.courseInfo.name} course students</h3>
+                    <h3 class="panel-title">${course.getCourseInfo().getName()} course students</h3>
                 </div>
 
                 <%-- Body --%>
@@ -44,7 +44,7 @@
                     <c:otherwise>
 
                         <div class="card-body">
-                            <form action="grade-students" method="post">
+                            <form action="${pageContext.request.requestURI}/grade-students" method="post">
 
                                 <table class="table">
                                     <thead class="thead-dark">
@@ -58,20 +58,20 @@
                                     <tbody>
                                         <c:forEach var="student" items="${course.getStudentsList()}">
                                             <tr>
-                                                <td>${student.userInfo.firstName}</td>
-                                                <td>${student.userInfo.lastName}</td>
+                                                <td>${student.getUserInfo().getFirstName()}</td>
+                                                <td>${student.getUserInfo().getLastName()}</td>
                                                 <td>
                                                     <div class="form-check form-check-inline">
-                                                        <input class="form-check-input" type="radio" name="${student.id}" id="result_bad${student.id}" value="${CourseResult.BAD}">
-                                                        <label class="form-check-label" for="result_bad${student.id}">${bad}</label>
+                                                        <input class="form-check-input" type="radio" name="${student.getId()}" id="result_bad${student.getId()}" value="${CourseResult.BAD}">
+                                                        <label class="form-check-label" for="result_bad${student.getId()}">${bad}</label>
                                                     </div>
                                                     <div class="form-check form-check-inline">
-                                                        <input class="form-check-input" type="radio" name="${student.id}" id="result_ok${student.id}" value="${CourseResult.OK}" checked>
-                                                        <label class="form-check-label" for="result_ok${student.id}">${OK}</label>
+                                                        <input class="form-check-input" type="radio" name="${student.getId()}" id="result_ok${student.getId()}" value="${CourseResult.OK}" checked>
+                                                        <label class="form-check-label" for="result_ok${student.getId()}">${OK}</label>
                                                     </div>
                                                     <div class="form-check form-check-inline">
-                                                        <input class="form-check-input" type="radio" name="${student.id}" id="result_perfect${student.id}" value="${CourseResult.EXCELLENT}" >
-                                                        <label class="form-check-label" for="result_perfect${student.id}">${excellent}</label>
+                                                        <input class="form-check-input" type="radio" name="${student.getId()}" id="result_perfect${student.getId()}" value="${CourseResult.EXCELLENT}" >
+                                                        <label class="form-check-label" for="result_perfect${student.getId()}">${excellent}</label>
                                                     </div>
                                                 </td>
                                             </tr>

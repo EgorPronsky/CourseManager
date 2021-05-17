@@ -22,7 +22,6 @@ public class SignUpServlet extends HttpServlet {
     public static final String FIRST_NAME_PARAM = "first_name";
     public static final String LAST_NAME_PARAM = "last_name";
     public static final String IS_TEACHER_PARAM = "is_teacher";
-    public static final String PASSWORD_CONFIRM_PARAM = "password_confirm";
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         log.debug("Receiving parameters from request");

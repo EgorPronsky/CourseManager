@@ -39,7 +39,7 @@ public class HibernateAccessInfoDAO extends HibernateGenericDAO<AccessInfo> impl
 
             // Predicate for WHERE clause
             Predicate predicateForEmail =
-                    criteriaBuilder.equal(root.get(AccessInfo_.EMAIL), email);
+                    criteriaBuilder.equal(root.get(AccessInfo_.email), email);
 
             query.select(root)
                     .where(predicateForEmail);
@@ -53,8 +53,7 @@ public class HibernateAccessInfoDAO extends HibernateGenericDAO<AccessInfo> impl
             }
             tr.commit();
         } catch (PersistenceException e) {
-            log.error("Error occurred during finding access info by email");
-            e.printStackTrace();
+            log.error("Error occurred during finding access info by email", e);
             if (tr != null && tr.isActive()) tr.rollback();
         }
         return Optional.ofNullable(accessInfo);

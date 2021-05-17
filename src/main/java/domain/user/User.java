@@ -4,6 +4,7 @@ import domain.course.Course;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -25,7 +26,11 @@ public class User {
     @OneToOne(cascade = CascadeType.ALL)
     private AccessInfo accessInfo;
 
-    @ManyToMany(cascade = {CascadeType.PERSIST,CascadeType.MERGE}, fetch = FetchType.EAGER)
-    private List<Course> courses;
+    @Builder.Default
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "users_courses",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "course_id"))
+    private final List<Course> courses = new ArrayList<>();
 
 }

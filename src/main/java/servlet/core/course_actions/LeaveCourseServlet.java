@@ -11,26 +11,21 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.security.InvalidParameterException;
-import java.util.Optional;
 
 import static filter.SessionFilter.APP_DOMAIN_NAME;
+import static servlet.core.get_courses.GetCourseToEditServlet.COURSE_ID_PARAM;
 
 @Slf4j
 public class LeaveCourseServlet extends HttpServlet {
 
-    public static final String COURSE_TO_LEAVE_ID_PARAM = "course_to_leave_id";
-
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        log.debug("Receiving course to leave id");
+        log.debug("Receiving course id to leave");
         long courseIdToLeave =
-                Long.parseLong(request.getParameter(COURSE_TO_LEAVE_ID_PARAM));
+                Long.parseLong(request.getParameter(COURSE_ID_PARAM));
 
-        log.debug("Getting course from DB by received id");
-        Optional<Course> courseToLeaveOpt = CourseServiceImpl.getService().getCourseById(courseIdToLeave);
-        if (!courseToLeaveOpt.isPresent())
-            throw new InvalidParameterException("Course wasn't received");
-        Course courseToLeave = courseToLeaveOpt.get();
+        log.debug("Getting course by received id from DB");
+        Course courseToLeave = CourseServiceImpl.getService()
+                .getCourseById_OrThrowEx(courseIdToLeave);
 
         log.debug("Getting current user from DB");
         User currentUser = UserServiceImpl.getService()
@@ -40,6 +35,6 @@ public class LeaveCourseServlet extends HttpServlet {
         currentUser.getCourses().remove(courseToLeave);
         UserServiceImpl.getService().updateUser(currentUser);
 
-        response.sendRedirect(String.format("/%s/main-menu", APP_DOMAIN_NAME));
+        response.sendRedirect(String.format("/%s/main-menu/select-courses", APP_DOMAIN_NAME));
     }
 }

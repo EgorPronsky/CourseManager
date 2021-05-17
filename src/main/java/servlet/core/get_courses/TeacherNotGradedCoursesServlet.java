@@ -1,7 +1,6 @@
 package servlet.core.get_courses;
 
 import domain.course.Course;
-import domain.user.User;
 import lombok.extern.slf4j.Slf4j;
 import services.impl.CourseServiceImpl;
 import handlers.view_handlers.impl.JspViewHandler;
@@ -16,13 +15,13 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
-import static servlet.core.get_courses.UserCurrentCoursesServlet.COURSES_STATE_ATTR;
-import static servlet.core.get_courses.UserCurrentCoursesServlet.SELECTED_COURSES_ATTR;
+import static servlet.core.get_courses.UserCurrentCoursesServlet.*;
 
 @Slf4j
 public class TeacherNotGradedCoursesServlet extends HttpServlet {
+
+    public static final String NOT_GRADED_COURSES_STATE_ATTR_VALUE = "not graded";
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         log.debug("Receiving current user id from session");
@@ -31,12 +30,12 @@ public class TeacherNotGradedCoursesServlet extends HttpServlet {
 
         log.debug("Getting teacher not graded courses");
         List<Course> notGradedCourses = CourseServiceImpl.getService()
-                .getUserFinishedUngradedCourses(currentUserId);
+                .getTeacherFinishedNotGradedCourses(currentUserId);
 
         log.debug("Preparing attributes for response");
         Map<String, Object> respAttrs = new HashMap<>();
-        respAttrs.put(COURSES_STATE_ATTR, "not graded");
-        respAttrs.put(SELECTED_COURSES_ATTR, notGradedCourses);
+        respAttrs.put(COURSES_STATE_ATTR, NOT_GRADED_COURSES_STATE_ATTR_VALUE);
+        respAttrs.put(COURSES_ATTR, notGradedCourses);
 
         log.debug("Invoking view handler");
         ViewHandler viewHandler = new JspViewHandler();

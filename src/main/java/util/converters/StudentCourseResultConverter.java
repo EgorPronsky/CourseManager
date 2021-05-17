@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class StudentCourseResultMapService {
+public class StudentCourseResultConverter {
 
     public static List<StudentCourseResult> convertStudentsResultsToDTO(Course course,
                                                                                   Map<User, CourseResult> studentsResults) {
