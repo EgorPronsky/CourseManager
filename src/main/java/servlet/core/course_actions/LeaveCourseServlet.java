@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Optional;
 
 import static filter.SessionFilter.APP_DOMAIN_NAME;
 import static servlet.core.get_courses.GetCourseToEditServlet.COURSE_ID_PARAM;
@@ -20,20 +21,22 @@ public class LeaveCourseServlet extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         log.debug("Receiving course id to leave");
-        long courseIdToLeave =
-                Long.parseLong(request.getParameter(COURSE_ID_PARAM));
+        long courseIdToLeave = Long.parseLong(request.getParameter(COURSE_ID_PARAM));
 
         log.debug("Getting course by received id from DB");
-        Course courseToLeave = CourseServiceImpl.getService()
-                .getCourseById_OrThrowEx(courseIdToLeave);
+        Optional<Course> courseToLeaveOpt = CourseServiceImpl.getService()
+                .getCourseById(courseIdToLeave);
 
-        log.debug("Getting current user from DB");
-        User currentUser = UserServiceImpl.getService()
-                .getCurrentUserFromDB_OrThrowEx(request);
+        // Course could be already deleted
+        if (courseToLeaveOpt.isPresent()) {
+            log.debug("Getting current user from DB");
+            User currentUser = UserServiceImpl.getService()
+                    .getCurrentUserFromDB_OrThrowEx(request);
 
-        log.debug("Updating user in DB");
-        currentUser.getCourses().remove(courseToLeave);
-        UserServiceImpl.getService().updateUser(currentUser);
+            log.debug("Updating user in DB");
+            currentUser.getCourses().remove(courseToLeaveOpt.get());
+            UserServiceImpl.getService().updateUser(currentUser);
+        }
 
         response.sendRedirect(String.format("/%s/main-menu/select-courses", APP_DOMAIN_NAME));
     }

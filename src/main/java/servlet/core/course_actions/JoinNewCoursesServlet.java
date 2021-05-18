@@ -11,10 +11,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static filter.SessionFilter.APP_DOMAIN_NAME;
@@ -26,15 +23,15 @@ public class JoinNewCoursesServlet extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         log.debug("Receiving checkbox states");
-        List<Long> coursesIdList = Arrays.stream(request.getParameterValues(COURSES_TO_JOIN_ID_PARAM))
+        Set<Long> coursesIdSet = Arrays.stream(request.getParameterValues(COURSES_TO_JOIN_ID_PARAM))
                 // Removing unchecked checkboxes
                 .filter(Objects::nonNull)
                 .map(Long::valueOf)
-                .collect(Collectors.toList());
+                .collect(Collectors.toSet());
 
         log.debug("Getting courses to join by id from DB");
         List<Course> coursesToJoin = CourseServiceImpl.getService()
-                .getCoursesById(coursesIdList);
+                .getCoursesById(coursesIdSet);
 
         log.debug("Getting current user from DB");
         User currentUser = UserServiceImpl.getService()

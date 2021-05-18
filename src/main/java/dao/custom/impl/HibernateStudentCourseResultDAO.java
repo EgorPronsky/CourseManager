@@ -19,6 +19,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 @Slf4j
@@ -29,11 +30,11 @@ public class HibernateStudentCourseResultDAO extends HibernateGenericDAO<Student
     }
 
     @Override
-    public void saveAll(List<StudentCourseResult> scrList) {
+    public void saveAll(Collection<StudentCourseResult> scrCollection) {
         Transaction tr = null;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             tr = session.beginTransaction();
-            scrList.forEach(session::save);
+            scrCollection.forEach(session::save);
             tr.commit();
         } catch (HibernateException e) {
             log.debug("Error while saving SCR entities", e);

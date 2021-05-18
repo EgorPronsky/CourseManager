@@ -26,8 +26,14 @@ public class Course {
     @Embedded
     private CourseInfo courseInfo;
 
+    @OneToOne
+    private User teacher;
+
     @Builder.Default
-    @ManyToMany(mappedBy = "courses", fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "users_courses",
+            joinColumns = @JoinColumn(name = "course_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id"))
     private final List<User> teacherAndStudents = new ArrayList<>();
 
     @Transient

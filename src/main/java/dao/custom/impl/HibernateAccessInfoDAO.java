@@ -49,7 +49,7 @@ public class HibernateAccessInfoDAO extends HibernateGenericDAO<AccessInfo> impl
             try {
                 accessInfo = session.createQuery(query).getSingleResult();
             } catch (NoResultException e) {
-                log.debug("User wasn't found by given email and password hash");
+                log.debug("User wasn't found by given email");
             }
             tr.commit();
         } catch (PersistenceException e) {

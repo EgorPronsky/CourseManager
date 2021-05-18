@@ -102,7 +102,7 @@ public class HibernateCourseDAO extends HibernateGenericDAO<Course> implements C
             courses.addAll(session.createQuery(rootQuery).getResultList());
             tr.commit();
         } catch (PersistenceException e) {
-            log.error("Error while getting all courses started after given date", e);
+            log.error("Error while getting student not subscribed courses that start after date", e);
             if (tr != null && tr.isActive()) tr.rollback();
         }
         return courses;
@@ -133,7 +133,7 @@ public class HibernateCourseDAO extends HibernateGenericDAO<Course> implements C
             courses.addAll(session.createQuery(query).getResultList());
             tr.commit();
         } catch (PersistenceException e) {
-            log.error("Error while getting all courses started after given date", e);
+            log.error("Error while getting user courses that start after given date", e);
             if (tr != null && tr.isActive()) tr.rollback();
         }
         return courses;
@@ -167,7 +167,7 @@ public class HibernateCourseDAO extends HibernateGenericDAO<Course> implements C
             courses.addAll(session.createQuery(query).getResultList());
             tr.commit();
         } catch (PersistenceException e) {
-            log.error("Error while getting all courses started after given date", e);
+            log.error("Error while getting user courses active on given date", e);
             if (tr != null && tr.isActive()) tr.rollback();
         }
         return courses;
@@ -211,7 +211,7 @@ public class HibernateCourseDAO extends HibernateGenericDAO<Course> implements C
             requiredCourses.addAll(session.createQuery(rootQuery).getResultList());
             tr.commit();
         } catch (PersistenceException e) {
-            log.error("Error while getting user ungraded courses ended before given date", e);
+            log.error("Error while getting student ungraded courses ended before given date", e);
             if (tr != null && tr.isActive()) tr.rollback();
         }
         return requiredCourses;
@@ -251,7 +251,7 @@ public class HibernateCourseDAO extends HibernateGenericDAO<Course> implements C
             requiredCourses.addAll(session.createQuery(rootQuery).getResultList());
             tr.commit();
         } catch (PersistenceException e) {
-            log.error("Error while getting user ungraded courses ended before given date", e);
+            log.error("Error while getting teacher not graded courses ended before given date", e);
             if (tr != null && tr.isActive()) tr.rollback();
         }
         return requiredCourses;

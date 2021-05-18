@@ -28,30 +28,13 @@ public class DeleteCourseServlet extends HttpServlet {
         long courseId = Long.parseLong(request.getParameter(COURSE_ID_PARAM));
 
         log.debug("Getting course by id from DB");
-        Course course = CourseServiceImpl.getService().getCourseById_OrThrowEx(courseId);
-
-        log.debug("Deleting course from each user and updating this users in DB");
-
-        if (course.getTeacherAndStudents().size() != 0) {
-            log.debug("Getting course users by id from DB");
-            Set<Long> usersId = course.getTeacherAndStudents()
-                    .stream().map(User::getId)
-                    .collect(Collectors.toSet());
-
-            log.debug("Deleting course from each user");
-            List<User> courseUsers = UserServiceImpl.getService()
-                    .getUsersById(usersId);
-            courseUsers.forEach(u -> u.getCourses().remove(course));
-
-            log.debug("Updating users in DB");
-            UserServiceImpl.getService().updateAllUsers(courseUsers);
-        }
+        Course course = CourseServiceImpl.getService()
+                .getCourseById_OrThrowEx(courseId);
 
         log.debug("Deleting course from DB");
         CourseServiceImpl.getService().deleteCourse(course);
         
         response.sendRedirect(String.format("/%s/main-menu/select-courses", APP_DOMAIN_NAME));
-
     }
 
 }
