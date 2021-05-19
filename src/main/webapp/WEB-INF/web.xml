@@ -169,7 +169,7 @@
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>CourseStudentsServlet</servlet-name>
-        <url-pattern>/main-menu/select-courses/my-not-graded-courses/students</url-pattern>
+        <url-pattern>/main-menu/select-courses/students</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>UserCurrentCoursesServlet</servlet-name>

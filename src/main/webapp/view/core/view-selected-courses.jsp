@@ -63,6 +63,7 @@
                                         <th scope="col">Grade students</th>
                                     </c:if>
                                     <c:if test="${current_user_info.userRole == UserRole.TEACHER && courses_state != not_graded_course_state}">
+                                        <th scope="col">Students</th>
                                         <th scope="col">Edit course</th>
                                         <th scope="col">Delete course</th>
                                     </c:if>
@@ -114,7 +115,7 @@
                                         <c:if test="${current_user_info.userRole == UserRole.STUDENT}">
                                             <td>
                                                 <form action="${pageContext.request.contextPath}/main-menu/select-courses/leave-course" method="post">
-                                                    <button class="btn btn-primary btn-block" type="submit" name="<%=COURSE_ID%>" value="${course.id}">Leave</button>
+                                                    <button class="btn btn-warning btn-block" type="submit" name="<%=COURSE_ID%>" value="${course.id}">Leave</button>
                                                 </form>
                                             </td>
                                         </c:if>
@@ -122,20 +123,25 @@
                                         <%-- Special actions for teachers --%>
                                         <c:if test="${courses_state == not_graded_course_state}">
                                             <td>
-                                                <form action="${pageContext.request.contextPath}/main-menu/select-courses/my-not-graded-courses/students" method="get">
+                                                <form action="${pageContext.request.contextPath}/main-menu/select-courses/students" method="get">
                                                     <button class="btn btn-primary btn-block" type="submit" name="<%=COURSE_ID%>" value="${course.id}">Grade</button>
                                                 </form>
                                             </td>
                                         </c:if>
                                         <c:if test="${current_user_info.userRole == UserRole.TEACHER && courses_state != not_graded_course_state}">
                                             <td>
+                                                <form action="${pageContext.request.contextPath}/main-menu/select-courses/students" method="get">
+                                                    <button class="btn btn-primary btn-block" type="submit" name="<%=COURSE_ID%>" value="${course.id}">See students</button>
+                                                </form>
+                                            </td>
+                                            <td>
                                                 <form action="${pageContext.request.contextPath}/main-menu/select-courses/edit-course" method="get">
-                                                    <button class="btn btn-primary btn-block" type="submit" name="<%=COURSE_ID%>" value="${course.id}">Edit</button>
+                                                    <button class="btn btn-success btn-block" type="submit" name="<%=COURSE_ID%>" value="${course.id}">Edit</button>
                                                 </form>
                                             </td>
                                             <td>
                                                 <form action="${pageContext.request.contextPath}/main-menu/select-courses/delete-course" method="post">
-                                                    <button class="btn btn-primary btn-block" type="submit" name="<%=COURSE_ID%>" value="${course.id}">Delete</button>
+                                                    <button class="btn btn-danger btn-block" type="submit" name="<%=COURSE_ID%>" value="${course.id}">Delete</button>
                                                 </form>
                                             </td>
                                         </c:if>

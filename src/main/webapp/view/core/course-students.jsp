@@ -45,7 +45,7 @@
                                     <tr>
                                         <th scope="col">First name</th>
                                         <th scope="col">Last name</th>
-                                        <th scope="col">Result</th>
+                                        <c:if test="${course.courseInfo.startDate > }" <th scope="col">Result</th>
                                     </tr>
                                     </thead>
 

@@ -12,6 +12,7 @@ import java.util.*;
 
 @Builder
 @Getter
+@Setter
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @NoArgsConstructor
 @AllArgsConstructor

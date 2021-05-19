@@ -39,38 +39,24 @@ public class SaveOrUpdateCourseServlet extends HttpServlet {
         LocalDate startDate = LocalDate.parse(startDateStr, DateTimeFormatter.ofPattern(COURSE_DATE_PATTERN));
         LocalDate endDate = LocalDate.parse(endDateStr, DateTimeFormatter.ofPattern(COURSE_DATE_PATTERN));
 
-        Course courseToSaveOrUpdate = null;
+        log.debug("Getting current teacher from DB");
+        Long teacherId = (Long)request.getSession(false)
+                .getAttribute(CURRENT_USER_ID_SESSION);
+        User currentTeacher = UserServiceImpl.getService()
+                .getUserById(teacherId);
 
-        // If this is a new course -> will return null
-        String courseIdToUpdate = request.getParameter(COURSE_ID);
-        if (courseIdToUpdate == null) {
+        log.debug("Creating new course from received params");
+        Course courseToSaveOrUpdate = Course.builder()
+                .courseInfo(CourseInfo.builder()
+                        .name(name).description(description)
+                        .startDate(startDate).endDate(endDate)
+                        .timeTable(timeTable).uri(uri)
+                        .build()).teacher(currentTeacher).build();
 
-            log.debug("Getting current teacher from DB");
-            Long teacherId = (Long)request.getSession(false)
-                    .getAttribute(CURRENT_USER_ID_SESSION);
-            User currentTeacher = UserServiceImpl.getService()
-                    .getUserById(teacherId);
-
-            log.debug("Creating new course from received params");
-            courseToSaveOrUpdate = Course.builder()
-                    .courseInfo(CourseInfo.builder()
-                            .name(name).description(description)
-                            .startDate(startDate).endDate(endDate)
-                            .timeTable(timeTable).uri(uri)
-                            .build())
-                    .teacher(currentTeacher).build();
-        } else {
-            log.debug("Getting course by received id from DB");
-            courseToSaveOrUpdate = CourseServiceImpl.getService()
-                    .getCourseById(Long.parseLong(courseIdToUpdate));
-
-            log.debug("Updating course");
-            courseToSaveOrUpdate.getCourseInfo().setName(name);
-            courseToSaveOrUpdate.getCourseInfo().setDescription(description);
-            courseToSaveOrUpdate.getCourseInfo().setStartDate(startDate);
-            courseToSaveOrUpdate.getCourseInfo().setEndDate(endDate);
-            courseToSaveOrUpdate.getCourseInfo().setTimeTable(timeTable);
-            courseToSaveOrUpdate.getCourseInfo().setUri(uri);
+        // Course id was received == course to update
+        String courseIdStr = request.getParameter(COURSE_ID);
+        if (courseIdStr != null) {
+            courseToSaveOrUpdate.setId(Long.parseLong(courseIdStr));
         }
 
         log.debug("Saving or updating course");
