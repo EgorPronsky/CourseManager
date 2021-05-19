@@ -15,9 +15,7 @@
 
         <!-- Annotated entities -->
         <mapping class="com.company.manager.domain.user.User"/>
-        <mapping class="com.company.manager.domain.user.Teacher"/>
-        <mapping class="com.company.manager.domain.user.Student"/>
-        <mapping class="com.company.manager.domain.user.info.AccessInfo"/>
+        <mapping class="com.company.manager.domain.user.AccessInfo"/>
         <mapping class="com.company.manager.domain.course.Course"/>
         <mapping class="com.company.manager.domain.archive.StudentCourseResult"/>
 

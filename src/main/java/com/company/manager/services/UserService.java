@@ -11,16 +11,13 @@ public interface UserService {
 
     void saveUser(User user);
     void updateUser(User user);
-    Optional<User> findUserById(long userId);
     void updateAllUsers(Collection<User> users);
-    List<User> getUsersById(Collection<Long> usersId);
-
-    Optional<User> getCurrentUserFromDB(HttpServletRequest request);
-    Optional<Long> getCurrentUserIdFromSession(HttpServletRequest request);
-    Optional<User> findUserByEmailAndPassword(String email, String password);
+    Optional<User> findUserById(long userId);
 
     User getUserById(long userId);
-    User getCurrentUserFromDB_OrThrowEx(HttpServletRequest request);
-    long getCurrentUserIdFromSession_OrThrowEx(HttpServletRequest request);
+    List<User> getUsersById(Collection<Long> usersId);
+
+    Optional<User> findUserByEmailAndPassword(String email, String password);
+
 
 }

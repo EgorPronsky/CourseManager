@@ -1,7 +1,7 @@
 package com.company.manager.dao.custom;
 
 import com.company.manager.dao.generic.GenericDAO;
-import com.company.manager.domain.user.info.AccessInfo;
+import com.company.manager.domain.user.AccessInfo;
 
 import java.util.Optional;
 

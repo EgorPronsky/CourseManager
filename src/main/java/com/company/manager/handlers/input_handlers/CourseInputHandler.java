@@ -2,69 +2,40 @@ package com.company.manager.handlers.input_handlers;
 
 import javax.servlet.http.HttpServletRequest;
 
+import static com.company.manager.constans.CourseAttrAndParamNames.*;
+
 public class CourseInputHandler {
-
-    public static final String MONDAY_PARAM = "monday";
-    public static final String MONDAY_START_TIME_PARAM = "monday_start_date";
-    public static final String MONDAY_END_TIME_PARAM = "monday_end_date";
-
-    public static final String TUESDAY_PARAM = "tuesday";
-    public static final String TUESDAY_START_TIME_PARAM = "tuesday_start_date";
-    public static final String TUESDAY_END_TIME_PARAM = "tuesday_end_date";
-
-    public static final String WEDNESDAY_PARAM = "wednesday";
-    public static final String WEDNESDAY_START_TIME_PARAM = "wednesday_start_date";
-    public static final String WEDNESDAY_END_TIME_PARAM = "wednesday_end_date";
-
-    public static final String THURSDAY_PARAM = "thursday";
-    public static final String THURSDAY_START_DATE_PARAM = "thursday_start_date";
-    public static final String THURSDAY_END_DATE_PARAM = "thursday_end_date";
-
-    public static final String FRIDAY_PARAM = "friday";
-    public static final String FRIDAY_START_DATE_PARAM = "friday_start_date";
-    public static final String FRIDAY_END_DATE_PARAM = "friday_end_date";
-
-    public static final String SATURDAY_PARAM = "saturday";
-    public static final String SATURDAY_START_DATE_PARAM = "saturday_start_date";
-    public static final String SATURDAY_END_DATE_PARAM = "saturday_end_date";
-
-    public static final String SUNDAY_PARAM = "sunday";
-    public static final String SUNDAY_START_DATE_PARAM = "sunday_start_date";
-    public static final String SUNDAY_END_DATE_PARAM = "sunday_end_date";
 
     public static String getTimeTableFromRequest(HttpServletRequest req) {
         String timeTable = "";
-
-        // Verify checkboxes states (days of week)
-        if (req.getParameter(MONDAY_PARAM) != null) {
+        if (req.getParameter(MONDAY) != null) {
             timeTable += "Monday " +
-                    getTimeTableRow(req, MONDAY_START_TIME_PARAM, MONDAY_END_TIME_PARAM) + "\n";
+                    getTimeTableRow(req, MONDAY_START_TIME, MONDAY_END_TIME) + "\n";
         }
-        if (req.getParameter(TUESDAY_PARAM) != null) {
+        if (req.getParameter(TUESDAY) != null) {
             timeTable += "Tuesday " +
-                    getTimeTableRow(req, TUESDAY_START_TIME_PARAM, TUESDAY_END_TIME_PARAM) + "\n";
+                    getTimeTableRow(req, TUESDAY_START_TIME, TUESDAY_END_TIME) + "\n";
         }
-        if (req.getParameter(WEDNESDAY_PARAM) != null) {
+        if (req.getParameter(WEDNESDAY) != null) {
             timeTable += "Wednesday " +
-                    getTimeTableRow(req, WEDNESDAY_START_TIME_PARAM, WEDNESDAY_END_TIME_PARAM) + "\n";
+                    getTimeTableRow(req, WEDNESDAY_START_TIME, WEDNESDAY_END_TIME) + "\n";
         }
-        if (req.getParameter(THURSDAY_PARAM) != null) {
+        if (req.getParameter(THURSDAY) != null) {
             timeTable += "Thursday " +
-                    getTimeTableRow(req, THURSDAY_START_DATE_PARAM, THURSDAY_END_DATE_PARAM) + "\n";
+                    getTimeTableRow(req, THURSDAY_START_DATE, THURSDAY_END_DATE) + "\n";
         }
-        if (req.getParameter(FRIDAY_PARAM) != null) {
+        if (req.getParameter(FRIDAY) != null) {
             timeTable += "Friday " +
-                    getTimeTableRow(req, FRIDAY_START_DATE_PARAM, FRIDAY_END_DATE_PARAM) + "\n";
+                    getTimeTableRow(req, FRIDAY_START_DATE, FRIDAY_END_DATE) + "\n";
         }
-        if (req.getParameter(SATURDAY_PARAM) != null) {
+        if (req.getParameter(SATURDAY) != null) {
             timeTable += "Saturday " +
-                    getTimeTableRow(req, SATURDAY_START_DATE_PARAM, SATURDAY_END_DATE_PARAM) + "\n";
+                    getTimeTableRow(req, SATURDAY_START_DATE, SATURDAY_END_DATE) + "\n";
         }
-        if (req.getParameter(SUNDAY_PARAM) != null) {
+        if (req.getParameter(SUNDAY) != null) {
             timeTable += "Sunday " +
-                    getTimeTableRow(req, SUNDAY_START_DATE_PARAM, SUNDAY_END_DATE_PARAM) + "\n";
+                    getTimeTableRow(req, SUNDAY_START_DATE, SUNDAY_END_DATE) + "\n";
         }
-
         return timeTable;
     }
 

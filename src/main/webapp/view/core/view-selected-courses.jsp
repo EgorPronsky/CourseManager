@@ -1,10 +1,9 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page contentType="text/html;charset=UTF-8" %>
-<%@ page import="static com.company.manager.servlet.core.get_courses.UserCurrentCoursesServlet.*" %>
 <%@ page import="static com.company.manager.servlet.core.get_courses.TeacherNotGradedCoursesServlet.*" %>
-<%@ page import="com.company.manager.domain.user.info.UserRole" %>
-<%@ page import="static com.company.manager.servlet.access.SignInServlet.CURRENT_USER_INFO_SESSION_ATTR" %>
-<%@ page import="static com.company.manager.servlet.core.get_courses.GetCourseToEditServlet.COURSE_ID_PARAM" %>
+<%@ page import="com.company.manager.domain.user.UserRole" %>
+<%@ page import="static com.company.manager.constans.CourseAttrAndParamNames.*" %>
+<%@ page import="static com.company.manager.constans.UserAttrAndParamNames.CURRENT_USER_INFO_SESSION" %>
 <html>
 
 <head>
@@ -13,9 +12,9 @@
 </head>
 
 <%-- Prepare variables --%>
-<c:set var="current_user_info" value="<%=session.getAttribute(CURRENT_USER_INFO_SESSION_ATTR)%>" />
-<c:set var="courses_state" value="<%=request.getAttribute(COURSES_STATE_ATTR)%>" />
-<c:set var="selected_courses" value="<%=request.getAttribute(COURSES_ATTR)%>" />
+<c:set var="current_user_info" value="<%=session.getAttribute(CURRENT_USER_INFO_SESSION)%>" />
+<c:set var="courses_state" value="<%=request.getAttribute(COURSES_STATE)%>" />
+<c:set var="selected_courses" value="<%=request.getAttribute(COURSES)%>" />
 <c:set var="not_graded_course_state" value="<%=NOT_GRADED_COURSES_STATE_ATTR_VALUE%>" />
 
 <body>
@@ -108,14 +107,14 @@
                                         </td>
 
                                         <c:if test="${current_user_info.userRole == UserRole.STUDENT}">
-                                            <td>${course.teacher.user.userInfo.firstName} ${course.teacher.user.userInfo.lastName}</td>
+                                            <td>${course.teacher.userInfo.firstName} ${course.teacher.userInfo.lastName}</td>
                                         </c:if>
 
                                         <%-- Special actions for students --%>
                                         <c:if test="${current_user_info.userRole == UserRole.STUDENT}">
                                             <td>
                                                 <form action="${pageContext.request.contextPath}/main-menu/select-courses/leave-course" method="post">
-                                                    <button class="btn btn-primary btn-block" type="submit" name="<%=COURSE_ID_PARAM%>" value="${course.id}">Leave</button>
+                                                    <button class="btn btn-primary btn-block" type="submit" name="<%=COURSE_ID%>" value="${course.id}">Leave</button>
                                                 </form>
                                             </td>
                                         </c:if>
@@ -124,19 +123,19 @@
                                         <c:if test="${courses_state == not_graded_course_state}">
                                             <td>
                                                 <form action="${pageContext.request.contextPath}/main-menu/select-courses/my-not-graded-courses/students" method="get">
-                                                    <button class="btn btn-primary btn-block" type="submit" name="<%=COURSE_ID_PARAM%>" value="${course.id}">Grade</button>
+                                                    <button class="btn btn-primary btn-block" type="submit" name="<%=COURSE_ID%>" value="${course.id}">Grade</button>
                                                 </form>
                                             </td>
                                         </c:if>
                                         <c:if test="${current_user_info.userRole == UserRole.TEACHER && courses_state != not_graded_course_state}">
                                             <td>
                                                 <form action="${pageContext.request.contextPath}/main-menu/select-courses/edit-course" method="get">
-                                                    <button class="btn btn-primary btn-block" type="submit" name="<%=COURSE_ID_PARAM%>" value="${course.id}">Edit</button>
+                                                    <button class="btn btn-primary btn-block" type="submit" name="<%=COURSE_ID%>" value="${course.id}">Edit</button>
                                                 </form>
                                             </td>
                                             <td>
                                                 <form action="${pageContext.request.contextPath}/main-menu/select-courses/delete-course" method="post">
-                                                    <button class="btn btn-primary btn-block" type="submit" name="<%=COURSE_ID_PARAM%>" value="${course.id}">Delete</button>
+                                                    <button class="btn btn-primary btn-block" type="submit" name="<%=COURSE_ID%>" value="${course.id}">Delete</button>
                                                 </form>
                                             </td>
                                         </c:if>

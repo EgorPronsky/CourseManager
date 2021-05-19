@@ -1,7 +1,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page import="static com.company.manager.servlet.core.students_actions.GetCourseStudentsServlet.COURSE_ATTR" %>
 <%@ page import="com.company.manager.domain.archive.CourseResult" %>
-<%@ page import="static com.company.manager.servlet.core.get_courses.GetCourseToEditServlet.COURSE_ID_PARAM" %>
+<%@ page import="static com.company.manager.constans.CourseAttrAndParamNames.COURSE_ID" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 
@@ -12,7 +12,7 @@
 
 <%-- Prepare variables --%>
 <c:set var="course" value="<%=request.getAttribute(COURSE_ATTR)%>" />
-<c:set var="course_id" value="<%=COURSE_ID_PARAM%>" />
+<c:set var="course_id" value="<%=COURSE_ID%>" />
 
 <body>
 
@@ -52,8 +52,8 @@
                                     <tbody>
                                         <c:forEach var="student" items="${course.students}">
                                             <tr>
-                                                <td>${student.user.userInfo.firstName}</td>
-                                                <td>${student.user.userInfo.lastName}</td>
+                                                <td>${student.userInfo.firstName}</td>
+                                                <td>${student.userInfo.lastName}</td>
                                                 <td>
                                                     <div class="form-check form-check-inline">
                                                         <input class="form-check-input" type="radio" name="${student.id}" id="result_bad${student.id}" value="${CourseResult.BAD}">

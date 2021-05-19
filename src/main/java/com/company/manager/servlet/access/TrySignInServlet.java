@@ -13,20 +13,15 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
+import static com.company.manager.constans.UserAttrAndParamNames.*;
+
 @Slf4j
 public class TrySignInServlet extends HttpServlet {
 
-    // Parameter and attribute names
-    public static final String EMAIL_PARAM = "email";
-    public static final String PASSWORD_PARAM = "password";
-    public static final String SIGN_IN_USER_ATTR = "sign_in_user";
-
-    public static final String INVALID_EMAIL_OR_PASSWORD_MESSAGE_ATTR = "invalid_email_or_password_message";
-
     public void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         log.debug("Receiving parameters from request");
-        String email = req.getParameter(EMAIL_PARAM);
-        String password = req.getParameter(PASSWORD_PARAM);
+        String email = req.getParameter(EMAIL);
+        String password = req.getParameter(PASSWORD);
 
         log.debug("Trying to find user by email and password");
         Optional<User> userOpt = UserServiceImpl.getService()
@@ -34,16 +29,16 @@ public class TrySignInServlet extends HttpServlet {
 
         if (userOpt.isPresent()) {
             log.debug("User was found");
-            req.setAttribute(SIGN_IN_USER_ATTR, userOpt.get());
+            req.setAttribute(SIGN_IN_USER, userOpt.get());
             req.getRequestDispatcher("/sign-in").forward(req, resp);
         } else {
             log.debug("User wasn't found");
             String invalidInputMessage = "Invalid email or password";
 
             Map<String, Object> respAttrs = new HashMap<>();
-            respAttrs.put(INVALID_EMAIL_OR_PASSWORD_MESSAGE_ATTR, invalidInputMessage);
-            respAttrs.put(EMAIL_PARAM, email);
-            respAttrs.put(PASSWORD_PARAM, password);
+            respAttrs.put(INVALID_EMAIL_OR_PASSWORD_MESSAGE, invalidInputMessage);
+            respAttrs.put(EMAIL, email);
+            respAttrs.put(PASSWORD, password);
 
             log.debug("Invoking view handler");
             ViewHandler viewHandler = new JspViewHandler();

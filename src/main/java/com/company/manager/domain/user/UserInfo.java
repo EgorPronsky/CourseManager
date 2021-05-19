@@ -1,5 +1,6 @@
-package com.company.manager.domain.user.info;
+package com.company.manager.domain.user;
 
+import com.company.manager.domain.user.UserRole;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

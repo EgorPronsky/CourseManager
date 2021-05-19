@@ -2,7 +2,7 @@ package com.company.manager.services.impl;
 
 import com.company.manager.dao.custom.AccessInfoDAO;
 import com.company.manager.dao.custom.impl.HibernateAccessInfoDAO;
-import com.company.manager.domain.user.info.AccessInfo;
+import com.company.manager.domain.user.AccessInfo;
 import com.company.manager.services.AccessInfoService;
 import lombok.extern.slf4j.Slf4j;
 

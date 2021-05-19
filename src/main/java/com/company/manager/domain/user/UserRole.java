@@ -1,4 +1,4 @@
-package com.company.manager.domain.user.info;
+package com.company.manager.domain.user;
 
 public enum UserRole {
     STUDENT,

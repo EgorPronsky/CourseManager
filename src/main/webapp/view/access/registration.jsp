@@ -1,8 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ page import="static com.company.manager.servlet.access.SignUpServlet.*" %>
-<%@ page import="static com.company.manager.filter.RegistrationFilter.*" %>
-<%@ page import="static com.company.manager.servlet.access.TrySignInServlet.EMAIL_PARAM" %>
-<%@ page import="static com.company.manager.servlet.access.TrySignInServlet.PASSWORD_PARAM" %>
+<%@ page import="static com.company.manager.constans.UserAttrAndParamNames.*" %>
 <%@ page session="false" %>
 <html>
 
@@ -12,22 +9,22 @@
 </head>
 
 <%-- Prepare variables --%>
-<c:set var="first_name" value="<%=FIRST_NAME_PARAM%>" />
-<c:set var="last_name" value="<%=LAST_NAME_PARAM%>" />
-<c:set var="is_teacher" value="<%=IS_TEACHER_PARAM%>" />
-<c:set var="email" value="<%=EMAIL_PARAM%>" />
-<c:set var="password" value="<%=PASSWORD_PARAM%>" />
-<c:set var="password_confirm" value="<%=PASSWORD_CONFIRM_PARAM%>" />
+<c:set var="first_name" value="<%=FIRST_NAME%>" />
+<c:set var="last_name" value="<%=LAST_NAME%>" />
+<c:set var="is_teacher" value="<%=IS_TEACHER%>" />
+<c:set var="email" value="<%=EMAIL%>" />
+<c:set var="password" value="<%=PASSWORD%>" />
+<c:set var="password_confirm" value="<%=PASSWORD_CONFIRM%>" />
 
-<c:set var="first_name_value" value="<%=request.getParameter(FIRST_NAME_PARAM)%>" />
-<c:set var="last_name_value" value="<%=request.getParameter(LAST_NAME_PARAM)%>" />
-<c:set var="is_teacher_value" value="<%=request.getParameter(IS_TEACHER_PARAM)%>" />
-<c:set var="email_value" value="<%=request.getParameter(EMAIL_PARAM)%>" />
-<c:set var="password_value" value="<%=request.getParameter(PASSWORD_PARAM)%>" />
-<c:set var="password_confirm_value" value="<%=request.getParameter(PASSWORD_CONFIRM_PARAM)%>" />
+<c:set var="first_name_value" value="<%=request.getParameter(FIRST_NAME)%>" />
+<c:set var="last_name_value" value="<%=request.getParameter(LAST_NAME)%>" />
+<c:set var="is_teacher_value" value="<%=request.getParameter(IS_TEACHER)%>" />
+<c:set var="email_value" value="<%=request.getParameter(EMAIL)%>" />
+<c:set var="password_value" value="<%=request.getParameter(PASSWORD)%>" />
+<c:set var="password_confirm_value" value="<%=request.getParameter(PASSWORD_CONFIRM)%>" />
 
-<c:set var="email_exists_message" value="<%=request.getAttribute(EMAIL_EXISTS_MESSAGE_ATTR)%>" />
-<c:set var="password_mismatch_message" value="<%=request.getAttribute(PASSWORD_MISMATCH_MESSAGE_ATTR)%>" />
+<c:set var="email_exists_message" value="<%=request.getAttribute(EMAIL_EXISTS_MESSAGE)%>" />
+<c:set var="password_mismatch_message" value="<%=request.getAttribute(PASSWORD_MISMATCH_MESSAGE)%>" />
 
 <body>
 

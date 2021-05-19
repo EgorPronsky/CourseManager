@@ -10,15 +10,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import static com.company.manager.filter.SessionFilter.APP_DOMAIN_NAME;
-import static com.company.manager.servlet.core.get_courses.GetCourseToEditServlet.COURSE_ID_PARAM;
+import static com.company.manager.constans.ApplicationConstants.APP_DOMAIN_NAME;
+import static com.company.manager.constans.CourseAttrAndParamNames.COURSE_ID;
 
 @Slf4j
 public class DeleteCourseServlet extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         log.debug("Receiving course id");
-        long courseId = Long.parseLong(request.getParameter(COURSE_ID_PARAM));
+        long courseId = Long.parseLong(request.getParameter(COURSE_ID));
 
         log.debug("Getting course by id from DB");
         Course course = CourseServiceImpl.getService()

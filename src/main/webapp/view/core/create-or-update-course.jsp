@@ -1,11 +1,6 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ page import="static com.company.manager.servlet.core.course_actions.SaveOrUpdateCourseServlet.*" %>
-<%@ page import="static com.company.manager.handlers.input_handlers.CourseInputHandler.MONDAY_PARAM" %>
-<%@ page import="static com.company.manager.handlers.input_handlers.CourseInputHandler.MONDAY_START_TIME_PARAM" %>
-<%@ page import="static com.company.manager.handlers.input_handlers.CourseInputHandler.*" %>
 <%@ page import="static com.company.manager.servlet.core.students_actions.GetCourseStudentsServlet.COURSE_ATTR" %>
-<%@ page import="static com.company.manager.servlet.core.get_courses.GetCourseToEditServlet.COURSE_ID_PARAM" %>
-<%@ page import="com.company.manager.domain.course.Course" %>
+<%@ page import="static com.company.manager.constans.CourseAttrAndParamNames.*" %>
 <html>
 
 <head>
@@ -14,12 +9,12 @@
 </head>
 
 <%-- Prepare variables --%>
-<c:set var="course_title" value="<%=COURSE_TITLE_PARAM%>" />
-<c:set var="course_description" value="<%=COURSE_DESCRIPTION_PARAM%>" />
-<c:set var="course_start_date" value="<%=COURSE_START_DATE_PARAM%>" />
-<c:set var="course_end_date" value="<%=COURSE_END_DATE_PARAM%>" />
-<c:set var="course_uri" value="<%=COURSE_URI_PARAM%>" />
-<c:set var="course_id" value="<%=COURSE_ID_PARAM%>" />
+<c:set var="course_title" value="<%=COURSE_TITLE%>" />
+<c:set var="course_description" value="<%=COURSE_DESCRIPTION%>" />
+<c:set var="course_start_date" value="<%=COURSE_START_DATE%>" />
+<c:set var="course_end_date" value="<%=COURSE_END_DATE%>" />
+<c:set var="course_uri" value="<%=COURSE_URI%>" />
+<c:set var="course_id" value="<%=COURSE_ID%>" />
 
 <c:set var="course" value="<%=request.getAttribute(COURSE_ATTR)%>" />
 
@@ -142,9 +137,9 @@
                                         <tbody>
 
                                         <!--Monday-->
-                                        <c:set var="monday" value="<%=MONDAY_PARAM%>" />
-                                        <c:set var="monday_start_time" value="<%=MONDAY_START_TIME_PARAM%>" />
-                                        <c:set var="monday_end_time" value="<%=MONDAY_END_TIME_PARAM%>" />
+                                        <c:set var="monday" value="<%=MONDAY%>" />
+                                        <c:set var="monday_start_time" value="<%=MONDAY_START_TIME%>" />
+                                        <c:set var="monday_end_time" value="<%=MONDAY_END_TIME%>" />
                                         <tr>
                                             <td>
                                                 <input name="${monday}" type="checkbox" value="monday">
@@ -163,9 +158,9 @@
                                         </tr>
 
                                         <!--Tuesday-->
-                                        <c:set var="tuesday" value="<%=TUESDAY_PARAM%>" />
-                                        <c:set var="tuesday_start_time" value="<%=TUESDAY_START_TIME_PARAM%>" />
-                                        <c:set var="tuesday_end_time" value="<%=TUESDAY_END_TIME_PARAM%>" />
+                                        <c:set var="tuesday" value="<%=TUESDAY%>" />
+                                        <c:set var="tuesday_start_time" value="<%=TUESDAY_START_TIME%>" />
+                                        <c:set var="tuesday_end_time" value="<%=TUESDAY_END_TIME%>" />
                                         <tr>
                                             <td>
                                                 <input name="${tuesday}" type="checkbox" value="tuesday">
@@ -184,9 +179,9 @@
                                         </tr>
 
                                         <!--Wednesday-->
-                                        <c:set var="wednesday" value="<%=WEDNESDAY_PARAM%>" />
-                                        <c:set var="wednesday_start_time" value="<%=WEDNESDAY_START_TIME_PARAM%>" />
-                                        <c:set var="wednesday_end_time" value="<%=WEDNESDAY_END_TIME_PARAM%>" />
+                                        <c:set var="wednesday" value="<%=WEDNESDAY%>" />
+                                        <c:set var="wednesday_start_time" value="<%=WEDNESDAY_START_TIME%>" />
+                                        <c:set var="wednesday_end_time" value="<%=WEDNESDAY_END_TIME%>" />
                                         <tr>
                                             <td>
                                                 <input name="${wednesday}" type="checkbox" value="wednesday">
@@ -205,9 +200,9 @@
                                         </tr>
 
                                         <!--Thursday-->
-                                        <c:set var="thursday" value="<%=THURSDAY_PARAM%>" />
-                                        <c:set var="thursday_start_time" value="<%=THURSDAY_START_DATE_PARAM%>" />
-                                        <c:set var="thursday_end_time" value="<%=THURSDAY_END_DATE_PARAM%>" />
+                                        <c:set var="thursday" value="<%=THURSDAY%>" />
+                                        <c:set var="thursday_start_time" value="<%=THURSDAY_START_DATE%>" />
+                                        <c:set var="thursday_end_time" value="<%=THURSDAY_END_DATE%>" />
                                         <tr>
                                             <td>
                                                 <input name="${thursday}" type="checkbox" value="thursday">
@@ -226,9 +221,9 @@
                                         </tr>
 
                                         <!--Friday-->
-                                        <c:set var="friday" value="<%=FRIDAY_PARAM%>" />
-                                        <c:set var="friday_start_time" value="<%=FRIDAY_START_DATE_PARAM%>" />
-                                        <c:set var="friday_end_time" value="<%=FRIDAY_END_DATE_PARAM%>" />
+                                        <c:set var="friday" value="<%=FRIDAY%>" />
+                                        <c:set var="friday_start_time" value="<%=FRIDAY_START_DATE%>" />
+                                        <c:set var="friday_end_time" value="<%=FRIDAY_END_DATE%>" />
                                         <tr>
                                             <td>
                                                 <input name="${friday}" type="checkbox" value="friday">
@@ -247,9 +242,9 @@
                                         </tr>
 
                                         <!--Saturday-->
-                                        <c:set var="saturday" value="<%=SATURDAY_PARAM%>" />
-                                        <c:set var="saturday_start_time" value="<%=SATURDAY_START_DATE_PARAM%>" />
-                                        <c:set var="saturday_end_time" value="<%=SATURDAY_END_DATE_PARAM%>" />
+                                        <c:set var="saturday" value="<%=SATURDAY%>" />
+                                        <c:set var="saturday_start_time" value="<%=SATURDAY_START_DATE%>" />
+                                        <c:set var="saturday_end_time" value="<%=SATURDAY_END_DATE%>" />
                                         <tr>
                                             <td>
                                                 <input name="${saturday}" type="checkbox" value="saturday">
@@ -268,9 +263,9 @@
                                         </tr>
 
                                         <!--Sunday-->
-                                        <c:set var="sunday" value="<%=SUNDAY_PARAM%>" />
-                                        <c:set var="sunday_start_time" value="<%=SUNDAY_START_DATE_PARAM%>" />
-                                        <c:set var="sunday_end_time" value="<%=SUNDAY_END_DATE_PARAM%>" />
+                                        <c:set var="sunday" value="<%=SUNDAY%>" />
+                                        <c:set var="sunday_start_time" value="<%=SUNDAY_START_DATE%>" />
+                                        <c:set var="sunday_end_time" value="<%=SUNDAY_END_DATE%>" />
                                         <tr>
                                             <td>
                                                 <input name="${sunday}" type="checkbox" value="saturday">

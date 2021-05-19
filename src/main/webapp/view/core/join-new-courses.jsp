@@ -1,5 +1,5 @@
 <%@ page import="static com.company.manager.servlet.core.course_actions.JoinNewCoursesServlet.COURSES_ID_PARAM" %>
-<%@ page import="static com.company.manager.servlet.core.get_courses.UserCurrentCoursesServlet.COURSES_ATTR" %>
+<%@ page import="static com.company.manager.constans.CourseAttrAndParamNames.COURSES" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
@@ -11,7 +11,7 @@
 
 <%-- Prepare variables --%>
 <c:set var="courses_to_join" value="<%=COURSES_ID_PARAM%>" />
-<c:set var="available_courses" value="<%=request.getAttribute(COURSES_ATTR)%>" />
+<c:set var="available_courses" value="<%=request.getAttribute(COURSES)%>" />
 
 <body>
 <div class="container">
@@ -72,7 +72,7 @@
                                                         </div>
                                                     </div>
                                                 </td>
-                                                <td>${course.teacher.user.userInfo.firstName} ${course.teacher.user.userInfo.lastName}</td>
+                                                <td>${course.teacher.userInfo.firstName} ${course.teacher.userInfo.lastName}</td>
                                                 <td>
                                                     <div class="dropdown">
                                                         <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">

@@ -15,8 +15,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.company.manager.servlet.access.SignInServlet.CURRENT_USER_ID_SESSION_ATTR;
-import static com.company.manager.servlet.core.get_courses.UserCurrentCoursesServlet.*;
+import static com.company.manager.constans.CourseAttrAndParamNames.*;
+import static com.company.manager.constans.UserAttrAndParamNames.CURRENT_USER_ID_SESSION;
 
 @Slf4j
 public class TeacherNotGradedCoursesServlet extends HttpServlet {
@@ -26,7 +26,7 @@ public class TeacherNotGradedCoursesServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         log.debug("Receiving current teacher id from session");
         Long teacherId = (Long)request.getSession(false)
-                .getAttribute(CURRENT_USER_ID_SESSION_ATTR);
+                .getAttribute(CURRENT_USER_ID_SESSION);
 
         log.debug("Getting teacher not graded courses");
         List<Course> notGradedCourses = CourseServiceImpl.getService()
@@ -34,8 +34,8 @@ public class TeacherNotGradedCoursesServlet extends HttpServlet {
 
         log.debug("Preparing attributes for response");
         Map<String, Object> respAttrs = new HashMap<>();
-        respAttrs.put(COURSES_STATE_ATTR, NOT_GRADED_COURSES_STATE_ATTR_VALUE);
-        respAttrs.put(COURSES_ATTR, notGradedCourses);
+        respAttrs.put(COURSES_STATE, NOT_GRADED_COURSES_STATE_ATTR_VALUE);
+        respAttrs.put(COURSES, notGradedCourses);
 
         log.debug("Invoking view handler");
         ViewHandler viewHandler = new JspViewHandler();

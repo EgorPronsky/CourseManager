@@ -7,7 +7,8 @@ import java.util.Arrays;
 import java.util.Optional;
 import java.util.Set;
 
-import static com.company.manager.filter.SessionFilter.APP_DOMAIN_NAME;
+import static com.company.manager.constans.ApplicationConstants.APP_DOMAIN_NAME;
+
 
 public class CookieUtil {
 

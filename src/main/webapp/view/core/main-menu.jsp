@@ -1,5 +1,5 @@
-<%@ page import="com.company.manager.domain.user.info.UserRole" %>
-<%@ page import="static com.company.manager.servlet.access.SignInServlet.CURRENT_USER_INFO_SESSION_ATTR" %>
+<%@ page import="com.company.manager.domain.user.UserRole" %>
+<%@ page import="static com.company.manager.constans.UserAttrAndParamNames.CURRENT_USER_INFO_SESSION" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
@@ -12,7 +12,7 @@
 </head>
 
 <%-- Prepare variables --%>
-<c:set var="current_user_info" value="<%=session.getAttribute(CURRENT_USER_INFO_SESSION_ATTR)%>" />
+<c:set var="current_user_info" value="<%=session.getAttribute(CURRENT_USER_INFO_SESSION)%>" />
 
 <body>
 <div class="container">

@@ -6,11 +6,9 @@ import com.company.manager.domain.archive.StudentCourseResult;
 import com.company.manager.domain.archive.StudentCourseResult_;
 import com.company.manager.domain.course.CourseInfo_;
 import com.company.manager.domain.course.Course_;
-import com.company.manager.domain.user.Student;
-import com.company.manager.domain.user.Student_;
-import com.company.manager.domain.user.Teacher;
 import com.company.manager.domain.course.Course;
-import com.company.manager.domain.user.Teacher_;
+import com.company.manager.domain.user.User;
+import com.company.manager.domain.user.User_;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
@@ -70,7 +68,7 @@ public class HibernateCourseDAO extends HibernateGenericDAO<Course> implements C
     }
 
     @Override
-    public List<Course> getStudentCoursesStartAfterDate(long teacherId, LocalDate date) {
+    public List<Course> getStudentCoursesStartAfterDate(long studentId, LocalDate date) {
         List<Course> courses = new ArrayList<>();
         Transaction tr = null;
 
@@ -79,10 +77,11 @@ public class HibernateCourseDAO extends HibernateGenericDAO<Course> implements C
             CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
             CriteriaQuery<Course> query = criteriaBuilder.createQuery(Course.class);
             Root<Course> courseRoot = query.from(Course.class);
-            Join<Course, Student> studentJoin = courseRoot.join(Course_.students);
+            Join<Course, StudentCourseResult> scrJoin = courseRoot.join(Course_.studentResults);
 
             // Predicates for WHERE clause
-            Predicate predicateForUserId = criteriaBuilder.equal(studentJoin.get(Student_.id), teacherId);
+            Predicate predicateForUserId = criteriaBuilder
+                    .equal(scrJoin.get(StudentCourseResult_.student).get(User_.id), studentId);
             Predicate predicateForDate = criteriaBuilder.greaterThan(
                     courseRoot.get(Course_.courseInfo).get(CourseInfo_.startDate), date);
 
@@ -110,18 +109,18 @@ public class HibernateCourseDAO extends HibernateGenericDAO<Course> implements C
             CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
             CriteriaQuery<Course> query = criteriaBuilder.createQuery(Course.class);
             Root<Course> courseRoot = query.from(Course.class);
-            Join<Course, Student> studentJoin = courseRoot.join(Course_.students);
+            Join<Course, StudentCourseResult> scrJoin = courseRoot.join(Course_.studentResults);
 
             // Predicates for WHERE clause
-            Predicate predicateForUserId = criteriaBuilder.equal(studentJoin.get(Student_.id), studentId);
+            Predicate predicateForUserId = criteriaBuilder
+                    .equal(scrJoin.get(StudentCourseResult_.student).get(User_.id), studentId);
             Predicate predicateForStartDate = criteriaBuilder.lessThanOrEqualTo(
                     courseRoot.get(Course_.courseInfo).get(CourseInfo_.startDate), date);
             Predicate predicateForEndDate = criteriaBuilder.greaterThanOrEqualTo(
                     courseRoot.get(Course_.courseInfo).get(CourseInfo_.endDate), date);
 
             query.select(courseRoot)
-                    .where(criteriaBuilder
-                            .and(predicateForUserId, predicateForStartDate, predicateForEndDate));
+                    .where(criteriaBuilder.and(predicateForUserId, predicateForStartDate, predicateForEndDate));
 
             // Executing query and saving result
             tr = session.beginTransaction();
@@ -148,10 +147,11 @@ public class HibernateCourseDAO extends HibernateGenericDAO<Course> implements C
             // Sub query to get student subscribed courses
             Subquery<Course> subQuery = rootQuery.subquery(Course.class);
             Root<Course> courseSubRoot = subQuery.from(Course.class);
-            Join<Course, Student> studentSubJoin = courseSubRoot.join(Course_.students);
+            Join<Course, StudentCourseResult> scrSubJoin = courseSubRoot.join(Course_.studentResults);
 
             subQuery.select(courseSubRoot)
-                    .where(criteriaBuilder.equal(studentSubJoin.get(Student_.id), studentId));
+                    .where(criteriaBuilder
+                            .equal(scrSubJoin.get(StudentCourseResult_.student).get(User_.id), studentId));
 
             // Predicates for WHERE clause of root query
             Predicate predicateForUserNotSubscribedCourses = courseRoot.in(subQuery).not();
@@ -182,27 +182,18 @@ public class HibernateCourseDAO extends HibernateGenericDAO<Course> implements C
             // Prepare
             CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
             CriteriaQuery<Course> rootQuery = criteriaBuilder.createQuery(Course.class);
-            Root<Student> userRoot = rootQuery.from(Student.class);
-            Join<Student, Course> courseJoin = userRoot.join(Student_.courses);
+            Root<User> userRoot = rootQuery.from(User.class);
+            Join<User, StudentCourseResult> scrJoin = userRoot.join(User_.courseResults);
 
-            // Sub query to get student graded courses
-            Subquery<Course> subQuery = rootQuery.subquery(Course.class);
-            Root<StudentCourseResult> scrSubRoot = subQuery.from(StudentCourseResult.class);
-
-            // Predicate for sub query
-            Predicate subPredicateForStudentId = criteriaBuilder
-                    .equal(scrSubRoot.get(StudentCourseResult_.student).get(Student_.id), studentId);
-
-            subQuery.select(scrSubRoot.get(StudentCourseResult_.course))
-                    .where(subPredicateForStudentId);
-
-            // Predicates for WHERE clause of root query
-            Predicate predicateForUserId = criteriaBuilder.equal(userRoot.get(Student_.id), studentId);
-            Predicate predicateForUserNotGradedCourses = courseJoin.in(subQuery).not();
+            // Predicates for WHERE clause
+            Predicate predicateForUserId = criteriaBuilder.equal(userRoot.get(User_.id), studentId);
+            Predicate predicateForUserNotGradedCourses = criteriaBuilder
+                    .isNull(scrJoin.get(StudentCourseResult_.result));
             Predicate predicateForDate = criteriaBuilder
-                    .lessThan(courseJoin.get(Course_.courseInfo).get(CourseInfo_.endDate), date);
+                    .lessThan(scrJoin.get(StudentCourseResult_.course)
+                            .get(Course_.courseInfo).get(CourseInfo_.endDate), date);
 
-            rootQuery.select(courseJoin)
+            rootQuery.select(scrJoin.get(StudentCourseResult_.course))
                     .where(criteriaBuilder
                             .and(predicateForUserId, predicateForUserNotGradedCourses, predicateForDate));
 
@@ -230,7 +221,7 @@ public class HibernateCourseDAO extends HibernateGenericDAO<Course> implements C
 
             // Predicates for WHERE clause
             Predicate predicateForUserId = criteriaBuilder
-                    .equal(courseRoot.get(Course_.teacher).get(Teacher_.id), teacherId);
+                    .equal(courseRoot.get(Course_.teacher).get(User_.id), teacherId);
             Predicate predicateForDate = criteriaBuilder.greaterThan(
                     courseRoot.get(Course_.courseInfo).get(CourseInfo_.startDate), date);
 
@@ -261,7 +252,7 @@ public class HibernateCourseDAO extends HibernateGenericDAO<Course> implements C
 
             // Predicates for WHERE clause
             Predicate predicateForUserId = criteriaBuilder
-                    .equal(courseRoot.get(Course_.teacher).get(Teacher_.id), teacherId);
+                    .equal(courseRoot.get(Course_.teacher).get(User_.id), teacherId);
             Predicate predicateForStartDate = criteriaBuilder.lessThanOrEqualTo(
                     courseRoot.get(Course_.courseInfo).get(CourseInfo_.startDate), date);
             Predicate predicateForEndDate = criteriaBuilder.greaterThanOrEqualTo(
@@ -291,24 +282,21 @@ public class HibernateCourseDAO extends HibernateGenericDAO<Course> implements C
             // Prepare
             CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
             CriteriaQuery<Course> rootQuery = criteriaBuilder.createQuery(Course.class);
-            Root<Teacher> teacherRoot = rootQuery.from(Teacher.class);
-            Join<Teacher, Course> courseJoin = teacherRoot.join(Teacher_.courses);
-
-            // Sub query to get all graded courses
-            Subquery<Course> subQuery = rootQuery.subquery(Course.class);
-            Root<StudentCourseResult> scrSubRoot = subQuery.from(StudentCourseResult.class);
-
-            subQuery.select(scrSubRoot.get(StudentCourseResult_.course)).distinct(true);
+            Root<Course> courseRoot = rootQuery.from(Course.class);
+            Join<Course, StudentCourseResult> scrJoin = courseRoot.join(Course_.studentResults);
 
             // Predicates for WHERE clause of root query
-            Predicate predicateForUserId = criteriaBuilder.equal(teacherRoot.get(Teacher_.id), teacherId);
-            Predicate predicateForUserNotGradedCourses = courseJoin.in(subQuery).not();
+            Predicate predicateForUserId = criteriaBuilder
+                    .equal(courseRoot.get(Course_.teacher).get(User_.id), teacherId);
+            Predicate predicateForUserNotGradedCourses = criteriaBuilder
+                    .isNull(scrJoin.get(StudentCourseResult_.result));
             Predicate predicateForDate = criteriaBuilder
-                    .lessThan(courseJoin.get(Course_.courseInfo).get(CourseInfo_.endDate), date);
+                    .lessThan(courseRoot.get(Course_.courseInfo).get(CourseInfo_.endDate), date);
 
-            rootQuery.select(courseJoin)
+            rootQuery.select(courseRoot)
                     .where(criteriaBuilder
-                            .and(predicateForUserId, predicateForUserNotGradedCourses, predicateForDate));
+                            .and(predicateForUserId, predicateForUserNotGradedCourses, predicateForDate))
+                    .distinct(true);
 
             // Executing query and saving result
             tr = session.beginTransaction();

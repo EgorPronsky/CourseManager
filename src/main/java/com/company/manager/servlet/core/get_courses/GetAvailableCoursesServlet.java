@@ -15,8 +15,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.company.manager.servlet.access.SignInServlet.CURRENT_USER_ID_SESSION_ATTR;
-import static com.company.manager.servlet.core.get_courses.UserCurrentCoursesServlet.COURSES_ATTR;
+import static com.company.manager.constans.CourseAttrAndParamNames.COURSES;
+import static com.company.manager.constans.UserAttrAndParamNames.CURRENT_USER_ID_SESSION;
 
 @Slf4j
 public class GetAvailableCoursesServlet extends HttpServlet {
@@ -24,7 +24,7 @@ public class GetAvailableCoursesServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         log.debug("Receiving current student id from session");
         Long studentId = (Long)request.getSession(false)
-                .getAttribute(CURRENT_USER_ID_SESSION_ATTR);
+                .getAttribute(CURRENT_USER_ID_SESSION);
 
         log.debug("Getting available courses for the student");
         List<Course> availableCourses = CourseServiceImpl.getService()
@@ -32,7 +32,7 @@ public class GetAvailableCoursesServlet extends HttpServlet {
 
         log.debug("Preparing attributes for response");
         Map<String, Object> respAttrs = new HashMap<>();
-        respAttrs.put(COURSES_ATTR, availableCourses);
+        respAttrs.put(COURSES, availableCourses);
 
         log.debug("Invoking view handler");
         ViewHandler viewHandler = new JspViewHandler();

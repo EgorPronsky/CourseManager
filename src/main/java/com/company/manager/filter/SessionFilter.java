@@ -1,7 +1,6 @@
 package com.company.manager.filter;
 
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.tool.schema.internal.exec.ScriptTargetOutputToFile;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
@@ -10,12 +9,11 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Optional;
 
-import static java.util.Arrays.stream;
+import static com.company.manager.constans.ApplicationConstants.APP_DOMAIN_NAME;
 
 @Slf4j
 public class SessionFilter implements Filter {
 
-    public static final String APP_DOMAIN_NAME = "courses-manager";
     private String[] allowedPathsWithNoActiveSession;
 
     public void init(FilterConfig config) throws ServletException {

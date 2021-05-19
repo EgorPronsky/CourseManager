@@ -2,8 +2,8 @@ package com.company.manager.dao.custom.impl;
 
 import com.company.manager.dao.custom.AccessInfoDAO;
 import com.company.manager.dao.generic.impl.HibernateGenericDAO;
-import com.company.manager.domain.user.info.AccessInfo;
-import com.company.manager.domain.user.info.AccessInfo_;
+import com.company.manager.domain.user.AccessInfo;
+import com.company.manager.domain.user.AccessInfo_;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.Session;
 import org.hibernate.Transaction;

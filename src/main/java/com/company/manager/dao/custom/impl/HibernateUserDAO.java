@@ -2,9 +2,9 @@ package com.company.manager.dao.custom.impl;
 
 import com.company.manager.dao.custom.UserDAO;
 import com.company.manager.dao.generic.impl.HibernateGenericDAO;
+import com.company.manager.domain.user.AccessInfo_;
 import com.company.manager.domain.user.User;
 import com.company.manager.domain.user.User_;
-import com.company.manager.domain.user.info.AccessInfo_;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;

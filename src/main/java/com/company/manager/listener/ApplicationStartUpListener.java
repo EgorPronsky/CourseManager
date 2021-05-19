@@ -19,8 +19,6 @@ public class ApplicationStartUpListener implements ServletContextListener {
             Class.forName(CourseServiceImpl.class.getName());
             Class.forName(StudentCourseResultServiceImpl.class.getName());
             Class.forName(UserServiceImpl.class.getName());
-            Class.forName(TeacherServiceImpl.class.getName());
-            Class.forName(StudentServiceImpl.class.getName());
             log.debug("Classes were loaded");
         } catch (ClassNotFoundException e) {
             log.error("Class wasn't found",e);

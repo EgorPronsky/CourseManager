@@ -4,7 +4,6 @@ import com.company.manager.util.CookieUtil;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -13,8 +12,8 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-import static com.company.manager.filter.SessionFilter.APP_DOMAIN_NAME;
-import static com.company.manager.servlet.access.SignInServlet.*;
+import static com.company.manager.constans.ApplicationConstants.APP_DOMAIN_NAME;
+import static com.company.manager.constans.UserAttrAndParamNames.*;
 
 @Slf4j
 public class LogoutServlet extends HttpServlet {
@@ -24,7 +23,7 @@ public class LogoutServlet extends HttpServlet {
     @Override
     public void init() throws ServletException {
         cookieNamesToDeleteWhenLogout = new HashSet<>(Arrays.asList(
-                USER_ID_COOKIE_NAME, "JSESSIONID"
+                USER_ID_COOKIE_NAME, USER_SESSION_ID_COOKIE_NAME
         ));
     }
 

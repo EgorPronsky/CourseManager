@@ -14,16 +14,15 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.company.manager.constans.CourseAttrAndParamNames.COURSE_ID;
 import static com.company.manager.servlet.core.students_actions.GetCourseStudentsServlet.COURSE_ATTR;
 
 @Slf4j
 public class GetCourseToEditServlet extends HttpServlet {
 
-    public static final String COURSE_ID_PARAM = "course_id";
-
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         log.debug("Receiving course id to edit");
-        long courseId = Long.parseLong(request.getParameter(COURSE_ID_PARAM));
+        long courseId = Long.parseLong(request.getParameter(COURSE_ID));
 
         log.debug("Finding course by received id");
         Course courseToEdit = CourseServiceImpl.getService()

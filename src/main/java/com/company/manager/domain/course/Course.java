@@ -1,7 +1,7 @@
 package com.company.manager.domain.course;
 
-import com.company.manager.domain.user.Student;
-import com.company.manager.domain.user.Teacher;
+import com.company.manager.domain.archive.StudentCourseResult;
+import com.company.manager.domain.user.User;
 import lombok.*;
 
 import javax.persistence.*;
@@ -27,13 +27,10 @@ public class Course {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "teacher_id")
-    private Teacher teacher;
+    private User teacher;
 
     @Builder.Default
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "students_courses",
-            joinColumns = @JoinColumn(name = "course_id"),
-            inverseJoinColumns = @JoinColumn(name = "student_id"))
-    private final Set<Student> students = new HashSet<>();
+    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private final Set<StudentCourseResult> studentResults = new HashSet<>();
 
 }

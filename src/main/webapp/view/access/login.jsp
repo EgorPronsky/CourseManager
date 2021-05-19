@@ -1,5 +1,4 @@
-<%@ page import="static com.company.manager.servlet.access.SignInServlet.REMEMBER_USER_PARAM" %>
-<%@ page import="static com.company.manager.servlet.access.TrySignInServlet.*" %>
+<%@ page import="static com.company.manager.constans.UserAttrAndParamNames.*" %>
 <%@ page session="false" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
@@ -18,11 +17,11 @@
 </head>
 
 <%-- Prepare variables --%>
-<c:set var="email" value="<%=EMAIL_PARAM%>" />
-<c:set var="password" value="<%=PASSWORD_PARAM%>" />
-<c:set var="remember_user" value="<%=REMEMBER_USER_PARAM%>" />
-<c:set var="email_value" value="<%=request.getAttribute(EMAIL_PARAM)%>" />
-<c:set var="invalid_email_or_password_message" value="<%=request.getAttribute(INVALID_EMAIL_OR_PASSWORD_MESSAGE_ATTR)%>" />
+<c:set var="email" value="<%=EMAIL%>" />
+<c:set var="password" value="<%=PASSWORD%>" />
+<c:set var="remember_user" value="<%=REMEMBER_USER%>" />
+<c:set var="email_value" value="<%=request.getAttribute(EMAIL)%>" />
+<c:set var="invalid_email_or_password_message" value="<%=request.getAttribute(INVALID_EMAIL_OR_PASSWORD_MESSAGE)%>" />
 
 <body>
 

@@ -1,11 +1,10 @@
 package com.company.manager.domain.archive;
 
 import com.company.manager.domain.course.Course;
-import com.company.manager.domain.user.Student;
+import com.company.manager.domain.user.User;
 import lombok.*;
 
 import javax.persistence.*;
-import java.io.Serializable;
 
 @Entity
 @Table(name = "archive")
@@ -19,13 +18,13 @@ import java.io.Serializable;
 public class StudentCourseResult {
 
     @Id
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "student_id")
     @EqualsAndHashCode.Include
-    private Student student;
+    private User student;
 
     @Id
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "course_id")
     @EqualsAndHashCode.Include
     private Course course;

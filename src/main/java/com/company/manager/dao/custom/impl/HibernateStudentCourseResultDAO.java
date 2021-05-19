@@ -5,7 +5,7 @@ import com.company.manager.dao.generic.impl.HibernateGenericDAO;
 import com.company.manager.domain.archive.StudentCourseResult;
 import com.company.manager.domain.archive.StudentCourseResult_;
 import com.company.manager.domain.course.Course_;
-import com.company.manager.domain.user.Student_;
+import com.company.manager.domain.user.User_;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
@@ -15,6 +15,7 @@ import com.company.manager.util.HibernateUtil;
 import javax.persistence.PersistenceException;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -75,11 +76,11 @@ public class HibernateStudentCourseResultDAO extends HibernateGenericDAO<Student
             // Prepare
             CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
             CriteriaQuery<StudentCourseResult> query = criteriaBuilder.createQuery(StudentCourseResult.class);
-            Root<StudentCourseResult> scr = query.from(StudentCourseResult.class);
+            Root<StudentCourseResult> scrRoot = query.from(StudentCourseResult.class);
 
-            query.select(scr)
-                    .where(criteriaBuilder
-                            .equal(scr.get(StudentCourseResult_.student).get(Student_.id), studentId));
+            query.select(scrRoot)
+                    .where(criteriaBuilder.equal(
+                            scrRoot.get(StudentCourseResult_.student).get(User_.id), studentId));
 
             // Executing query and saving result
             tr = session.beginTransaction();

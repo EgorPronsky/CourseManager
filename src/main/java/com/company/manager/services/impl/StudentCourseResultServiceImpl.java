@@ -5,11 +5,12 @@ import com.company.manager.dao.custom.impl.HibernateStudentCourseResultDAO;
 import com.company.manager.domain.archive.CourseResult;
 import com.company.manager.domain.archive.StudentCourseResult;
 import com.company.manager.domain.course.Course;
-import com.company.manager.domain.user.Student;
+import com.company.manager.domain.user.User;
 import lombok.extern.slf4j.Slf4j;
 import com.company.manager.services.StudentCourseResultService;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Slf4j
 public class StudentCourseResultServiceImpl implements StudentCourseResultService {
@@ -32,13 +33,8 @@ public class StudentCourseResultServiceImpl implements StudentCourseResultServic
     }
 
     @Override
-    public void saveStudentCourseResults(Course course, Map<Student, CourseResult> studentsResults) {
-        Set<StudentCourseResult> scrSet = new HashSet<>();
-            studentsResults.forEach((key, value) -> scrSet.add(StudentCourseResult.builder()
-                    .course(course)
-                    .student(key)
-                    .result(value).build()));
-        dao.saveAll(scrSet);
+    public void saveStudentCourseResults(Collection<StudentCourseResult> scrCollection) {
+        dao.saveAll(scrCollection);
     }
 
     @Override

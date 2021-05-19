@@ -1,10 +1,11 @@
 package com.company.manager.servlet.core.course_actions;
 
+import com.company.manager.domain.archive.StudentCourseResult;
 import com.company.manager.domain.course.Course;
-import com.company.manager.domain.user.Student;
+import com.company.manager.domain.user.User;
+import com.company.manager.services.impl.UserServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import com.company.manager.services.impl.CourseServiceImpl;
-import com.company.manager.services.impl.StudentServiceImpl;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -14,8 +15,8 @@ import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static com.company.manager.filter.SessionFilter.APP_DOMAIN_NAME;
-import static com.company.manager.servlet.access.SignInServlet.CURRENT_USER_ID_SESSION_ATTR;
+import static com.company.manager.constans.ApplicationConstants.APP_DOMAIN_NAME;
+import static com.company.manager.constans.UserAttrAndParamNames.CURRENT_USER_ID_SESSION;
 
 @Slf4j
 public class JoinNewCoursesServlet extends HttpServlet {
@@ -30,19 +31,25 @@ public class JoinNewCoursesServlet extends HttpServlet {
                 .map(Long::valueOf)
                 .collect(Collectors.toSet());
 
+        log.debug("Getting current student from DB");
+        Long studentId = (Long)request.getSession(false)
+                .getAttribute(CURRENT_USER_ID_SESSION);
+        User currentStudent = UserServiceImpl.getService()
+                .getUserById(studentId);
+
         log.debug("Getting courses to join by id from DB");
         List<Course> coursesToJoin = CourseServiceImpl.getService()
                 .getCoursesById(coursesIdSet);
 
-        log.debug("Getting current student from DB");
-        Long studentId = (Long)request.getSession(false)
-                .getAttribute(CURRENT_USER_ID_SESSION_ATTR);
-        Student currentStudent = StudentServiceImpl.getService()
-                .getStudentById(studentId);
+        log.debug("Mapping courses to SCR entities");
+        Set<StudentCourseResult> scrList = coursesToJoin.stream()
+                .map(course -> StudentCourseResult.builder()
+                        .course(course).student(currentStudent).build())
+                .collect(Collectors.toSet());
 
-        log.debug("Updating student in DB");
-        currentStudent.getCourses().addAll(coursesToJoin);
-        StudentServiceImpl.getService().updateStudent(currentStudent);
+        log.debug("Updating student");
+        currentStudent.getCourseResults().addAll(scrList);
+        UserServiceImpl.getService().updateUser(currentStudent);
 
         response.sendRedirect(String.format("/%s/main-menu", APP_DOMAIN_NAME));
     }

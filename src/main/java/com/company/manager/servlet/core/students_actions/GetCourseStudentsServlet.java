@@ -1,7 +1,6 @@
 package com.company.manager.servlet.core.students_actions;
 
 import com.company.manager.domain.course.Course;
-import com.company.manager.servlet.core.get_courses.GetCourseToEditServlet;
 import lombok.extern.slf4j.Slf4j;
 import com.company.manager.services.impl.CourseServiceImpl;
 import com.company.manager.handlers.view_handlers.impl.JspViewHandler;
@@ -15,7 +14,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.company.manager.servlet.core.get_courses.GetCourseToEditServlet.COURSE_ID_PARAM;
+import static com.company.manager.constans.CourseAttrAndParamNames.COURSE_ID;
 
 @Slf4j
 public class GetCourseStudentsServlet extends HttpServlet {
@@ -24,7 +23,7 @@ public class GetCourseStudentsServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         log.debug("Receiving course id from request");
-        long courseId = Long.parseLong(request.getParameter(COURSE_ID_PARAM));
+        long courseId = Long.parseLong(request.getParameter(COURSE_ID));
 
         log.debug("Getting course by received id");
         Course course = CourseServiceImpl.getService().getCourseById(courseId);

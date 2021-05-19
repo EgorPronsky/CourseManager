@@ -10,25 +10,19 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.company.manager.servlet.access.TrySignInServlet.EMAIL_PARAM;
-import static com.company.manager.servlet.access.TrySignInServlet.PASSWORD_PARAM;
+import static com.company.manager.constans.UserAttrAndParamNames.*;
 
 @Slf4j
 public class RegistrationFilter implements Filter {
-
-    // Parameter and attribute names
-    public static final String PASSWORD_CONFIRM_PARAM = "password_confirm";
-    public static final String PASSWORD_MISMATCH_MESSAGE_ATTR = "password_mismatch_message";
-    public static final String EMAIL_EXISTS_MESSAGE_ATTR = "email_exists_message";
 
     public void init(FilterConfig config) throws ServletException {}
 
     public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain)
             throws ServletException, IOException {
         log.debug("Receiving user input");
-        String email = req.getParameter(EMAIL_PARAM);
-        String password = req.getParameter(PASSWORD_PARAM);
-        String passwordConfirm = req.getParameter(PASSWORD_CONFIRM_PARAM);
+        String email = req.getParameter(EMAIL);
+        String password = req.getParameter(PASSWORD);
+        String passwordConfirm = req.getParameter(PASSWORD_CONFIRM);
 
         log.debug("Checking user input on validity");
         boolean isInputValid = true;
@@ -36,11 +30,11 @@ public class RegistrationFilter implements Filter {
 
         if (!password.equals(passwordConfirm)) {
             isInputValid = false;
-            respAttrs.put(PASSWORD_MISMATCH_MESSAGE_ATTR, "Password mismatch");
+            respAttrs.put(PASSWORD_MISMATCH_MESSAGE, "Password mismatch");
         }
         if (AccessInfoServiceImpl.getService().isEmailExists(email)) {
             isInputValid = false;
-            respAttrs.put(EMAIL_EXISTS_MESSAGE_ATTR, "This email already exists");
+            respAttrs.put(EMAIL_EXISTS_MESSAGE, "This email already exists");
         }
 
         if (isInputValid) {

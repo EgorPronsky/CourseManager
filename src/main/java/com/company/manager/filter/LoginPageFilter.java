@@ -10,16 +10,13 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Optional;
 
-import static com.company.manager.filter.SessionFilter.APP_DOMAIN_NAME;
-import static com.company.manager.servlet.access.SignInServlet.USER_ID_COOKIE_NAME;
+import static com.company.manager.constans.ApplicationConstants.APP_DOMAIN_NAME;
+import static com.company.manager.constans.UserAttrAndParamNames.USER_ID_COOKIE_NAME;
 
 @Slf4j
 public class LoginPageFilter implements Filter {
-
-    public static final String USER_ID_FROM_COOKIE_ATTR = "user_from_cookie_id";
 
     public void init(FilterConfig config) throws ServletException { }
 
@@ -37,7 +34,7 @@ public class LoginPageFilter implements Filter {
                     .findCookie(USER_ID_COOKIE_NAME, httpReq);
 
             if (userIdCookie.isPresent()) {
-                req.setAttribute(USER_ID_FROM_COOKIE_ATTR, Long.parseLong(userIdCookie.get().getValue()));
+                req.setAttribute(USER_ID_COOKIE_NAME, Long.parseLong(userIdCookie.get().getValue()));
                 req.getRequestDispatcher("/sign-in").forward(req, resp);
             } else {
                 chain.doFilter(req, resp);
