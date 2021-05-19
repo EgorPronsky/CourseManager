@@ -6,25 +6,21 @@
 
     <!-- Listeners -->
     <listener>
-        <listener-class>listener.ApplicationStartUpListener</listener-class>
+        <listener-class>com.company.manager.listener.ApplicationStartUpListener</listener-class>
     </listener>
 
     <!-- Filters -->
     <filter>
         <filter-name>SessionFilter</filter-name>
-        <filter-class>filter.SessionFilter</filter-class>
+        <filter-class>com.company.manager.filter.SessionFilter</filter-class>
     </filter>
     <filter>
         <filter-name>LoginPageFilter</filter-name>
-        <filter-class>filter.LoginPageFilter</filter-class>
+        <filter-class>com.company.manager.filter.LoginPageFilter</filter-class>
     </filter>
     <filter>
         <filter-name>RegistrationFilter</filter-name>
-        <filter-class>filter.RegistrationFilter</filter-class>
-    </filter>
-    <filter>
-        <filter-name>SignInFilter</filter-name>
-        <filter-class>filter.SignInFilter</filter-class>
+        <filter-class>com.company.manager.filter.RegistrationFilter</filter-class>
     </filter>
 
     <!-- Filters mapping -->
@@ -40,71 +36,71 @@
         <filter-name>RegistrationFilter</filter-name>
         <servlet-name>SignUpServlet</servlet-name>
     </filter-mapping>
-    <filter-mapping>
-        <filter-name>SignInFilter</filter-name>
-        <url-pattern>/sign-in</url-pattern>
-    </filter-mapping>
 
     <!-- Servlets -->
     <servlet>
         <servlet-name>SignInServlet</servlet-name>
-        <servlet-class>servlet.access.SignInServlet</servlet-class>
+        <servlet-class>com.company.manager.servlet.access.SignInServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>SignUpServlet</servlet-name>
-        <servlet-class>servlet.access.SignUpServlet</servlet-class>
+        <servlet-class>com.company.manager.servlet.access.SignUpServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>SaveOrUpdateCourseServlet</servlet-name>
-        <servlet-class>servlet.core.course_actions.SaveOrUpdateCourseServlet</servlet-class>
+        <servlet-class>com.company.manager.servlet.core.course_actions.SaveOrUpdateCourseServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>JoinNewCoursesServlet</servlet-name>
-        <servlet-class>servlet.core.course_actions.JoinNewCoursesServlet</servlet-class>
+        <servlet-class>com.company.manager.servlet.core.course_actions.JoinNewCoursesServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>JoinNewCoursesPageServlet</servlet-name>
-        <servlet-class>servlet.core.get_courses.GetAvailableCoursesServlet</servlet-class>
+        <servlet-class>com.company.manager.servlet.core.get_courses.GetAvailableCoursesServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>UserCurrentCoursesServlet</servlet-name>
-        <servlet-class>servlet.core.get_courses.UserCurrentCoursesServlet</servlet-class>
+        <servlet-class>com.company.manager.servlet.core.get_courses.UserCurrentCoursesServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>UserFutureCoursesServlet</servlet-name>
-        <servlet-class>servlet.core.get_courses.UserFutureCoursesServlet</servlet-class>
+        <servlet-class>com.company.manager.servlet.core.get_courses.UserFutureCoursesServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>StudentCompletedCoursesServlet</servlet-name>
-        <servlet-class>servlet.core.get_courses.StudentCompletedCoursesServlet</servlet-class>
+        <servlet-class>com.company.manager.servlet.core.get_courses.StudentCompletedCoursesServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>TeacherNotGradedCoursesServlet</servlet-name>
-        <servlet-class>servlet.core.get_courses.TeacherNotGradedCoursesServlet</servlet-class>
+        <servlet-class>com.company.manager.servlet.core.get_courses.TeacherNotGradedCoursesServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>CourseStudentsServlet</servlet-name>
-        <servlet-class>servlet.core.students_actions.GetCourseStudentsServlet</servlet-class>
+        <servlet-class>com.company.manager.servlet.core.students_actions.GetCourseStudentsServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>GradeStudentsServlet</servlet-name>
-        <servlet-class>servlet.core.students_actions.GradeStudentsServlet</servlet-class>
+        <servlet-class>com.company.manager.servlet.core.students_actions.GradeStudentsServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>LeaveCourseServlet</servlet-name>
-        <servlet-class>servlet.core.course_actions.LeaveCourseServlet</servlet-class>
+        <servlet-class>com.company.manager.servlet.core.course_actions.LeaveCourseServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>LogoutServlet</servlet-name>
-        <servlet-class>servlet.access.LogoutServlet</servlet-class>
+        <servlet-class>com.company.manager.servlet.access.LogoutServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>DeleteCourseServlet</servlet-name>
-        <servlet-class>servlet.core.course_actions.DeleteCourseServlet</servlet-class>
+        <servlet-class>com.company.manager.servlet.core.course_actions.DeleteCourseServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>EditCoursePageServlet</servlet-name>
-        <servlet-class>servlet.core.get_courses.GetCourseToEditServlet</servlet-class>
+        <servlet-class>com.company.manager.servlet.core.get_courses.GetCourseToEditServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>TrySignInServlet</servlet-name>
+        <servlet-class>com.company.manager.servlet.access.TrySignInServlet</servlet-class>
     </servlet>
 
     <!-- JSP -->
@@ -126,11 +122,15 @@
     </servlet>
     <servlet>
         <servlet-name>CreateNewCoursePageServlet</servlet-name>
-        <jsp-file>/view/core/create-new-course.jsp</jsp-file>
+        <jsp-file>/view/core/create-or-update-course.jsp</jsp-file>
     </servlet>
 
 
     <!-- Servlets mapping -->
+    <servlet-mapping>
+        <servlet-name>TrySignInServlet</servlet-name>
+        <url-pattern>/try-sign-in</url-pattern>
+    </servlet-mapping>
     <servlet-mapping>
         <servlet-name>CreateNewCoursePageServlet</servlet-name>
         <url-pattern>/main-menu/create-new-course</url-pattern>

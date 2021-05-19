@@ -1,5 +1,5 @@
-<%@ page import="domain.user.UserRole" %>
-<%@ page import="static servlet.access.SignInServlet.CURRENT_USER_INFO_SESSION_ATTR" %>
+<%@ page import="com.company.manager.domain.user.info.UserRole" %>
+<%@ page import="static com.company.manager.servlet.access.SignInServlet.CURRENT_USER_INFO_SESSION_ATTR" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 

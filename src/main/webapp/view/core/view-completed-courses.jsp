@@ -1,4 +1,4 @@
-<%@ page import="static servlet.core.get_courses.StudentCompletedCoursesServlet.COURSES_RESULTS_ATTR" %>
+<%@ page import="static com.company.manager.servlet.core.get_courses.StudentCompletedCoursesServlet.COURSES_RESULTS_ATTR" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page contentType="text/html;charset=UTF-8"%>
 <html>
@@ -63,7 +63,7 @@
                                                 </div>
                                             </div>
                                         </td>
-                                        <td>${course_with_result.course.teacher.userInfo.firstName} ${course_with_result.course.teacher.userInfo.lastName}</td>
+                                        <td>${course_with_result.course.teacher.user.userInfo.firstName} ${course_with_result.course.teacher.user.userInfo.lastName}</td>
                                         <td>${course_with_result.result.toString()}<td>
                                     </tr>
                                 </c:forEach>

@@ -1,8 +1,8 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ page import="static servlet.access.SignUpServlet.*" %>
-<%@ page import="static filter.SignInFilter.EMAIL_PARAM" %>
-<%@ page import="static filter.SignInFilter.PASSWORD_PARAM" %>
-<%@ page import="static filter.RegistrationFilter.*" %>
+<%@ page import="static com.company.manager.servlet.access.SignUpServlet.*" %>
+<%@ page import="static com.company.manager.filter.RegistrationFilter.*" %>
+<%@ page import="static com.company.manager.servlet.access.TrySignInServlet.EMAIL_PARAM" %>
+<%@ page import="static com.company.manager.servlet.access.TrySignInServlet.PASSWORD_PARAM" %>
 <%@ page session="false" %>
 <html>
 

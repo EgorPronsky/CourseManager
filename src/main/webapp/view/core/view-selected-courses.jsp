@@ -1,11 +1,10 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page contentType="text/html;charset=UTF-8" %>
-<%@ page import="static servlet.core.get_courses.UserCurrentCoursesServlet.*" %>
-<%@ page import="static servlet.core.get_courses.TeacherNotGradedCoursesServlet.*" %>
-<%@ page import="domain.user.UserRole" %>
-<%@ page import="static servlet.core.students_actions.GetCourseStudentsServlet.COURSE_ID_TO_GET_STUDENTS_PARAM" %>
-<%@ page import="static servlet.access.SignInServlet.CURRENT_USER_INFO_SESSION_ATTR" %>
-<%@ page import="static servlet.core.get_courses.GetCourseToEditServlet.COURSE_ID_PARAM" %>
+<%@ page import="static com.company.manager.servlet.core.get_courses.UserCurrentCoursesServlet.*" %>
+<%@ page import="static com.company.manager.servlet.core.get_courses.TeacherNotGradedCoursesServlet.*" %>
+<%@ page import="com.company.manager.domain.user.info.UserRole" %>
+<%@ page import="static com.company.manager.servlet.access.SignInServlet.CURRENT_USER_INFO_SESSION_ATTR" %>
+<%@ page import="static com.company.manager.servlet.core.get_courses.GetCourseToEditServlet.COURSE_ID_PARAM" %>
 <html>
 
 <head>
@@ -109,7 +108,7 @@
                                         </td>
 
                                         <c:if test="${current_user_info.userRole == UserRole.STUDENT}">
-                                            <td>${course.teacher.userInfo.firstName} ${course.teacher.userInfo.lastName}</td>
+                                            <td>${course.teacher.user.userInfo.firstName} ${course.teacher.user.userInfo.lastName}</td>
                                         </c:if>
 
                                         <%-- Special actions for students --%>
@@ -125,7 +124,7 @@
                                         <c:if test="${courses_state == not_graded_course_state}">
                                             <td>
                                                 <form action="${pageContext.request.contextPath}/main-menu/select-courses/my-not-graded-courses/students" method="get">
-                                                    <button class="btn btn-primary btn-block" type="submit" name="<%=COURSE_ID_TO_GET_STUDENTS_PARAM%>" value="${course.id}">Grade</button>
+                                                    <button class="btn btn-primary btn-block" type="submit" name="<%=COURSE_ID_PARAM%>" value="${course.id}">Grade</button>
                                                 </form>
                                             </td>
                                         </c:if>

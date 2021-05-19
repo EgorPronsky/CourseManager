@@ -1,5 +1,5 @@
-<%@ page import="static servlet.core.course_actions.JoinNewCoursesServlet.COURSES_TO_JOIN_ID_PARAM" %>
-<%@ page import="static servlet.core.get_courses.UserCurrentCoursesServlet.COURSES_ATTR" %>
+<%@ page import="static com.company.manager.servlet.core.course_actions.JoinNewCoursesServlet.COURSES_ID_PARAM" %>
+<%@ page import="static com.company.manager.servlet.core.get_courses.UserCurrentCoursesServlet.COURSES_ATTR" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
@@ -10,7 +10,7 @@
 </head>
 
 <%-- Prepare variables --%>
-<c:set var="courses_to_join" value="<%=COURSES_TO_JOIN_ID_PARAM%>" />
+<c:set var="courses_to_join" value="<%=COURSES_ID_PARAM%>" />
 <c:set var="available_courses" value="<%=request.getAttribute(COURSES_ATTR)%>" />
 
 <body>
@@ -45,6 +45,7 @@
                                         <th scope="col">Title</th>
                                         <th scope="col">Start date</th>
                                         <th scope="col">End date</th>
+                                        <th scope="col">Timetable</th>
                                         <th scope="col">Teacher</th>
                                         <th scope="col">Description</th>
                                     </tr>
@@ -61,8 +62,27 @@
                                                 <th>${course.courseInfo.name}</th>
                                                 <td>${course.courseInfo.startDate}</td>
                                                 <td>${course.courseInfo.endDate}</td>
-                                                <td>${course.teacher.userInfo.firstName} ${course.teacher.userInfo.lastName}</td>
-                                                <td>${course.courseInfo.description}</td>
+                                                <td>
+                                                    <div class="dropdown">
+                                                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                                                            Timetable
+                                                        </button>
+                                                        <div class="dropdown-menu">
+                                                            <span class="dropdown-item-text">${course.courseInfo.timeTable}</span>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>${course.teacher.user.userInfo.firstName} ${course.teacher.user.userInfo.lastName}</td>
+                                                <td>
+                                                    <div class="dropdown">
+                                                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                                                            Description
+                                                        </button>
+                                                        <div class="dropdown-menu">
+                                                            <span class="dropdown-item-text">${course.courseInfo.description}</span>
+                                                        </div>
+                                                    </div>
+                                                </td>
                                             </tr>
                                         </c:forEach>
                                     </tbody>

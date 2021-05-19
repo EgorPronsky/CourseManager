@@ -2,7 +2,7 @@
   <artifact type="exploded-ear" name="web_4:ear exploded">
     <output-path>$PROJECT_DIR$/out/artifacts/web_4_ear_exploded</output-path>
     <root id="root">
-      <element id="javaee-facet-resources" facet="web_4/javaeeApplication/javaEEApplication" />
+      <element id="javaee-facet-resources" facet="Course-Online-Manager/javaeeApplication/javaEEApplication" />
     </root>
   </artifact>
 </component>

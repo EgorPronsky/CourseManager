@@ -1,0 +1,50 @@
+package com.company.manager.filter;
+
+import com.company.manager.domain.user.User;
+import com.company.manager.services.impl.UserServiceImpl;
+import com.company.manager.util.CookieUtil;
+import lombok.extern.slf4j.Slf4j;
+
+import javax.servlet.*;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.Optional;
+
+import static com.company.manager.filter.SessionFilter.APP_DOMAIN_NAME;
+import static com.company.manager.servlet.access.SignInServlet.USER_ID_COOKIE_NAME;
+
+@Slf4j
+public class LoginPageFilter implements Filter {
+
+    public static final String USER_ID_FROM_COOKIE_ATTR = "user_from_cookie_id";
+
+    public void init(FilterConfig config) throws ServletException { }
+
+    public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain)
+            throws ServletException, IOException {
+
+        HttpServletRequest httpReq = (HttpServletRequest) req;
+        HttpServletResponse httpResp = (HttpServletResponse) resp;
+
+        if (httpReq.getSession(false) != null) {
+            log.debug("Session is active, access to login page denied");
+            httpResp.sendRedirect(String.format("/%s/main-menu", APP_DOMAIN_NAME));
+        } else {
+            Optional<Cookie> userIdCookie = CookieUtil
+                    .findCookie(USER_ID_COOKIE_NAME, httpReq);
+
+            if (userIdCookie.isPresent()) {
+                req.setAttribute(USER_ID_FROM_COOKIE_ATTR, Long.parseLong(userIdCookie.get().getValue()));
+                req.getRequestDispatcher("/sign-in").forward(req, resp);
+            } else {
+                chain.doFilter(req, resp);
+            }
+        }
+
+    }
+
+    public void destroy() { }
+}

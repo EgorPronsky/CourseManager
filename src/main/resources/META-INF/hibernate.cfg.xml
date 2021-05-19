@@ -11,12 +11,15 @@
 
         <property name="dialect">org.hibernate.dialect.PostgreSQL10Dialect</property> <!-- DB Dialect -->
         <property name="hbm2ddl.auto">update</property> <!-- create / create-drop / update -->
+        <property name="hibernate.enable_lazy_load_no_trans">true</property><!-- Enable lazy load -->
 
         <!-- Annotated entities -->
-        <mapping class="domain.user.User"/>
-        <mapping class="domain.user.AccessInfo"/>
-        <mapping class="domain.course.Course"/>
-        <mapping class="domain.archive.StudentCourseResult"/>
+        <mapping class="com.company.manager.domain.user.User"/>
+        <mapping class="com.company.manager.domain.user.Teacher"/>
+        <mapping class="com.company.manager.domain.user.Student"/>
+        <mapping class="com.company.manager.domain.user.info.AccessInfo"/>
+        <mapping class="com.company.manager.domain.course.Course"/>
+        <mapping class="com.company.manager.domain.archive.StudentCourseResult"/>
 
     </session-factory>
 </hibernate-configuration>

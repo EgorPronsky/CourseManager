@@ -1,5 +1,5 @@
-<%@ page import="domain.user.UserRole" %>
-<%@ page import="static servlet.access.SignInServlet.CURRENT_USER_INFO_SESSION_ATTR" %>
+<%@ page import="com.company.manager.domain.user.info.UserRole" %>
+<%@ page import="static com.company.manager.servlet.access.SignInServlet.CURRENT_USER_INFO_SESSION_ATTR" %>
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
@@ -53,6 +53,12 @@
                             <p>Undefined</p>
                         </c:otherwise>
                     </c:choose>
+
+                    <%-- Go to main menu button --%>
+                    <hr/>
+                    <form action="${pageContext.request.contextPath}/main-menu" method="get">
+                        <input class="btn btn-lg btn-success btn-block" type="submit" value="Back to main menu">
+                    </form>
                 </div>
 
             </div>
