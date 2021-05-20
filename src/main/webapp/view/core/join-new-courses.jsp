@@ -79,7 +79,12 @@
                                                             Timetable
                                                         </button>
                                                         <div class="dropdown-menu">
-                                                            <span class="dropdown-item-text">${course.courseInfo.timeTable}</span>
+                                                            <c:if test="${not empty course.courseInfo.timeTable}">
+                                                                <span class="dropdown-item-text">${course.courseInfo.timeTable}</span>
+                                                            </c:if>
+                                                            <c:if test="${empty course.courseInfo.timeTable}">
+                                                                <span class="dropdown-item-text">No timetable yet</span>
+                                                            </c:if>
                                                         </div>
                                                     </div>
                                                 </td>

@@ -5,6 +5,7 @@ public class CourseAttrAndParamNames {
     public static final String COURSE = "course";
     public static final String COURSES = "courses";
     public static final String COURSE_ID = "course_id";
+    public static final String COURSES_ID = "courses_id";
     public static final String COURSES_STATE = "courses_state";
     public static final String COURSES_RESULTS = "courses_results";
     public static final String COURSE_STUDENTS_VIEW_TARGET = "view_course_scope";

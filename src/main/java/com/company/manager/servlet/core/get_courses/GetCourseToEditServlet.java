@@ -28,7 +28,7 @@ public class GetCourseToEditServlet extends HttpServlet {
         Course courseToEdit = CourseServiceImpl.getService()
                 .getCourseById(courseId);
 
-        log.debug("Preparing attributes to response");
+        log.debug("Preparing attributes for response");
         Map<String, Object> respAttrs = new HashMap<>();
         respAttrs.put(COURSE, courseToEdit);
 

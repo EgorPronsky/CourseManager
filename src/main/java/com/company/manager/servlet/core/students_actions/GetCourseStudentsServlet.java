@@ -26,7 +26,7 @@ public class GetCourseStudentsServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         log.debug("Receiving course id and scope from request");
         long courseId = Long.parseLong(request.getParameter(COURSE_ID));
-        String scope = request.getParameter(COURSE_STUDENTS_VIEW_TARGET);
+        String viewScope = request.getParameter(COURSE_STUDENTS_VIEW_TARGET);
 
         log.debug("Getting course by received id");
         Course course = CourseServiceImpl.getService().getCourseById(courseId);
@@ -34,7 +34,7 @@ public class GetCourseStudentsServlet extends HttpServlet {
         log.debug("Preparing attributes for response");
         Map<String, Object> respAttrs = new HashMap<>();
         respAttrs.put(COURSE, course);
-        respAttrs.put(COURSE_STUDENTS_VIEW_TARGET, scope);
+        respAttrs.put(COURSE_STUDENTS_VIEW_TARGET, viewScope);
 
         log.debug("Invoking view handler");
         ViewHandler viewHandler = new JspViewHandler();

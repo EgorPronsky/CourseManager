@@ -29,7 +29,7 @@ public class StudentCompletedCoursesServlet extends HttpServlet {
         log.debug("Getting student completed courses");
         List<StudentCourseResult> completedCourses =
                 StudentCourseResultServiceImpl.getService()
-                        .getCoursesResultsByStudentId(studentId);
+                        .getCompletedCoursesWithResultsByStudentId(studentId);
 
         log.debug("Preparing attributes for response");
         Map<String, Object> respAttrs = new HashMap<>();

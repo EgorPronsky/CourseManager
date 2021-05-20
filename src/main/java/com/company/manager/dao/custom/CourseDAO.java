@@ -16,7 +16,6 @@ public interface CourseDAO extends GenericDAO<Course> {
     List<Course> getStudentCoursesActiveOnDate(long studentId, LocalDate date);
     List<Course> getStudentCoursesStartAfterDate(long studentId, LocalDate date);
     List<Course> getStudentNotSubscribedCoursesStartAfterDate(long studentId, LocalDate date);
-    List<Course> getStudentUngradedCoursesEndedBeforeDate(long studentId, LocalDate date);
 
     // For teachers
     List<Course> getTeacherCoursesActiveOnDate(long teacherId, LocalDate date);

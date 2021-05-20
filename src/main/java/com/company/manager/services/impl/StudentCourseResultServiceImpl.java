@@ -51,7 +51,7 @@ public class StudentCourseResultServiceImpl implements StudentCourseResultServic
     @Override
     public List<StudentCourseResult> getCompletedCoursesWithResultsByStudentId(long studentId) {
         LocalDate today = LocalDate.now();
-        return dao.getCoursesResultsByStudentId(studentId, today);
+        return dao.getEndedBeforeDateCoursesWithResultsByStudentId(studentId, today);
     }
 
 }

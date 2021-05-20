@@ -93,7 +93,7 @@ public class HibernateStudentCourseResultDAO extends HibernateGenericDAO<Student
             scrList.addAll(session.createQuery(query).getResultList());
             tr.commit();
         } catch (PersistenceException e) {
-            log.debug("Error while finding student courses results", e);
+            log.debug("Error while finding student ended before given date courses with results ", e);
             if (tr != null && tr.isActive()) tr.rollback();
         }
         return scrList;

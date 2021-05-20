@@ -174,41 +174,6 @@ public class HibernateCourseDAO extends HibernateGenericDAO<Course> implements C
     }
 
     @Override
-    public List<Course> getStudentUngradedCoursesEndedBeforeDate(long studentId, LocalDate date) {
-        List<Course> requiredCourses = new ArrayList<>();
-        Transaction tr = null;
-
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            // Prepare
-            CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
-            CriteriaQuery<Course> rootQuery = criteriaBuilder.createQuery(Course.class);
-            Root<User> userRoot = rootQuery.from(User.class);
-            Join<User, StudentCourseResult> scrJoin = userRoot.join(User_.courseResults);
-
-            // Predicates for WHERE clause
-            Predicate predicateForUserId = criteriaBuilder.equal(userRoot.get(User_.id), studentId);
-            Predicate predicateForUserNotGradedCourses = criteriaBuilder
-                    .isNull(scrJoin.get(StudentCourseResult_.result));
-            Predicate predicateForDate = criteriaBuilder
-                    .lessThan(scrJoin.get(StudentCourseResult_.course)
-                            .get(Course_.courseInfo).get(CourseInfo_.endDate), date);
-
-            rootQuery.select(scrJoin.get(StudentCourseResult_.course))
-                    .where(criteriaBuilder
-                            .and(predicateForUserId, predicateForUserNotGradedCourses, predicateForDate));
-
-            // Executing query and saving result
-            tr = session.beginTransaction();
-            requiredCourses.addAll(session.createQuery(rootQuery).getResultList());
-            tr.commit();
-        } catch (PersistenceException e) {
-            log.error("Error while getting student ungraded courses ended before given date", e);
-            if (tr != null && tr.isActive()) tr.rollback();
-        }
-        return requiredCourses;
-    }
-
-    @Override
     public List<Course> getTeacherCoursesStartAfterDate(long teacherId, LocalDate date) {
         List<Course> courses = new ArrayList<>();
         Transaction tr = null;

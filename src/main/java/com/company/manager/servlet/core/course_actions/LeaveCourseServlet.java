@@ -5,6 +5,7 @@ import com.company.manager.domain.course.Course;
 import com.company.manager.domain.user.User;
 import com.company.manager.services.impl.StudentCourseResultServiceImpl;
 import com.company.manager.services.impl.UserServiceImpl;
+import com.company.manager.util.StudentCourseResultConverter;
 import lombok.extern.slf4j.Slf4j;
 import com.company.manager.services.impl.CourseServiceImpl;
 
@@ -39,8 +40,8 @@ public class LeaveCourseServlet extends HttpServlet {
                     .getUserById(studentId);
 
             log.debug("Mapping course to SCR entity");
-            StudentCourseResult scrToLeave = StudentCourseResult.builder()
-                    .student(currentStudent).course(courseToLeaveOpt.get()).build();
+            StudentCourseResult scrToLeave = StudentCourseResultConverter
+                    .convertToStudentCourseResult(courseToLeaveOpt.get(), currentStudent, null);
 
             log.debug("Deleting user from course");
             StudentCourseResultServiceImpl.getService()
