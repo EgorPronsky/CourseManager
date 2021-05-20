@@ -9,6 +9,7 @@ import com.company.manager.domain.user.User;
 import lombok.extern.slf4j.Slf4j;
 import com.company.manager.services.StudentCourseResultService;
 
+import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -33,8 +34,13 @@ public class StudentCourseResultServiceImpl implements StudentCourseResultServic
     }
 
     @Override
-    public void saveStudentCourseResults(Collection<StudentCourseResult> scrCollection) {
-        dao.saveAll(scrCollection);
+    public void deleteStudentCourseResult(StudentCourseResult scr) {
+        dao.delete(scr);
+    }
+
+    @Override
+    public void updateStudentCourseResults(Collection<StudentCourseResult> scrCollection) {
+        dao.updateAll(scrCollection);
     }
 
     @Override
@@ -43,8 +49,9 @@ public class StudentCourseResultServiceImpl implements StudentCourseResultServic
     }
 
     @Override
-    public List<StudentCourseResult> getCoursesResultsByStudentId(long studentId) {
-        return dao.getCoursesResultsByStudentId(studentId);
+    public List<StudentCourseResult> getCompletedCoursesWithResultsByStudentId(long studentId) {
+        LocalDate today = LocalDate.now();
+        return dao.getCoursesResultsByStudentId(studentId, today);
     }
 
 }

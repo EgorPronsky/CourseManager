@@ -11,8 +11,9 @@ import java.util.Map;
 
 public interface StudentCourseResultService {
 
-    void saveStudentCourseResults(Collection<StudentCourseResult> scrCollection);
+    void deleteStudentCourseResult(StudentCourseResult scr);
+    void updateStudentCourseResults(Collection<StudentCourseResult> scrCollection);
     List<StudentCourseResult> getStudentsResultsByCourseId(long courseId);
-    List<StudentCourseResult> getCoursesResultsByStudentId(long studentId);
+    List<StudentCourseResult> getCompletedCoursesWithResultsByStudentId(long studentId);
 
 }

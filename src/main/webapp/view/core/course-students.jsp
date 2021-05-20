@@ -1,7 +1,10 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ page import="static com.company.manager.servlet.core.students_actions.GetCourseStudentsServlet.COURSE_ATTR" %>
 <%@ page import="com.company.manager.domain.archive.CourseResult" %>
 <%@ page import="static com.company.manager.constans.CourseAttrAndParamNames.COURSE_ID" %>
+<%@ page import="static com.company.manager.constans.CourseAttrAndParamNames.COURSE" %>
+<%@ page import="static com.company.manager.servlet.core.students_actions.GetCourseStudentsServlet.GET_STUDENTS_TO_SEE" %>
+<%@ page import="static com.company.manager.servlet.core.students_actions.GetCourseStudentsServlet.GET_STUDENTS_TO_GRADE" %>
+<%@ page import="static com.company.manager.constans.CourseAttrAndParamNames.*" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 
@@ -11,8 +14,12 @@
 </head>
 
 <%-- Prepare variables --%>
-<c:set var="course" value="<%=request.getAttribute(COURSE_ATTR)%>" />
+<c:set var="course" value="<%=request.getAttribute(COURSE)%>" />
+<c:set var="course_students_view_target" value="<%=request.getParameter(COURSE_STUDENTS_VIEW_TARGET)%>" />
+
 <c:set var="course_id" value="<%=COURSE_ID%>" />
+<c:set var="target_get_students_to_see" value="<%=GET_STUDENTS_TO_SEE%>" />
+<c:set var="target_get_students_to_grade" value="<%=GET_STUDENTS_TO_GRADE%>" />
 
 <body>
 
@@ -23,13 +30,13 @@
 
                 <%-- Header --%>
                 <div class="card-header">
-                    <h3 class="panel-title">${course.courseInfo.name} course students</h3>
+                    <h3 class="panel-title">${course.courseInfo.name} students</h3>
                 </div>
 
                 <%-- Body --%>
                 <c:choose>
                     <%--If courses list is empty--%>
-                    <c:when test="${course.students.size() == 0}">
+                    <c:when test="${course.studentResults.size() == 0}">
                         <hr/>
                         <center><h3 class="panel-title">No students yet</h3></center>
                         <hr/>
@@ -45,37 +52,44 @@
                                     <tr>
                                         <th scope="col">First name</th>
                                         <th scope="col">Last name</th>
-                                        <c:if test="${course.courseInfo.startDate > }" <th scope="col">Result</th>
+                                        <c:if test="${course_students_view_target == target_get_students_to_grade}">
+                                            <th scope="col">Result</th>
+                                        </c:if>
                                     </tr>
                                     </thead>
 
                                     <tbody>
-                                        <c:forEach var="student" items="${course.students}">
+                                        <c:forEach var="studentResult" items="${course.studentResults}">
                                             <tr>
-                                                <td>${student.userInfo.firstName}</td>
-                                                <td>${student.userInfo.lastName}</td>
-                                                <td>
-                                                    <div class="form-check form-check-inline">
-                                                        <input class="form-check-input" type="radio" name="${student.id}" id="result_bad${student.id}" value="${CourseResult.BAD}">
-                                                        <label class="form-check-label" for="result_bad${student.id}">${CourseResult.BAD.toString()}</label>
-                                                    </div>
-                                                    <div class="form-check form-check-inline">
-                                                        <input class="form-check-input" type="radio" name="${student.id}" id="result_ok${student.id}" value="${CourseResult.OK}" checked>
-                                                        <label class="form-check-label" for="result_ok${student.id}">${CourseResult.OK.toString()}</label>
-                                                    </div>
-                                                    <div class="form-check form-check-inline">
-                                                        <input class="form-check-input" type="radio" name="${student.id}" id="result_perfect${student.id}" value="${CourseResult.EXCELLENT}" >
-                                                        <label class="form-check-label" for="result_perfect${student.id}">${CourseResult.EXCELLENT.toString()}</label>
-                                                    </div>
-                                                </td>
+                                                <td>${studentResult.student.userInfo.firstName}</td>
+                                                <td>${studentResult.student.userInfo.lastName}</td>
+                                                <c:if test="${course_students_view_target == target_get_students_to_grade}">
+                                                    <td>
+                                                        <div class="form-check form-check-inline">
+                                                            <input class="form-check-input" type="radio" name="${studentResult.student.id}" id="result_bad${studentResult.student.id}" value="${CourseResult.BAD}">
+                                                            <label class="form-check-label" for="result_bad${studentResult.student.id}">${CourseResult.BAD.toString()}</label>
+                                                        </div>
+                                                        <div class="form-check form-check-inline">
+                                                            <input class="form-check-input" type="radio" name="${studentResult.student.id}" id="result_ok${studentResult.student.id}" value="${CourseResult.OK}" checked>
+                                                            <label class="form-check-label" for="result_ok${studentResult.student.id}">${CourseResult.OK.toString()}</label>
+                                                        </div>
+                                                        <div class="form-check form-check-inline">
+                                                            <input class="form-check-input" type="radio" name="${studentResult.student.id}" id="result_perfect${studentResult.student.id}" value="${CourseResult.EXCELLENT}" >
+                                                            <label class="form-check-label" for="result_perfect${studentResult.student.id}">${CourseResult.EXCELLENT.toString()}</label>
+                                                        </div>
+                                                    </td>
+                                                </c:if>
                                             </tr>
                                         </c:forEach>
 
                                     </tbody>
                                 </table>
+
                                 <hr/>
-                                <button class="btn btn-lg btn-primary btn-block" type="submit"  name="${course_id}" value="${course.id}">Submit</button>
-                                <hr/>
+                                <c:if test="${course_students_view_target == target_get_students_to_grade}">
+                                    <button class="btn btn-lg btn-primary btn-block" type="submit"  name="${course_id}" value="${course.id}">Submit</button>
+                                    <hr/>
+                                </c:if>
                             </form>
 
                         </div>

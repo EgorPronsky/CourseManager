@@ -14,8 +14,8 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.company.manager.constans.CourseAttrAndParamNames.COURSE;
 import static com.company.manager.constans.CourseAttrAndParamNames.COURSE_ID;
-import static com.company.manager.servlet.core.students_actions.GetCourseStudentsServlet.COURSE_ATTR;
 
 @Slf4j
 public class GetCourseToEditServlet extends HttpServlet {
@@ -30,7 +30,7 @@ public class GetCourseToEditServlet extends HttpServlet {
 
         log.debug("Preparing attributes to response");
         Map<String, Object> respAttrs = new HashMap<>();
-        respAttrs.put(COURSE_ATTR, courseToEdit);
+        respAttrs.put(COURSE, courseToEdit);
 
         log.debug("Invoking view handler");
         ViewHandler viewHandler = new JspViewHandler();

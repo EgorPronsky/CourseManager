@@ -47,7 +47,8 @@ public class UserFutureCoursesServlet extends HttpServlet {
                 userFutureCourses = CourseServiceImpl.getService()
                         .getTeacherFutureCourses(currentUserId);
                 break;
-            } default: {
+            }
+            default: {
                 throw new IllegalArgumentException("No action is defined for given user role");
             }
         }

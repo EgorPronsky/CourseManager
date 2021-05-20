@@ -1,5 +1,10 @@
 <%@ page import="static com.company.manager.servlet.core.course_actions.JoinNewCoursesServlet.COURSES_ID_PARAM" %>
 <%@ page import="static com.company.manager.constans.CourseAttrAndParamNames.COURSES" %>
+<%@ page import="java.time.format.DateTimeFormatter" %>
+<%@ page
+        import="static com.company.manager.servlet.core.course_actions.SaveOrUpdateCourseServlet.COURSE_DATE_PATTERN" %>
+<%@ page import="com.company.manager.domain.archive.StudentCourseResult" %>
+<%@ page import="com.company.manager.domain.course.Course" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
@@ -52,6 +57,8 @@
                                     </thead>
 
                                     <tbody>
+                                        <%-- Prepare to format dates --%>
+                                        <% DateTimeFormatter formatter = DateTimeFormatter.ofPattern(COURSE_DATE_PATTERN); %>
                                         <c:forEach var="course" items="${available_courses}">
                                             <tr>
                                                 <td>
@@ -60,8 +67,12 @@
                                                     </div>
                                                 </td>
                                                 <th>${course.courseInfo.name}</th>
-                                                <td>${course.courseInfo.startDate}</td>
-                                                <td>${course.courseInfo.endDate}</td>
+
+                                                <%-- Formatting dates --%>
+                                                <%Course course = (Course) pageContext.getAttribute("course");%>
+                                                <td><%=course.getCourseInfo().getStartDate().format(formatter)%></td>
+                                                <td><%=course.getCourseInfo().getEndDate().format(formatter)%></td>
+
                                                 <td>
                                                     <div class="dropdown">
                                                         <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">

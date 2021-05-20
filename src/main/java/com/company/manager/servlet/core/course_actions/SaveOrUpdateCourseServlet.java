@@ -4,7 +4,6 @@ import com.company.manager.domain.course.Course;
 import com.company.manager.domain.course.CourseInfo;
 import com.company.manager.domain.user.User;
 import com.company.manager.services.impl.UserServiceImpl;
-import com.company.manager.servlet.core.get_courses.GetCourseToEditServlet;
 import lombok.extern.slf4j.Slf4j;
 import com.company.manager.services.impl.CourseServiceImpl;
 import com.company.manager.handlers.input_handlers.CourseInputHandler;

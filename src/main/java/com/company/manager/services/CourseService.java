@@ -17,7 +17,6 @@ public interface CourseService {
     // For students
     List<Course> getStudentFutureCourses(long studentId);
     List<Course> getStudentCurrentCourses(long studentId);
-    List<Course> getStudentFinishedUngradedCourses(long studentId);
     List<Course> getStudentAvailableToJoinCourses(long studentId);
 
     // For teachers

@@ -24,33 +24,37 @@ public class JoinNewCoursesServlet extends HttpServlet {
     public static final String COURSES_ID_PARAM = "courses_id";
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        log.debug("Receiving checkbox states");
-        Set<Long> coursesIdSet = Arrays.stream(request.getParameterValues(COURSES_ID_PARAM))
-                // Removing unchecked checkboxes
-                .filter(Objects::nonNull)
-                .map(Long::valueOf)
-                .collect(Collectors.toSet());
+        log.debug("Receiving courses id");
+        String[] coursesStrIdToLeave = request.getParameterValues(COURSES_ID_PARAM);
 
-        log.debug("Getting current student from DB");
-        Long studentId = (Long)request.getSession(false)
-                .getAttribute(CURRENT_USER_ID_SESSION);
-        User currentStudent = UserServiceImpl.getService()
-                .getUserById(studentId);
+        if (coursesStrIdToLeave != null) {
+            Set<Long> coursesIdSet = Arrays.stream(coursesStrIdToLeave)
+                    // Removing unchecked checkboxes
+                    .filter(Objects::nonNull)
+                    .map(Long::valueOf)
+                    .collect(Collectors.toSet());
 
-        log.debug("Getting courses to join by id from DB");
-        List<Course> coursesToJoin = CourseServiceImpl.getService()
-                .getCoursesById(coursesIdSet);
+            log.debug("Getting current student from DB");
+            Long studentId = (Long) request.getSession(false)
+                    .getAttribute(CURRENT_USER_ID_SESSION);
+            User currentStudent = UserServiceImpl.getService()
+                    .getUserById(studentId);
 
-        log.debug("Mapping courses to SCR entities");
-        Set<StudentCourseResult> scrList = coursesToJoin.stream()
-                .map(course -> StudentCourseResult.builder()
-                        .course(course).student(currentStudent).build())
-                .collect(Collectors.toSet());
+            log.debug("Getting courses to join by id from DB");
+            List<Course> coursesToJoin = CourseServiceImpl.getService()
+                    .getCoursesById(coursesIdSet);
 
-        log.debug("Updating student");
-        currentStudent.getCourseResults().addAll(scrList);
-        UserServiceImpl.getService().updateUser(currentStudent);
+            log.debug("Mapping courses to SCR entities");
+            Set<StudentCourseResult> scrSet = coursesToJoin.stream()
+                    .map(course -> StudentCourseResult.builder()
+                            .course(course).student(currentStudent).build())
+                    .collect(Collectors.toSet());
 
-        response.sendRedirect(String.format("/%s/main-menu", APP_DOMAIN_NAME));
+            log.debug("Updating student");
+            currentStudent.getCourseResults().addAll(scrSet);
+            UserServiceImpl.getService().updateUser(currentStudent);
+        }
+
+        response.sendRedirect(String.format("/%s/main-menu/select-courses", APP_DOMAIN_NAME));
     }
 }

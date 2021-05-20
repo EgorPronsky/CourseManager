@@ -17,7 +17,7 @@
 <body>
 <div class="container">
     <div class="row justify-content-md-center">
-        <div class="col-lg-8">
+        <div class="col-md-7">
             <div class="card">
 
                 <%-- Header --%>

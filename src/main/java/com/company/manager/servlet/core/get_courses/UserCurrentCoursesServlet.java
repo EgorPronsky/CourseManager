@@ -35,14 +35,22 @@ public class UserCurrentCoursesServlet extends HttpServlet {
                 .getAttribute(CURRENT_USER_INFO_SESSION);
 
         List<Course> userCurrentCourses;
-        if (currentUserInfo.getUserRole() == UserRole.STUDENT) {
-            log.debug("Getting student current courses");
-            userCurrentCourses = CourseServiceImpl.getService()
-                    .getStudentCurrentCourses(currentUserId);
-        } else {
-            log.debug("Getting teacher current courses");
-            userCurrentCourses = CourseServiceImpl.getService()
-                    .getTeacherCurrentCourses(currentUserId);
+        switch (currentUserInfo.getUserRole()) {
+            case STUDENT: {
+                log.debug("Getting student current courses");
+                userCurrentCourses = CourseServiceImpl.getService()
+                        .getStudentCurrentCourses(currentUserId);
+                break;
+            }
+            case TEACHER: {
+                log.debug("Getting teacher current courses");
+                userCurrentCourses = CourseServiceImpl.getService()
+                        .getTeacherCurrentCourses(currentUserId);
+                break;
+            }
+            default: {
+                throw new IllegalArgumentException("No action is defined for given user role");
+            }
         }
 
         log.debug("Preparing attributes for response");

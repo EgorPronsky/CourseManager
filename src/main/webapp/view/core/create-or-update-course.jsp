@@ -1,6 +1,8 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ page import="static com.company.manager.servlet.core.students_actions.GetCourseStudentsServlet.COURSE_ATTR" %>
 <%@ page import="static com.company.manager.constans.CourseAttrAndParamNames.*" %>
+<%@ page import="static com.company.manager.servlet.core.course_actions.SaveOrUpdateCourseServlet.COURSE_DATE_PATTERN" %>
+<%@ page import="com.company.manager.domain.course.Course" %>
+<%@ page import="java.time.format.DateTimeFormatter" %>
 <html>
 
 <head>
@@ -15,8 +17,20 @@
 <c:set var="course_end_date" value="<%=COURSE_END_DATE%>" />
 <c:set var="course_uri" value="<%=COURSE_URI%>" />
 <c:set var="course_id" value="<%=COURSE_ID%>" />
+<c:set var="course_date_pattern" value="<%=COURSE_DATE_PATTERN%>" />
 
-<c:set var="course" value="<%=request.getAttribute(COURSE_ATTR)%>" />
+<c:set var="course" value="<%=request.getAttribute(COURSE)%>" />
+
+<c:if test="${not empty course}">
+    <%-- Formatting dates --%>
+    <% DateTimeFormatter formatter = DateTimeFormatter.ofPattern(COURSE_DATE_PATTERN);
+        Course course = (Course) pageContext.getAttribute("course");
+    %>
+    <c:set var="course_start_date_formatted" value="<%=
+        course.getCourseInfo().getStartDate().format(formatter) %>" />
+    <c:set var="course_end_date_formatted" value="<%=
+        course.getCourseInfo().getEndDate().format(formatter) %>" />
+</c:if>
 
 <body>
 <div class="container">
@@ -25,7 +39,12 @@
             <div class="card">
 
                 <div class="card-header">
-                    <h3 class="panel-title">Create a new course</h3>
+                    <c:if test="${empty course}">
+                        <h3 class="panel-title">Create a new course</h3>
+                    </c:if>
+                    <c:if test="${not empty course}">
+                        <h3 class="panel-title">Edit the course</h3>
+                    </c:if>
                 </div>
 
                 <div class="card-body">
@@ -44,14 +63,25 @@
                                                 id="title"
                                                 name="${course_title}"
                                                 type="text"
-                                                <c:if test="${not empty course.courseInfo.name}">
+                                                <c:if test="${not empty course}">
                                                         value="${course.courseInfo.name}"
                                                 </c:if>
-                                                <c:if test="${empty course.courseInfo.name}">
+                                                <c:if test="${empty course}">
                                                         value="Course#"
                                                 </c:if>
                                                 required>
                                     </div>
+
+                                    <c:if test="${not empty course}">
+                                        <%-- Formatting dates --%>
+                                        <% DateTimeFormatter formatter = DateTimeFormatter.ofPattern(COURSE_DATE_PATTERN);
+                                            Course course = (Course) pageContext.getAttribute("course");
+                                        %>
+                                        <c:set var="course_start_date_formatted" value="<%=
+                                            course.getCourseInfo().getStartDate().format(formatter) %>" />
+                                        <c:set var="course_end_date_formatted" value="<%=
+                                            course.getCourseInfo().getEndDate().format(formatter) %>" />
+                                    </c:if>
 
                                     <div class="form-row">
                                         <!--Start date-->
@@ -59,15 +89,15 @@
                                             <label for="start_date">Start date</label>
                                             <input
                                                     class="form-control"
-                                                    placeholder="dd-MM-yyyy"
+                                                    placeholder="${course_date_pattern}"
                                                     id="start_date"
                                                     name="${course_start_date}"
                                                     type="text"
-                                                    <c:if test="${not empty course.courseInfo.startDate}">
-                                                        value="${course.courseInfo.startDate}"
+                                                    <c:if test="${not empty course}">
+                                                        value="${course_start_date_formatted}"
                                                     </c:if>
-                                                    <c:if test="${empty course.courseInfo.startDate}">
-                                                        value="18-06-2021"
+                                                    <c:if test="${empty course}">
+                                                        value="01-01-2022"
                                                     </c:if>
                                                     required>
                                         </div>
@@ -77,15 +107,15 @@
                                             <label for="end_date">End date</label>
                                             <input
                                                     class="form-control"
-                                                    placeholder="dd-MM-yyyy"
+                                                    placeholder="${course_date_pattern}"
                                                     id="end_date"
                                                     name="${course_end_date}"
                                                     type="text"
-                                                    <c:if test="${not empty course.courseInfo.endDate}">
-                                                            value="${course.courseInfo.endDate}"
+                                                    <c:if test="${not empty course}">
+                                                            value="${course_end_date_formatted}"
                                                     </c:if>
-                                                    <c:if test="${empty course.courseInfo.endDate}">
-                                                            value="25-07-2021"
+                                                    <c:if test="${empty course}">
+                                                            value="31-12-2023"
                                                     </c:if>
                                                     required>
                                         </div>
@@ -99,10 +129,10 @@
                                                 id="uri"
                                                 name="${course_uri}"
                                                 type="text"
-                                                <c:if test="${not empty course.courseInfo.uri}">
+                                                <c:if test="${not empty course}">
                                                     value="${course.courseInfo.uri}"
                                                 </c:if>
-                                                <c:if test="${empty course.courseInfo.uri}">
+                                                <c:if test="${empty course}">
                                                     value="http://www.random.com/random-uri/abc"
                                                 </c:if>
                                                 required>
@@ -117,7 +147,7 @@
                                                 name="${course_description}"
                                                 type="text"
                                                 rows="6"
-                                                required><c:if test="${not empty course.courseInfo.description}">${course.courseInfo.description}</c:if><c:if test="${empty course.courseInfo.description}">Some description</c:if>
+                                                required><c:if test="${not empty course}">${course.courseInfo.description}</c:if><c:if test="${empty course}">Some description</c:if>
                                         </textarea>
                                     </div>
                                 </div>

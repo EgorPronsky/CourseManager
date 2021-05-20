@@ -1,4 +1,9 @@
 <%@ page import="static com.company.manager.constans.CourseAttrAndParamNames.COURSES_RESULTS" %>
+<%@ page import="com.company.manager.domain.archive.CourseResult" %>
+<%@ page import="com.company.manager.domain.archive.StudentCourseResult" %>
+<%@ page import="java.time.format.DateTimeFormatter" %>
+<%@ page
+        import="static com.company.manager.servlet.core.course_actions.SaveOrUpdateCourseServlet.COURSE_DATE_PATTERN" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page contentType="text/html;charset=UTF-8"%>
 <html>
@@ -10,6 +15,8 @@
 
 <%-- Prepare variables --%>
 <c:set var="courses_results" value="<%=request.getAttribute(COURSES_RESULTS)%>" />
+
+
 
 <body>
 <div class="container">
@@ -37,36 +44,63 @@
                             <table class="table">
 
                                 <thead class="thead-dark">
-                                <tr>
-                                    <th scope="col">Title</th>
-                                    <th scope="col">Start date</th>
-                                    <th scope="col">End date</th>
-                                    <th scope="col">Description</th>
-                                    <th scope="col">Teacher</th>
-                                    <th scope="col">Result</th>
-                                </tr>
+                                    <tr>
+                                        <th scope="col">Title</th>
+                                        <th scope="col">Start date</th>
+                                        <th scope="col">End date</th>
+                                        <th scope="col">Description</th>
+                                        <th scope="col">Teacher</th>
+                                        <th scope="col">Result</th>
+                                    </tr>
                                 </thead>
 
                                 <tbody>
-                                <c:forEach var="course_with_result" items="${courses_results}">
-                                    <tr>
-                                        <th>${course_with_result.course.courseInfo.name}</th>
-                                        <td>${course_with_result.course.courseInfo.startDate}</td>
-                                        <td>${course_with_result.course.courseInfo.endDate}</td>
-                                        <td>
-                                            <div class="dropdown">
-                                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                                                    Description
-                                                </button>
-                                                <div class="dropdown-menu">
-                                                    <span class="dropdown-item-text">${course_with_result.course.courseInfo.description}</span>
+                                    <%-- Prepare to format dates --%>
+                                    <% DateTimeFormatter formatter = DateTimeFormatter.ofPattern(COURSE_DATE_PATTERN); %>
+                                    <c:forEach var="course_with_result" items="${courses_results}">
+                                        <tr>
+                                            <th>${course_with_result.course.courseInfo.name}</th>
+
+                                            <%-- Formatting dates --%>
+                                            <%StudentCourseResult scr = (StudentCourseResult) pageContext.getAttribute("course_with_result");%>
+                                            <td><%=scr.getCourse().getCourseInfo().getStartDate().format(formatter)%></td>
+                                            <td><%=scr.getCourse().getCourseInfo().getEndDate().format(formatter)%></td>
+
+                                            <td>
+                                                <div class="dropdown">
+                                                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                                                        Description
+                                                    </button>
+                                                    <div class="dropdown-menu">
+                                                        <span class="dropdown-item-text">${course_with_result.course.courseInfo.description}</span>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </td>
-                                        <td>${course_with_result.course.teacher.userInfo.firstName} ${course_with_result.course.teacher.userInfo.lastName}</td>
-                                        <td>${course_with_result.result.toString()}<td>
-                                    </tr>
-                                </c:forEach>
+                                            </td>
+                                            <td>${course_with_result.course.teacher.userInfo.firstName} ${course_with_result.course.teacher.userInfo.lastName}</td>
+                                            <c:if test="${not empty course_with_result.result}">
+                                                <c:if test="${course_with_result.result == CourseResult.EXCELLENT}">
+                                                    <td>
+                                                        <button type="button" class="btn btn-success btn-block">${CourseResult.EXCELLENT.toString()}</button>
+                                                    </td>
+                                                </c:if>
+                                                <c:if test="${course_with_result.result == CourseResult.OK}">
+                                                    <td>
+                                                        <button type="button" class="btn btn-info btn-block">${CourseResult.OK.toString()}</button>
+                                                    </td>
+                                                </c:if>
+                                                <c:if test="${course_with_result.result == CourseResult.BAD}">
+                                                    <td>
+                                                        <button type="button" class="btn btn-danger btn-block">${CourseResult.BAD.toString()}</button>
+                                                    </td>
+                                                </c:if>
+                                            </c:if>
+                                            <c:if test="${empty course_with_result.result}">
+                                                <td>
+                                                    <button type="button" class="btn btn-secondary btn-block">Not graded yet</button>
+                                                </td>
+                                            </c:if>
+                                        </tr>
+                                    </c:forEach>
                                 </tbody>
 
                             </table>

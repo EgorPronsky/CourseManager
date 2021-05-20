@@ -3,9 +3,8 @@ package com.company.manager.servlet.core.course_actions;
 import com.company.manager.domain.archive.StudentCourseResult;
 import com.company.manager.domain.course.Course;
 import com.company.manager.domain.user.User;
+import com.company.manager.services.impl.StudentCourseResultServiceImpl;
 import com.company.manager.services.impl.UserServiceImpl;
-import com.company.manager.servlet.access.SignInServlet;
-import com.company.manager.servlet.core.get_courses.GetCourseToEditServlet;
 import lombok.extern.slf4j.Slf4j;
 import com.company.manager.services.impl.CourseServiceImpl;
 
@@ -43,9 +42,9 @@ public class LeaveCourseServlet extends HttpServlet {
             StudentCourseResult scrToLeave = StudentCourseResult.builder()
                     .student(currentStudent).course(courseToLeaveOpt.get()).build();
 
-            log.debug("Updating student");
-            currentStudent.getCourseResults().remove(scrToLeave);
-            UserServiceImpl.getService().updateUser(currentStudent);
+            log.debug("Deleting user from course");
+            StudentCourseResultServiceImpl.getService()
+                    .deleteStudentCourseResult(scrToLeave);
         }
 
         response.sendRedirect(String.format("/%s/main-menu/select-courses", APP_DOMAIN_NAME));

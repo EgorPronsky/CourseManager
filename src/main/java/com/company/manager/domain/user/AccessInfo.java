@@ -1,10 +1,7 @@
 package com.company.manager.domain.user;
 
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -13,13 +10,15 @@ import javax.persistence.*;
 
 @Builder
 @Getter
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @NoArgsConstructor
 @AllArgsConstructor
 public class AccessInfo {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private Long id;
+    @EqualsAndHashCode.Include
+    private long id;
 
     private String email;
 

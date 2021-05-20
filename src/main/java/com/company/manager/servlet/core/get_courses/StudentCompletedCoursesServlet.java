@@ -21,13 +21,10 @@ import static com.company.manager.constans.UserAttrAndParamNames.CURRENT_USER_ID
 @Slf4j
 public class StudentCompletedCoursesServlet extends HttpServlet {
 
-
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        log.debug("Getting current student from DB");
+        log.debug("Getting current student id");
         Long studentId = (Long)request.getSession(false)
                 .getAttribute(CURRENT_USER_ID_SESSION);
-        User currentStudent = UserServiceImpl.getService()
-                .getUserById(studentId);
 
         log.debug("Getting student completed courses");
         List<StudentCourseResult> completedCourses =

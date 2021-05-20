@@ -42,10 +42,10 @@ public class GradeStudentsServlet extends HttpServlet {
                     .result(result).build());
         }
 
-        log.debug("Saving student results in database");
+        log.debug("Updating student results in database");
         StudentCourseResultServiceImpl.getService()
-                .saveStudentCourseResults(scrSet);
+                .updateStudentCourseResults(scrSet);
 
-        response.sendRedirect(String.format("/%s/main-menu", APP_DOMAIN_NAME));
+        response.sendRedirect(String.format("/%s/main-menu/select-courses", APP_DOMAIN_NAME));
     }
 }

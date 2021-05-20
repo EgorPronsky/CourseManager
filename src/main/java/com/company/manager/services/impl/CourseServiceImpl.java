@@ -71,12 +71,6 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public List<Course> getStudentFinishedUngradedCourses(long studentId) {
-        LocalDate today = LocalDate.now();
-        return dao.getStudentUngradedCoursesEndedBeforeDate(studentId, today);
-    }
-
-    @Override
     public List<Course> getStudentAvailableToJoinCourses(long studentId) {
         LocalDate today = LocalDate.now();
         return dao.getStudentNotSubscribedCoursesStartAfterDate(studentId, today);

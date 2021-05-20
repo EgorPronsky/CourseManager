@@ -4,6 +4,14 @@
 <%@ page import="com.company.manager.domain.user.UserRole" %>
 <%@ page import="static com.company.manager.constans.CourseAttrAndParamNames.*" %>
 <%@ page import="static com.company.manager.constans.UserAttrAndParamNames.CURRENT_USER_INFO_SESSION" %>
+<%@ page
+        import="static com.company.manager.servlet.core.students_actions.GetCourseStudentsServlet.GET_STUDENTS_TO_SEE" %>
+<%@ page
+        import="static com.company.manager.servlet.core.students_actions.GetCourseStudentsServlet.GET_STUDENTS_TO_GRADE" %>
+<%@ page import="com.company.manager.domain.course.Course" %>
+<%@ page import="java.time.format.DateTimeFormatter" %>
+<%@ page
+        import="static com.company.manager.servlet.core.course_actions.SaveOrUpdateCourseServlet.COURSE_DATE_PATTERN" %>
 <html>
 
 <head>
@@ -63,7 +71,7 @@
                                         <th scope="col">Grade students</th>
                                     </c:if>
                                     <c:if test="${current_user_info.userRole == UserRole.TEACHER && courses_state != not_graded_course_state}">
-                                        <th scope="col">Students</th>
+                                        <th scope="col">Subscribed students</th>
                                         <th scope="col">Edit course</th>
                                         <th scope="col">Delete course</th>
                                     </c:if>
@@ -71,18 +79,24 @@
                             </thead>
 
                             <tbody>
+                                <%-- Prepare to format dates --%>
+                                <% DateTimeFormatter formatter = DateTimeFormatter.ofPattern(COURSE_DATE_PATTERN); %>
                                 <c:forEach var="course" items="${selected_courses}">
                                     <tr>
                                         <th>${course.courseInfo.name}</th>
-                                        <td>${course.courseInfo.startDate}</td>
-                                        <td>${course.courseInfo.endDate}</td>
+
+                                        <%-- Formatting dates --%>
+                                        <%Course course = (Course) pageContext.getAttribute("course");%>
+                                        <td><%=course.getCourseInfo().getStartDate().format(formatter)%></td>
+                                        <td><%=course.getCourseInfo().getEndDate().format(formatter)%></td>
+
                                         <td>
                                             <div class="dropdown">
                                                 <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
                                                     Timetable
                                                 </button>
                                                 <div class="dropdown-menu">
-                                                    <span class="dropdown-item-text">${course.courseInfo.timeTable}</span>
+                                                    <span class="dropdown-item-text"><c:if test="${empty course.courseInfo.timeTable}">No timetable yet</c:if>${course.courseInfo.timeTable}</span>
                                                 </div>
                                             </div>
                                         </td>
@@ -107,12 +121,9 @@
                                             </div>
                                         </td>
 
+                                        <%-- Special for students --%>
                                         <c:if test="${current_user_info.userRole == UserRole.STUDENT}">
                                             <td>${course.teacher.userInfo.firstName} ${course.teacher.userInfo.lastName}</td>
-                                        </c:if>
-
-                                        <%-- Special actions for students --%>
-                                        <c:if test="${current_user_info.userRole == UserRole.STUDENT}">
                                             <td>
                                                 <form action="${pageContext.request.contextPath}/main-menu/select-courses/leave-course" method="post">
                                                     <button class="btn btn-warning btn-block" type="submit" name="<%=COURSE_ID%>" value="${course.id}">Leave</button>
@@ -124,6 +135,10 @@
                                         <c:if test="${courses_state == not_graded_course_state}">
                                             <td>
                                                 <form action="${pageContext.request.contextPath}/main-menu/select-courses/students" method="get">
+                                                    <%-- Hidden course students view target --%>
+                                                    <c:if test="${not empty course}">
+                                                        <input type="hidden" name="<%=COURSE_STUDENTS_VIEW_TARGET%>" value="<%=GET_STUDENTS_TO_GRADE%>"/>
+                                                    </c:if>
                                                     <button class="btn btn-primary btn-block" type="submit" name="<%=COURSE_ID%>" value="${course.id}">Grade</button>
                                                 </form>
                                             </td>
@@ -131,7 +146,11 @@
                                         <c:if test="${current_user_info.userRole == UserRole.TEACHER && courses_state != not_graded_course_state}">
                                             <td>
                                                 <form action="${pageContext.request.contextPath}/main-menu/select-courses/students" method="get">
-                                                    <button class="btn btn-primary btn-block" type="submit" name="<%=COURSE_ID%>" value="${course.id}">See students</button>
+                                                    <%-- Hidden course students view target --%>
+                                                    <c:if test="${not empty course}">
+                                                        <input type="hidden" name="<%=COURSE_STUDENTS_VIEW_TARGET%>" value="<%=GET_STUDENTS_TO_SEE%>"/>
+                                                    </c:if>
+                                                    <button class="btn btn-primary btn-block" type="submit" name="<%=COURSE_ID%>" value="${course.id}">Students</button>
                                                 </form>
                                             </td>
                                             <td>

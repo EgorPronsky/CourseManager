@@ -4,6 +4,7 @@ import com.company.manager.dao.custom.StudentCourseResultDAO;
 import com.company.manager.dao.generic.impl.HibernateGenericDAO;
 import com.company.manager.domain.archive.StudentCourseResult;
 import com.company.manager.domain.archive.StudentCourseResult_;
+import com.company.manager.domain.course.CourseInfo_;
 import com.company.manager.domain.course.Course_;
 import com.company.manager.domain.user.User_;
 import lombok.extern.slf4j.Slf4j;
@@ -17,6 +18,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -29,14 +31,14 @@ public class HibernateStudentCourseResultDAO extends HibernateGenericDAO<Student
     }
 
     @Override
-    public void saveAll(Collection<StudentCourseResult> scrCollection) {
+    public void updateAll(Collection<StudentCourseResult> scrCollection) {
         Transaction tr = null;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             tr = session.beginTransaction();
-            scrCollection.forEach(session::save);
+            scrCollection.forEach(session::update);
             tr.commit();
         } catch (HibernateException e) {
-            log.debug("Error while saving SCR entities", e);
+            log.debug("Error while updating SCR entities", e);
             if (tr != null && tr.isActive()) tr.rollback();
         }
     }
@@ -68,7 +70,7 @@ public class HibernateStudentCourseResultDAO extends HibernateGenericDAO<Student
     }
 
     @Override
-    public List<StudentCourseResult> getCoursesResultsByStudentId(long studentId) {
+    public List<StudentCourseResult> getEndedBeforeDateCoursesWithResultsByStudentId(long studentId, LocalDate date) {
         List<StudentCourseResult> scrList = new ArrayList<>();
         Transaction tr = null;
 
@@ -78,9 +80,13 @@ public class HibernateStudentCourseResultDAO extends HibernateGenericDAO<Student
             CriteriaQuery<StudentCourseResult> query = criteriaBuilder.createQuery(StudentCourseResult.class);
             Root<StudentCourseResult> scrRoot = query.from(StudentCourseResult.class);
 
+            Predicate predicateForStudentId =  criteriaBuilder.equal(
+                    scrRoot.get(StudentCourseResult_.student).get(User_.id), studentId);
+            Predicate predicateForDate = criteriaBuilder.lessThan(
+                    scrRoot.get(StudentCourseResult_.course).get(Course_.courseInfo).get(CourseInfo_.endDate), date);
+
             query.select(scrRoot)
-                    .where(criteriaBuilder.equal(
-                            scrRoot.get(StudentCourseResult_.student).get(User_.id), studentId));
+                    .where(criteriaBuilder.and(predicateForStudentId, predicateForDate));
 
             // Executing query and saving result
             tr = session.beginTransaction();
