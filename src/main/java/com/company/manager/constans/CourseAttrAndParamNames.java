@@ -8,6 +8,7 @@ public class CourseAttrAndParamNames {
     public static final String COURSES_ID = "courses_id";
     public static final String COURSES_STATE = "courses_state";
     public static final String COURSES_RESULTS = "courses_results";
+    public static final String COURSE_STUDENT_ID = "course_student_id";
     public static final String COURSE_STUDENTS_VIEW_TARGET = "view_course_scope";
 
     // For creating or updating course

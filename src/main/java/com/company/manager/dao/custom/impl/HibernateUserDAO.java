@@ -30,19 +30,6 @@ public class HibernateUserDAO extends HibernateGenericDAO<User> implements UserD
     }
 
     @Override
-    public void updateUsers(Collection<User> users) {
-        Transaction tr = null;
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            tr = session.beginTransaction();
-            users.forEach(session::update);
-            tr.commit();
-        } catch (HibernateException e) {
-            log.error("Error occurred during updating users", e);
-            if (tr != null && tr.isActive()) tr.rollback();
-        }
-    }
-
-    @Override
     public Optional<User> findUserByEmailAndPasswordHash(String email, int passwordHash) {
         User requiredUser = null;
         Transaction tr = null;
@@ -75,32 +62,6 @@ public class HibernateUserDAO extends HibernateGenericDAO<User> implements UserD
             if (tr != null && tr.isActive()) tr.rollback();
         }
         return Optional.ofNullable(requiredUser);
-    }
-
-    @Override
-    public List<User> getUsersById(Collection<Long> usersId) {
-        List<User> users = new ArrayList<>();
-        Transaction tr = null;
-
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            // Prepare
-            CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
-            CriteriaQuery<User> query = criteriaBuilder.createQuery(User.class);
-            Root<User> course = query.from(User.class);
-
-            query.select(course)
-                    .where(course.get(User_.id).in(usersId));
-
-            // Executing query and saving result
-            tr = session.beginTransaction();
-            users.addAll(session.createQuery(query).getResultList());
-            tr.commit();
-        } catch (PersistenceException e) {
-            log.error("Error while getting courses by id", e);
-            if (tr != null && tr.isActive()) tr.rollback();
-        }
-        return users;
-
     }
 
 }

@@ -57,14 +57,4 @@ public class UserServiceImpl implements UserService {
         dao.update(user);
     }
 
-    @Override
-    public void updateAllUsers(Collection<User> users) {
-        dao.updateUsers(users);
-    }
-
-    @Override
-    public List<User> getUsersById(Collection<Long> usersId) {
-        return dao.getUsersById(usersId);
-    }
-
 }

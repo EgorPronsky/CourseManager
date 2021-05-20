@@ -20,6 +20,7 @@ import javax.persistence.criteria.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 @Slf4j
@@ -44,7 +45,7 @@ public class HibernateCourseDAO extends HibernateGenericDAO<Course> implements C
 
     @Override
     public List<Course> getCoursesById(Collection<Long> idCollection) {
-        List<Course> courses = new ArrayList<>();
+        List<Course> courses = null;
         Transaction tr = null;
 
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
@@ -58,7 +59,7 @@ public class HibernateCourseDAO extends HibernateGenericDAO<Course> implements C
 
             // Executing query and saving result
             tr = session.beginTransaction();
-            courses.addAll(session.createQuery(query).getResultList());
+            courses = session.createQuery(query).getResultList();
             tr.commit();
         } catch (PersistenceException e) {
             log.error("Error while getting courses by id", e);
@@ -69,7 +70,7 @@ public class HibernateCourseDAO extends HibernateGenericDAO<Course> implements C
 
     @Override
     public List<Course> getStudentCoursesStartAfterDate(long studentId, LocalDate date) {
-        List<Course> courses = new ArrayList<>();
+        List<Course> courses = null;
         Transaction tr = null;
 
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
@@ -86,11 +87,12 @@ public class HibernateCourseDAO extends HibernateGenericDAO<Course> implements C
                     courseRoot.get(Course_.courseInfo).get(CourseInfo_.startDate), date);
 
             query.select(courseRoot)
-                    .where(criteriaBuilder.and(predicateForUserId, predicateForDate));
+                    .where(criteriaBuilder.and(predicateForUserId, predicateForDate))
+                    .orderBy(criteriaBuilder.asc(courseRoot.get(Course_.courseInfo).get(CourseInfo_.startDate)));
 
             // Executing query and saving result
             tr = session.beginTransaction();
-            courses.addAll(session.createQuery(query).getResultList());
+            courses = session.createQuery(query).getResultList();
             tr.commit();
         } catch (PersistenceException e) {
             log.error("Error while getting student courses that start after given date", e);
@@ -101,7 +103,7 @@ public class HibernateCourseDAO extends HibernateGenericDAO<Course> implements C
 
     @Override
     public List<Course> getStudentCoursesActiveOnDate(long studentId, LocalDate date) {
-        List<Course> courses = new ArrayList<>();
+        List<Course> courses = null;
         Transaction tr = null;
 
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
@@ -120,11 +122,12 @@ public class HibernateCourseDAO extends HibernateGenericDAO<Course> implements C
                     courseRoot.get(Course_.courseInfo).get(CourseInfo_.endDate), date);
 
             query.select(courseRoot)
-                    .where(criteriaBuilder.and(predicateForUserId, predicateForStartDate, predicateForEndDate));
+                    .where(criteriaBuilder.and(predicateForUserId, predicateForStartDate, predicateForEndDate))
+                    .orderBy(criteriaBuilder.asc((courseRoot.get(Course_.courseInfo).get(CourseInfo_.endDate))));
 
             // Executing query and saving result
             tr = session.beginTransaction();
-            courses.addAll(session.createQuery(query).getResultList());
+            courses = session.createQuery(query).getResultList();
             tr.commit();
         } catch (PersistenceException e) {
             log.error("Error while getting student courses active on given date", e);
@@ -135,7 +138,7 @@ public class HibernateCourseDAO extends HibernateGenericDAO<Course> implements C
 
     @Override
     public List<Course> getStudentNotSubscribedCoursesStartAfterDate(long studentId, LocalDate date) {
-        List<Course> courses = new ArrayList<>();
+        List<Course> courses = null;
         Transaction tr = null;
 
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
@@ -160,11 +163,12 @@ public class HibernateCourseDAO extends HibernateGenericDAO<Course> implements C
 
             rootQuery.select(courseRoot)
                     .where(criteriaBuilder
-                            .and(predicateForUserNotSubscribedCourses, predicateForDate));
+                            .and(predicateForUserNotSubscribedCourses, predicateForDate))
+                    .orderBy(criteriaBuilder.asc(courseRoot.get(Course_.courseInfo).get(CourseInfo_.startDate)));
 
             // Executing query and saving result
             tr = session.beginTransaction();
-            courses.addAll(session.createQuery(rootQuery).getResultList());
+            courses = session.createQuery(rootQuery).getResultList();
             tr.commit();
         } catch (PersistenceException e) {
             log.error("Error while getting student not subscribed courses that start after given date", e);
@@ -175,7 +179,7 @@ public class HibernateCourseDAO extends HibernateGenericDAO<Course> implements C
 
     @Override
     public List<Course> getTeacherCoursesStartAfterDate(long teacherId, LocalDate date) {
-        List<Course> courses = new ArrayList<>();
+        List<Course> courses = null;
         Transaction tr = null;
 
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
@@ -191,11 +195,12 @@ public class HibernateCourseDAO extends HibernateGenericDAO<Course> implements C
                     courseRoot.get(Course_.courseInfo).get(CourseInfo_.startDate), date);
 
             query.select(courseRoot)
-                    .where(criteriaBuilder.and(predicateForUserId, predicateForDate));
+                    .where(criteriaBuilder.and(predicateForUserId, predicateForDate))
+                    .orderBy(criteriaBuilder.asc((courseRoot.get(Course_.courseInfo).get(CourseInfo_.startDate))));
 
             // Executing query and saving result
             tr = session.beginTransaction();
-            courses.addAll(session.createQuery(query).getResultList());
+            courses = session.createQuery(query).getResultList();
             tr.commit();
         } catch (PersistenceException e) {
             log.error("Error while getting teacher courses that start after given date", e);
@@ -206,7 +211,7 @@ public class HibernateCourseDAO extends HibernateGenericDAO<Course> implements C
 
     @Override
     public List<Course> getTeacherCoursesActiveOnDate(long teacherId, LocalDate date) {
-        List<Course> courses = new ArrayList<>();
+        List<Course> courses = null;
         Transaction tr = null;
 
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
@@ -225,11 +230,12 @@ public class HibernateCourseDAO extends HibernateGenericDAO<Course> implements C
 
             query.select(courseRoot)
                     .where(criteriaBuilder
-                            .and(predicateForUserId, predicateForStartDate, predicateForEndDate));
+                            .and(predicateForUserId, predicateForStartDate, predicateForEndDate))
+                    .orderBy(criteriaBuilder.asc((courseRoot.get(Course_.courseInfo).get(CourseInfo_.endDate))));
 
             // Executing query and saving result
             tr = session.beginTransaction();
-            courses.addAll(session.createQuery(query).getResultList());
+            courses = session.createQuery(query).getResultList();
             tr.commit();
         } catch (PersistenceException e) {
             log.error("Error while getting teacher courses active on given date", e);
@@ -240,7 +246,7 @@ public class HibernateCourseDAO extends HibernateGenericDAO<Course> implements C
 
     @Override
     public List<Course> getTeacherNotGradedCoursesEndedBeforeDate(long teacherId, LocalDate date) {
-        List<Course> requiredCourses = new ArrayList<>();
+        List<Course> courses = null;
         Transaction tr = null;
 
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
@@ -261,17 +267,18 @@ public class HibernateCourseDAO extends HibernateGenericDAO<Course> implements C
             rootQuery.select(courseRoot)
                     .where(criteriaBuilder
                             .and(predicateForUserId, predicateForUserNotGradedCourses, predicateForDate))
-                    .distinct(true);
+                    .distinct(true)
+                    .orderBy(criteriaBuilder.asc((courseRoot.get(Course_.courseInfo).get(CourseInfo_.endDate))));
 
             // Executing query and saving result
             tr = session.beginTransaction();
-            requiredCourses.addAll(session.createQuery(rootQuery).getResultList());
+            courses = session.createQuery(rootQuery).getResultList();
             tr.commit();
         } catch (PersistenceException e) {
             log.error("Error while getting teacher not graded courses ended before given date", e);
             if (tr != null && tr.isActive()) tr.rollback();
         }
-        return requiredCourses;
+        return courses;
     }
 
 }

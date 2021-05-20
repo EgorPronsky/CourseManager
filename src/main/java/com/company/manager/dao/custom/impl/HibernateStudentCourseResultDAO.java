@@ -6,6 +6,7 @@ import com.company.manager.domain.archive.StudentCourseResult;
 import com.company.manager.domain.archive.StudentCourseResult_;
 import com.company.manager.domain.course.CourseInfo_;
 import com.company.manager.domain.course.Course_;
+import com.company.manager.domain.user.UserInfo_;
 import com.company.manager.domain.user.User_;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.HibernateException;
@@ -19,7 +20,6 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -45,7 +45,7 @@ public class HibernateStudentCourseResultDAO extends HibernateGenericDAO<Student
 
     @Override
     public List<StudentCourseResult> getStudentsResultsByCourseId(long courseId) {
-        List<StudentCourseResult> scrList = new ArrayList<>();
+        List<StudentCourseResult> scrList = null;
         Transaction tr = null;
 
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
@@ -56,11 +56,13 @@ public class HibernateStudentCourseResultDAO extends HibernateGenericDAO<Student
 
             query.select(scr)
                     .where(criteriaBuilder
-                            .equal(scr.get(StudentCourseResult_.course).get(Course_.id), courseId));
+                            .equal(scr.get(StudentCourseResult_.course).get(Course_.id), courseId))
+                    .orderBy(criteriaBuilder
+                            .desc(scr.get(StudentCourseResult_.student).get(User_.userInfo).get(UserInfo_.lastName)));
 
             // Executing query and saving result
             tr = session.beginTransaction();
-            scrList.addAll(session.createQuery(query).getResultList());
+            scrList = session.createQuery(query).getResultList();
             tr.commit();
         } catch (PersistenceException e) {
             log.debug("Error while finding course students results", e);
@@ -71,7 +73,7 @@ public class HibernateStudentCourseResultDAO extends HibernateGenericDAO<Student
 
     @Override
     public List<StudentCourseResult> getEndedBeforeDateCoursesWithResultsByStudentId(long studentId, LocalDate date) {
-        List<StudentCourseResult> scrList = new ArrayList<>();
+        List<StudentCourseResult> scrList = null;
         Transaction tr = null;
 
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
@@ -86,14 +88,17 @@ public class HibernateStudentCourseResultDAO extends HibernateGenericDAO<Student
                     scrRoot.get(StudentCourseResult_.course).get(Course_.courseInfo).get(CourseInfo_.endDate), date);
 
             query.select(scrRoot)
-                    .where(criteriaBuilder.and(predicateForStudentId, predicateForDate));
+                    .where(criteriaBuilder
+                            .and(predicateForStudentId, predicateForDate))
+                    .orderBy(criteriaBuilder
+                            .desc(scrRoot.get(StudentCourseResult_.course).get(Course_.courseInfo).get(CourseInfo_.endDate)));
 
             // Executing query and saving result
             tr = session.beginTransaction();
-            scrList.addAll(session.createQuery(query).getResultList());
+            scrList = session.createQuery(query).getResultList();
             tr.commit();
         } catch (PersistenceException e) {
-            log.debug("Error while finding student ended before given date courses with results ", e);
+            log.debug("Error while finding student ended before given date courses with results", e);
             if (tr != null && tr.isActive()) tr.rollback();
         }
         return scrList;

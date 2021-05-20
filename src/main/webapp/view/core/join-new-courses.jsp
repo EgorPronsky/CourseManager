@@ -1,10 +1,8 @@
-<%@ page import="static com.company.manager.servlet.core.course_actions.JoinNewCoursesServlet.COURSES_ID_PARAM" %>
 <%@ page import="static com.company.manager.constans.CourseAttrAndParamNames.COURSES" %>
 <%@ page import="java.time.format.DateTimeFormatter" %>
-<%@ page
-        import="static com.company.manager.servlet.core.course_actions.SaveOrUpdateCourseServlet.COURSE_DATE_PATTERN" %>
-<%@ page import="com.company.manager.domain.archive.StudentCourseResult" %>
+<%@ page import="static com.company.manager.servlet.core.course_actions.SaveOrUpdateCourseServlet.COURSE_DATE_PATTERN" %>
 <%@ page import="com.company.manager.domain.course.Course" %>
+<%@ page import="static com.company.manager.constans.CourseAttrAndParamNames.COURSES_ID" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
@@ -15,7 +13,7 @@
 </head>
 
 <%-- Prepare variables --%>
-<c:set var="courses_to_join" value="<%=COURSES_ID_PARAM%>" />
+<c:set var="courses_to_join" value="<%=COURSES_ID%>" />
 <c:set var="available_courses" value="<%=request.getAttribute(COURSES)%>" />
 
 <body>

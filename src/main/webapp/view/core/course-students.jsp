@@ -5,6 +5,14 @@
 <%@ page import="static com.company.manager.servlet.core.students_actions.GetCourseStudentsServlet.GET_STUDENTS_TO_SEE" %>
 <%@ page import="static com.company.manager.servlet.core.students_actions.GetCourseStudentsServlet.GET_STUDENTS_TO_GRADE" %>
 <%@ page import="static com.company.manager.constans.CourseAttrAndParamNames.*" %>
+<%@ page import="com.company.manager.domain.course.Course" %>
+<%@ page import="com.company.manager.domain.archive.StudentCourseResult" %>
+<%@ page import="java.util.Comparator" %>
+<%@ page import="java.util.stream.Collectors" %>
+<%@ page import="com.company.manager.domain.user.User" %>
+<%@ page import="java.util.List" %>
+<%@ page import="java.util.ArrayList" %>
+<%@ page import="java.util.Collections" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 
@@ -20,6 +28,23 @@
 <c:set var="course_id" value="<%=COURSE_ID%>" />
 <c:set var="target_get_students_to_see" value="<%=GET_STUDENTS_TO_SEE%>" />
 <c:set var="target_get_students_to_grade" value="<%=GET_STUDENTS_TO_GRADE%>" />
+
+<%-- Sorting students --%>
+<%
+    List<StudentCourseResult> sortedStudentsResults = new ArrayList<>(((Course)pageContext.getAttribute("course")).getStudentResults());
+    Collections.sort(sortedStudentsResults, new Comparator<StudentCourseResult>() {
+        @Override
+        public int compare(StudentCourseResult  o1, StudentCourseResult o2) {
+            return o1.getStudent().getUserInfo().getLastName()
+                    .compareTo(o2.getStudent().getUserInfo().getLastName());
+        }
+    });
+    List<User> sortedStudents = new ArrayList<>();
+    for (StudentCourseResult scr : sortedStudentsResults) {
+        sortedStudents.add(scr.getStudent());
+    }
+%>
+<c:set var="sorted_students" value="<%=sortedStudents%>" />
 
 <body>
 
@@ -45,13 +70,23 @@
                     <c:otherwise>
 
                         <div class="card-body">
-                            <form action="${pageContext.request.contextPath}/main-menu/select-courses/my-not-graded-courses/students/grade-students" method="post">
+                            <form
+                                <c:if test="${course_students_view_target == target_get_students_to_see}">
+                                    action="${pageContext.request.contextPath}/main-menu/select-courses/leave-course"
+                                </c:if>
+                                <c:if test="${course_students_view_target == target_get_students_to_grade}">
+                                    action="${pageContext.request.contextPath}/main-menu/select-courses/my-not-graded-courses/students/grade-students"
+                                </c:if>
+                                method="post">
 
                                 <table class="table">
                                     <thead class="thead-dark">
                                     <tr>
                                         <th scope="col">First name</th>
                                         <th scope="col">Last name</th>
+                                        <c:if test="${course_students_view_target == target_get_students_to_see}">
+                                            <th scope="col">Kick student</th>
+                                        </c:if>
                                         <c:if test="${course_students_view_target == target_get_students_to_grade}">
                                             <th scope="col">Result</th>
                                         </c:if>
@@ -59,23 +94,34 @@
                                     </thead>
 
                                     <tbody>
-                                        <c:forEach var="studentResult" items="${course.studentResults}">
+                                        <c:forEach var="student" items="${sorted_students}">
                                             <tr>
-                                                <td>${studentResult.student.userInfo.firstName}</td>
-                                                <td>${studentResult.student.userInfo.lastName}</td>
+                                                <td>${student.userInfo.firstName}</td>
+                                                <td>${student.userInfo.lastName}</td>
+
+                                                <c:if test="${course_students_view_target == target_get_students_to_see}">
+                                                    <%-- Hidden course id --%>
+                                                    <c:if test="${not empty course}">
+                                                        <input type="hidden" name="<%=COURSE_ID%>" value="${course.id}"/>
+                                                    </c:if>
+                                                    <td>
+                                                        <button class="btn btn-lg btn-primary btn-danger" type="submit"  name="<%=COURSE_STUDENT_ID%>" value="${student.id}">Kick out</button>
+                                                    </td>
+                                                </c:if>
+
                                                 <c:if test="${course_students_view_target == target_get_students_to_grade}">
                                                     <td>
                                                         <div class="form-check form-check-inline">
-                                                            <input class="form-check-input" type="radio" name="${studentResult.student.id}" id="result_bad${studentResult.student.id}" value="${CourseResult.BAD}">
-                                                            <label class="form-check-label" for="result_bad${studentResult.student.id}">${CourseResult.BAD.toString()}</label>
+                                                            <input class="form-check-input" type="radio" name="${student.id}" id="result_bad${student.id}" value="${CourseResult.BAD}">
+                                                            <label class="form-check-label" for="result_bad${student.id}">${CourseResult.BAD.toString()}</label>
                                                         </div>
                                                         <div class="form-check form-check-inline">
-                                                            <input class="form-check-input" type="radio" name="${studentResult.student.id}" id="result_ok${studentResult.student.id}" value="${CourseResult.OK}" checked>
-                                                            <label class="form-check-label" for="result_ok${studentResult.student.id}">${CourseResult.OK.toString()}</label>
+                                                            <input class="form-check-input" type="radio" name="${student.id}" id="result_ok${student.id}" value="${CourseResult.OK}" checked>
+                                                            <label class="form-check-label" for="result_ok${student.id}">${CourseResult.OK.toString()}</label>
                                                         </div>
                                                         <div class="form-check form-check-inline">
-                                                            <input class="form-check-input" type="radio" name="${studentResult.student.id}" id="result_perfect${studentResult.student.id}" value="${CourseResult.EXCELLENT}" >
-                                                            <label class="form-check-label" for="result_perfect${studentResult.student.id}">${CourseResult.EXCELLENT.toString()}</label>
+                                                            <input class="form-check-input" type="radio" name="${student.id}" id="result_perfect${student.id}" value="${CourseResult.EXCELLENT}" >
+                                                            <label class="form-check-label" for="result_perfect${student.id}">${CourseResult.EXCELLENT.toString()}</label>
                                                         </div>
                                                     </td>
                                                 </c:if>
@@ -86,6 +132,7 @@
                                 </table>
 
                                 <hr/>
+
                                 <c:if test="${course_students_view_target == target_get_students_to_grade}">
                                     <button class="btn btn-lg btn-primary btn-block" type="submit"  name="${course_id}" value="${course.id}">Submit</button>
                                     <hr/>

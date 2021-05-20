@@ -18,6 +18,7 @@ import java.util.Optional;
 
 import static com.company.manager.constans.ApplicationConstants.APP_DOMAIN_NAME;
 import static com.company.manager.constans.CourseAttrAndParamNames.COURSE_ID;
+import static com.company.manager.constans.CourseAttrAndParamNames.COURSE_STUDENT_ID;
 import static com.company.manager.constans.UserAttrAndParamNames.CURRENT_USER_ID_SESSION;
 
 @Slf4j
@@ -33,9 +34,20 @@ public class LeaveCourseServlet extends HttpServlet {
 
         // Course could be already deleted
         if (courseToLeaveOpt.isPresent()) {
-            log.debug("Getting current student from DB");
-            Long studentId = (Long)request.getSession(false)
-                    .getAttribute(CURRENT_USER_ID_SESSION);
+
+            // If teacher kicking student -> will receive student id
+            String studentIdStr = request.getParameter(COURSE_STUDENT_ID);
+
+            long studentId;
+            if (studentIdStr != null) {
+                studentId = Long.parseLong(studentIdStr);
+            } else {
+                // Student leaving course on his own
+                studentId = (Long)request.getSession(false)
+                        .getAttribute(CURRENT_USER_ID_SESSION);
+            }
+
+            log.debug("Getting current student by id from DB");
             User currentStudent = UserServiceImpl.getService()
                     .getUserById(studentId);
 
