@@ -39,7 +39,7 @@ public class SignInServlet extends HttpServlet {
         if (req.getParameter(REMEMBER_USER) != null) {
             log.debug("Adding user id cookie");
             CookieUtil.addCookie(USER_ID_COOKIE_NAME, String.valueOf(user.getId()),
-                    String.format("/%s", APP_NAME), Integer.MAX_VALUE, true, resp);
+                    String.format("/%s/login-page", APP_NAME), Integer.MAX_VALUE, true, resp);
         }
 
         resp.sendRedirect(String.format("/%s/main-menu", APP_NAME));

@@ -4,6 +4,7 @@ import com.company.manager.domain.archive.CourseResult;
 import com.company.manager.domain.archive.StudentCourseResult;
 import com.company.manager.domain.course.Course;
 import com.company.manager.domain.user.User;
+import com.company.manager.handlers.input_handlers.CourseInputHandler;
 import com.company.manager.util.StudentCourseResultConverter;
 import lombok.extern.slf4j.Slf4j;
 import com.company.manager.services.impl.CourseServiceImpl;
@@ -32,13 +33,8 @@ public class GradeStudentsServlet extends HttpServlet {
         Course course = CourseServiceImpl.getService().getCourseById(courseId);
 
         log.debug("Receiving student results from request and saving in map");
-        Map<User, CourseResult> studentResults = new HashMap<>();
-        for(StudentCourseResult scr : course.getStudentResults()) {
-            User student = scr.getStudent();
-            String resultStr = request.getParameter(String.valueOf(student.getId()));
-            CourseResult result = CourseResult.valueOf(resultStr);
-            studentResults.put(student, result);
-        }
+        Map<User, CourseResult> studentResults = CourseInputHandler
+                .getStudentResultsFromRequest(course, request);
 
         log.debug("Converting student results to SCR entities");
         Set<StudentCourseResult> scrSet = StudentCourseResultConverter

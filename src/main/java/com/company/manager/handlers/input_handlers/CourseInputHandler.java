@@ -1,10 +1,29 @@
 package com.company.manager.handlers.input_handlers;
 
+import com.company.manager.domain.archive.CourseResult;
+import com.company.manager.domain.archive.StudentCourseResult;
+import com.company.manager.domain.course.Course;
+import com.company.manager.domain.user.User;
+
 import javax.servlet.http.HttpServletRequest;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import static com.company.manager.constans.CourseAttrAndParamNames.*;
 
 public class CourseInputHandler {
+
+    public static Map<User, CourseResult> getStudentResultsFromRequest(Course course, HttpServletRequest req) {
+        Map<User, CourseResult> studentResults = new HashMap<>();
+        for(StudentCourseResult scr : course.getStudentResults()) {
+            User student = scr.getStudent();
+            String resultStr = req.getParameter(String.valueOf(student.getId()));
+            CourseResult result = CourseResult.valueOf(resultStr);
+            studentResults.put(student, result);
+        }
+        return studentResults;
+    }
 
     public static String getTimeTableFromRequest(HttpServletRequest req) {
         String timeTable = "";

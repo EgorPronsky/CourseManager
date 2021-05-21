@@ -62,8 +62,12 @@
                                     <th scope="col">Title</th>
                                     <th scope="col">Start date</th>
                                     <th scope="col">End date</th>
-                                    <th scope="col">Timetable</th>
-                                    <th scope="col">URI</th>
+
+                                    <c:if test="${courses_state != not_graded_course_state}">
+                                        <th scope="col">Timetable</th>
+                                        <th scope="col">URI</th>
+                                    </c:if>
+
                                     <th scope="col">Description</th>
 
                                     <%-- Special columns for students --%>
@@ -96,6 +100,7 @@
                                         <td><%=course.getCourseInfo().getStartDate().format(formatter)%></td>
                                         <td><%=course.getCourseInfo().getEndDate().format(formatter)%></td>
 
+                                        <c:if test="${courses_state != not_graded_course_state}">
                                         <td>
                                             <div class="dropdown">
                                                 <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
@@ -116,6 +121,7 @@
                                                 </div>
                                             </div>
                                         </td>
+                                        </c:if>
                                         <td>
                                             <div class="dropdown">
                                                 <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">

@@ -27,16 +27,6 @@ public class CookieUtil {
                 .findAny();
     }
 
-    public static void deleteCookies(Set<String> cookieNames, String path, HttpServletRequest req, HttpServletResponse resp) {
-        Cookie[] cookies = req.getCookies();
-        if (cookies != null)
-            Arrays.stream(cookies).forEach(cookie -> {
-                        if (cookieNames.contains(cookie.getName())) {
-                            removeCookie(cookie.getName(), path, resp);
-                        }
-                    });
-    }
-
     public static void removeCookie(String cookieName, String path, HttpServletResponse resp) {
         Cookie cookie = new Cookie(cookieName, "");
         cookie.setMaxAge(0);

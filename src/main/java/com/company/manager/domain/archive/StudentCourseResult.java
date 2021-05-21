@@ -18,13 +18,13 @@ import javax.persistence.*;
 public class StudentCourseResult {
 
     @Id
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "student_id")
     @EqualsAndHashCode.Include
     private User student;
 
     @Id
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "course_id")
     @EqualsAndHashCode.Include
     private Course course;

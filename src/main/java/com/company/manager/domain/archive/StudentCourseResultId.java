@@ -14,7 +14,6 @@ import java.io.Serializable;
 @Embeddable
 @EqualsAndHashCode
 @NoArgsConstructor
-@AllArgsConstructor
 public class StudentCourseResultId implements Serializable {
     private User student;
     private Course course;

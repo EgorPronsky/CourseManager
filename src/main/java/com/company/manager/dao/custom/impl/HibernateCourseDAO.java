@@ -78,17 +78,19 @@ public class HibernateCourseDAO extends HibernateGenericDAO<Course> implements C
             CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
             CriteriaQuery<Course> query = criteriaBuilder.createQuery(Course.class);
             Root<Course> courseRoot = query.from(Course.class);
-            Join<Course, StudentCourseResult> scrJoin = courseRoot.join(Course_.studentResults);
 
-            // Predicates for WHERE clause
-            Predicate predicateForUserId = criteriaBuilder
-                    .equal(scrJoin.get(StudentCourseResult_.student).get(User_.id), studentId);
+            // Joining SCR where student id == required student id
+            Join<Course, StudentCourseResult> scrJoin = courseRoot.join(Course_.studentResults);
+            scrJoin.on(criteriaBuilder.equal(
+                    scrJoin.get(StudentCourseResult_.student).get(User_.id), studentId));
+
             Predicate predicateForDate = criteriaBuilder.greaterThan(
                     courseRoot.get(Course_.courseInfo).get(CourseInfo_.startDate), date);
 
             query.select(courseRoot)
-                    .where(criteriaBuilder.and(predicateForUserId, predicateForDate))
-                    .orderBy(criteriaBuilder.asc(courseRoot.get(Course_.courseInfo).get(CourseInfo_.startDate)));
+                    .where(predicateForDate)
+                    .orderBy(criteriaBuilder.asc(
+                            courseRoot.get(Course_.courseInfo).get(CourseInfo_.startDate)));
 
             // Executing query and saving result
             tr = session.beginTransaction();
@@ -111,19 +113,22 @@ public class HibernateCourseDAO extends HibernateGenericDAO<Course> implements C
             CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
             CriteriaQuery<Course> query = criteriaBuilder.createQuery(Course.class);
             Root<Course> courseRoot = query.from(Course.class);
-            Join<Course, StudentCourseResult> scrJoin = courseRoot.join(Course_.studentResults);
 
-            // Predicates for WHERE clause
-            Predicate predicateForUserId = criteriaBuilder
-                    .equal(scrJoin.get(StudentCourseResult_.student).get(User_.id), studentId);
+            // Joining SCR where student id == required student id
+            Join<Course, StudentCourseResult> scrJoin = courseRoot.join(Course_.studentResults);
+            scrJoin.on(criteriaBuilder
+                    .equal(scrJoin.get(StudentCourseResult_.student).get(User_.id), studentId));
+
+            // Date predicates
             Predicate predicateForStartDate = criteriaBuilder.lessThanOrEqualTo(
                     courseRoot.get(Course_.courseInfo).get(CourseInfo_.startDate), date);
             Predicate predicateForEndDate = criteriaBuilder.greaterThanOrEqualTo(
                     courseRoot.get(Course_.courseInfo).get(CourseInfo_.endDate), date);
 
             query.select(courseRoot)
-                    .where(criteriaBuilder.and(predicateForUserId, predicateForStartDate, predicateForEndDate))
-                    .orderBy(criteriaBuilder.asc((courseRoot.get(Course_.courseInfo).get(CourseInfo_.endDate))));
+                    .where(criteriaBuilder.and(predicateForStartDate, predicateForEndDate))
+                    .orderBy(criteriaBuilder.asc((
+                            courseRoot.get(Course_.courseInfo).get(CourseInfo_.endDate))));
 
             // Executing query and saving result
             tr = session.beginTransaction();
@@ -150,11 +155,13 @@ public class HibernateCourseDAO extends HibernateGenericDAO<Course> implements C
             // Sub query to get student subscribed courses
             Subquery<Course> subQuery = rootQuery.subquery(Course.class);
             Root<Course> courseSubRoot = subQuery.from(Course.class);
-            Join<Course, StudentCourseResult> scrSubJoin = courseSubRoot.join(Course_.studentResults);
 
-            subQuery.select(courseSubRoot)
-                    .where(criteriaBuilder
-                            .equal(scrSubJoin.get(StudentCourseResult_.student).get(User_.id), studentId));
+            // Sub query joining SCR to get student SUBSCRIBED courses
+            Join<Course, StudentCourseResult> scrSubJoin = courseSubRoot.join(Course_.studentResults);
+            scrSubJoin.on(criteriaBuilder.equal(
+                    scrSubJoin.get(StudentCourseResult_.student).get(User_.id), studentId));
+
+            subQuery.select(courseSubRoot);
 
             // Predicates for WHERE clause of root query
             Predicate predicateForUserNotSubscribedCourses = courseRoot.in(subQuery).not();
@@ -164,7 +171,8 @@ public class HibernateCourseDAO extends HibernateGenericDAO<Course> implements C
             rootQuery.select(courseRoot)
                     .where(criteriaBuilder
                             .and(predicateForUserNotSubscribedCourses, predicateForDate))
-                    .orderBy(criteriaBuilder.asc(courseRoot.get(Course_.courseInfo).get(CourseInfo_.startDate)));
+                    .orderBy(criteriaBuilder.asc(
+                            courseRoot.get(Course_.courseInfo).get(CourseInfo_.startDate)));
 
             // Executing query and saving result
             tr = session.beginTransaction();
@@ -196,7 +204,8 @@ public class HibernateCourseDAO extends HibernateGenericDAO<Course> implements C
 
             query.select(courseRoot)
                     .where(criteriaBuilder.and(predicateForUserId, predicateForDate))
-                    .orderBy(criteriaBuilder.asc((courseRoot.get(Course_.courseInfo).get(CourseInfo_.startDate))));
+                    .orderBy(criteriaBuilder.asc(
+                            courseRoot.get(Course_.courseInfo).get(CourseInfo_.startDate)));
 
             // Executing query and saving result
             tr = session.beginTransaction();
@@ -231,7 +240,8 @@ public class HibernateCourseDAO extends HibernateGenericDAO<Course> implements C
             query.select(courseRoot)
                     .where(criteriaBuilder
                             .and(predicateForUserId, predicateForStartDate, predicateForEndDate))
-                    .orderBy(criteriaBuilder.asc((courseRoot.get(Course_.courseInfo).get(CourseInfo_.endDate))));
+                    .orderBy(criteriaBuilder.asc(
+                            courseRoot.get(Course_.courseInfo).get(CourseInfo_.endDate)));
 
             // Executing query and saving result
             tr = session.beginTransaction();
@@ -254,21 +264,19 @@ public class HibernateCourseDAO extends HibernateGenericDAO<Course> implements C
             CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
             CriteriaQuery<Course> rootQuery = criteriaBuilder.createQuery(Course.class);
             Root<Course> courseRoot = rootQuery.from(Course.class);
-            Join<Course, StudentCourseResult> scrJoin = courseRoot.join(Course_.studentResults);
 
-            // Predicates for WHERE clause of root query
-            Predicate predicateForUserId = criteriaBuilder
-                    .equal(courseRoot.get(Course_.teacher).get(User_.id), teacherId);
-            Predicate predicateForUserNotGradedCourses = criteriaBuilder
-                    .isNull(scrJoin.get(StudentCourseResult_.result));
+            // Join to get required teacher courses
+            Join<Course, StudentCourseResult> scrJoin = courseRoot.join(Course_.studentResults);
+            scrJoin.on(criteriaBuilder.equal(courseRoot.get(Course_.teacher).get(User_.id), teacherId))
+                    .on(criteriaBuilder.isNull(scrJoin.get(StudentCourseResult_.result)));
+
             Predicate predicateForDate = criteriaBuilder
                     .lessThan(courseRoot.get(Course_.courseInfo).get(CourseInfo_.endDate), date);
 
             rootQuery.select(courseRoot)
-                    .where(criteriaBuilder
-                            .and(predicateForUserId, predicateForUserNotGradedCourses, predicateForDate))
-                    .distinct(true)
-                    .orderBy(criteriaBuilder.asc((courseRoot.get(Course_.courseInfo).get(CourseInfo_.endDate))));
+                    .where(predicateForDate).distinct(true)
+                    .orderBy(criteriaBuilder.asc(
+                            courseRoot.get(Course_.courseInfo).get(CourseInfo_.endDate)));
 
             // Executing query and saving result
             tr = session.beginTransaction();
