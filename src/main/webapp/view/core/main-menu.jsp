@@ -55,7 +55,7 @@
                     <%-- Log out button --%>
                     <hr/>
                     <form action="${pageContext.request.requestURI}/log-out" method="get">
-                        <input class="btn btn-lg btn-success btn-block" type="submit" value="Log out">
+                        <input class="btn btn-lg btn-outline-success btn-block" type="submit" value="Log out">
                     </form>
 
                 </div>

@@ -15,11 +15,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import static com.company.manager.constans.ApplicationConstants.APP_DOMAIN_NAME;
+import static com.company.manager.constans.ApplicationConstants.FROM_URI;
 import static com.company.manager.constans.CourseAttrAndParamNames.COURSE_ID;
 
 @Slf4j
@@ -49,6 +48,6 @@ public class GradeStudentsServlet extends HttpServlet {
         StudentCourseResultServiceImpl.getService()
                 .updateStudentCourseResults(scrSet);
 
-        response.sendRedirect(String.format("/%s/main-menu/select-courses", APP_DOMAIN_NAME));
+        response.sendRedirect(request.getParameter(FROM_URI));
     }
 }

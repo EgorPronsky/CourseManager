@@ -3,6 +3,7 @@
 <%@ page import="static com.company.manager.servlet.core.course_actions.SaveOrUpdateCourseServlet.COURSE_DATE_PATTERN" %>
 <%@ page import="com.company.manager.domain.course.Course" %>
 <%@ page import="java.time.format.DateTimeFormatter" %>
+<%@ page import="static com.company.manager.constans.ApplicationConstants.FROM_URI" %>
 <html>
 
 <head>
@@ -323,6 +324,10 @@
                                 <input type="hidden" name="${course_id}" value="${course.id}"/>
                             </c:if>
 
+                            <%-- Hidden uri to redirect --%>
+                            <c:if test="${not empty course}">
+                                <input type="hidden" name="<%=FROM_URI%>" value="<%=request.getParameter(FROM_URI)%>"/>
+                            </c:if>
 
                             <%-- Submit button --%>
                             <hr/>

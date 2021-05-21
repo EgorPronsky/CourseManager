@@ -16,8 +16,6 @@
 <%-- Prepare variables --%>
 <c:set var="courses_results" value="<%=request.getAttribute(COURSES_RESULTS)%>" />
 
-
-
 <body>
 <div class="container">
     <div class="row justify-content-md-center">
@@ -107,6 +105,13 @@
                         </c:otherwise>
 
                     </c:choose>
+
+                    <%-- Back to "My courses" button --%>
+                    <hr/>
+                    <form action="${pageContext.request.contextPath}/main-menu/select-courses" method="get">
+                        <input class="btn btn-lg btn-outline-success btn-block" type="submit" value="Back to My courses">
+                    </form>
+
                 </div>
             </div>
         </div>

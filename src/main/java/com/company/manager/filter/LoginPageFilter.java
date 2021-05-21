@@ -1,7 +1,5 @@
 package com.company.manager.filter;
 
-import com.company.manager.domain.user.User;
-import com.company.manager.services.impl.UserServiceImpl;
 import com.company.manager.util.CookieUtil;
 import lombok.extern.slf4j.Slf4j;
 
@@ -12,7 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Optional;
 
-import static com.company.manager.constans.ApplicationConstants.APP_DOMAIN_NAME;
+import static com.company.manager.constans.ApplicationConstants.APP_NAME;
 import static com.company.manager.constans.UserAttrAndParamNames.USER_ID_COOKIE_NAME;
 
 @Slf4j
@@ -28,7 +26,7 @@ public class LoginPageFilter implements Filter {
 
         if (httpReq.getSession(false) != null) {
             log.debug("Session is active, access to login page denied");
-            httpResp.sendRedirect(String.format("/%s/main-menu", APP_DOMAIN_NAME));
+            httpResp.sendRedirect(String.format("/%s/main-menu", APP_NAME));
         } else {
             Optional<Cookie> userIdCookie = CookieUtil
                     .findCookie(USER_ID_COOKIE_NAME, httpReq);

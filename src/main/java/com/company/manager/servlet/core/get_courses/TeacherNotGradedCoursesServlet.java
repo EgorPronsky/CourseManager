@@ -15,6 +15,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.company.manager.constans.ApplicationConstants.APP_NAME;
+import static com.company.manager.constans.ApplicationConstants.FROM_URI;
 import static com.company.manager.constans.CourseAttrAndParamNames.*;
 import static com.company.manager.constans.UserAttrAndParamNames.CURRENT_USER_ID_SESSION;
 
@@ -36,6 +38,7 @@ public class TeacherNotGradedCoursesServlet extends HttpServlet {
         Map<String, Object> respAttrs = new HashMap<>();
         respAttrs.put(COURSES_STATE, NOT_GRADED_COURSES_STATE_ATTR_VALUE);
         respAttrs.put(COURSES, notGradedCourses);
+        respAttrs.put(FROM_URI, String.format("/%s/main-menu/select-courses/my-not-graded-courses", APP_NAME));
 
         log.debug("Invoking view handler");
         ViewHandler viewHandler = new JspViewHandler();

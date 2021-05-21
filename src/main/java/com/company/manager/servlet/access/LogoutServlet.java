@@ -12,7 +12,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-import static com.company.manager.constans.ApplicationConstants.APP_DOMAIN_NAME;
+import static com.company.manager.constans.ApplicationConstants.APP_NAME;
 import static com.company.manager.constans.UserAttrAndParamNames.*;
 
 @Slf4j
@@ -34,8 +34,9 @@ public class LogoutServlet extends HttpServlet {
         req.getSession().invalidate();
 
         // Deleting required cookies
-        CookieUtil.deleteCookies(cookieNamesToDeleteWhenLogout, req, resp);
+        CookieUtil.deleteCookies(cookieNamesToDeleteWhenLogout,
+                String.format("/%s", APP_NAME) ,req, resp);
 
-        resp.sendRedirect(String.format("/%s/login-page", APP_DOMAIN_NAME));
+        resp.sendRedirect(String.format("/%s/login-page", APP_NAME));
     }
 }

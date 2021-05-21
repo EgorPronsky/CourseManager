@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.company.manager.constans.ApplicationConstants.FROM_URI;
 import static com.company.manager.constans.CourseAttrAndParamNames.COURSE;
 import static com.company.manager.constans.CourseAttrAndParamNames.COURSE_ID;
 

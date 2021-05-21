@@ -1,5 +1,6 @@
 <%@ page import="com.company.manager.domain.user.UserRole" %>
 <%@ page import="static com.company.manager.constans.UserAttrAndParamNames.CURRENT_USER_INFO_SESSION" %>
+<%@ page import="static com.company.manager.constans.ApplicationConstants.FROM_URI" %>
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
@@ -54,10 +55,10 @@
                         </c:otherwise>
                     </c:choose>
 
-                    <%-- Go to main menu button --%>
+                    <%-- Back to main menu button --%>
                     <hr/>
                     <form action="${pageContext.request.contextPath}/main-menu" method="get">
-                        <input class="btn btn-lg btn-success btn-block" type="submit" value="Back to main menu">
+                        <input class="btn btn-lg btn-outline-success btn-block" type="submit" value="Back to main menu">
                     </form>
                 </div>
 

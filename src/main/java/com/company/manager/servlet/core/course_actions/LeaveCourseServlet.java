@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Optional;
 
-import static com.company.manager.constans.ApplicationConstants.APP_DOMAIN_NAME;
+import static com.company.manager.constans.ApplicationConstants.FROM_URI;
 import static com.company.manager.constans.CourseAttrAndParamNames.COURSE_ID;
 import static com.company.manager.constans.CourseAttrAndParamNames.COURSE_STUDENT_ID;
 import static com.company.manager.constans.UserAttrAndParamNames.CURRENT_USER_ID_SESSION;
@@ -42,7 +42,7 @@ public class LeaveCourseServlet extends HttpServlet {
             if (studentIdStr != null) {
                 studentId = Long.parseLong(studentIdStr);
             } else {
-                // Student leaving course on his own
+                // If student leaving course on his own -> getting his id from session
                 studentId = (Long)request.getSession(false)
                         .getAttribute(CURRENT_USER_ID_SESSION);
             }
@@ -60,6 +60,6 @@ public class LeaveCourseServlet extends HttpServlet {
                     .deleteStudentCourseResult(scrToLeave);
         }
 
-        response.sendRedirect(String.format("/%s/main-menu/select-courses", APP_DOMAIN_NAME));
+        response.sendRedirect(request.getParameter(FROM_URI));
     }
 }

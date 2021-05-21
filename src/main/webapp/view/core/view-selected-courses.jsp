@@ -4,15 +4,21 @@
 <%@ page import="com.company.manager.domain.user.UserRole" %>
 <%@ page import="static com.company.manager.constans.CourseAttrAndParamNames.*" %>
 <%@ page import="static com.company.manager.constans.UserAttrAndParamNames.CURRENT_USER_INFO_SESSION" %>
-<%@ page
-        import="static com.company.manager.servlet.core.students_actions.GetCourseStudentsServlet.GET_STUDENTS_TO_SEE" %>
-<%@ page
-        import="static com.company.manager.servlet.core.students_actions.GetCourseStudentsServlet.GET_STUDENTS_TO_GRADE" %>
+<%@ page import="static com.company.manager.servlet.core.students_actions.GetCourseStudentsServlet.GET_STUDENTS_TO_SEE" %>
+<%@ page import="static com.company.manager.servlet.core.students_actions.GetCourseStudentsServlet.GET_STUDENTS_TO_GRADE" %>
 <%@ page import="com.company.manager.domain.course.Course" %>
 <%@ page import="java.time.format.DateTimeFormatter" %>
-<%@ page
-        import="static com.company.manager.servlet.core.course_actions.SaveOrUpdateCourseServlet.COURSE_DATE_PATTERN" %>
+<%@ page import="static com.company.manager.servlet.core.course_actions.SaveOrUpdateCourseServlet.COURSE_DATE_PATTERN" %>
+<%@ page import="static com.company.manager.constans.ApplicationConstants.FROM_URI" %>
 <html>
+
+<%-- Prevent caching --%>
+<%
+    response.addHeader("Pragma", "no-cache");
+    response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+    response.addHeader("Cache-Control", "pre-check=0, post-check=0");
+    response.setDateHeader("Expires", 0);
+%>
 
 <head>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
@@ -126,6 +132,8 @@
                                             <td>${course.teacher.userInfo.firstName} ${course.teacher.userInfo.lastName}</td>
                                             <td>
                                                 <form action="${pageContext.request.contextPath}/main-menu/select-courses/leave-course" method="post">
+                                                    <%-- Hidden current URI --%>
+                                                    <input type="hidden" name="<%=FROM_URI%>" value="<%=(String)request.getAttribute(FROM_URI)%>"/>
                                                     <button class="btn btn-warning btn-block" type="submit" name="<%=COURSE_ID%>" value="${course.id}">Leave</button>
                                                 </form>
                                             </td>
@@ -135,10 +143,10 @@
                                         <c:if test="${courses_state == not_graded_course_state}">
                                             <td>
                                                 <form action="${pageContext.request.contextPath}/main-menu/select-courses/students" method="get">
+                                                    <%-- Hidden current URI --%>
+                                                    <input type="hidden" name="<%=FROM_URI%>" value="<%=(String)request.getAttribute(FROM_URI)%>"/>
                                                     <%-- Hidden course students view target --%>
-                                                    <c:if test="${not empty course}">
-                                                        <input type="hidden" name="<%=COURSE_STUDENTS_VIEW_TARGET%>" value="<%=GET_STUDENTS_TO_GRADE%>"/>
-                                                    </c:if>
+                                                    <input type="hidden" name="<%=COURSE_STUDENTS_VIEW_TARGET%>" value="<%=GET_STUDENTS_TO_GRADE%>"/>
                                                     <button class="btn btn-primary btn-block" type="submit" name="<%=COURSE_ID%>" value="${course.id}">Grade</button>
                                                 </form>
                                             </td>
@@ -146,20 +154,24 @@
                                         <c:if test="${current_user_info.userRole == UserRole.TEACHER && courses_state != not_graded_course_state}">
                                             <td>
                                                 <form action="${pageContext.request.contextPath}/main-menu/select-courses/students" method="get">
+                                                    <%-- Hidden current URI --%>
+                                                    <input type="hidden" name="<%=FROM_URI%>" value="<%=(String)request.getAttribute(FROM_URI)%>"/>
                                                     <%-- Hidden course students view target --%>
-                                                    <c:if test="${not empty course}">
-                                                        <input type="hidden" name="<%=COURSE_STUDENTS_VIEW_TARGET%>" value="<%=GET_STUDENTS_TO_SEE%>"/>
-                                                    </c:if>
+                                                    <input type="hidden" name="<%=COURSE_STUDENTS_VIEW_TARGET%>" value="<%=GET_STUDENTS_TO_SEE%>"/>
                                                     <button class="btn btn-primary btn-block" type="submit" name="<%=COURSE_ID%>" value="${course.id}">Students</button>
                                                 </form>
                                             </td>
                                             <td>
                                                 <form action="${pageContext.request.contextPath}/main-menu/select-courses/edit-course" method="get">
+                                                    <%-- Hidden current URI --%>
+                                                    <input type="hidden" name="<%=FROM_URI%>" value="<%=(String)request.getAttribute(FROM_URI)%>"/>
                                                     <button class="btn btn-success btn-block" type="submit" name="<%=COURSE_ID%>" value="${course.id}">Edit</button>
                                                 </form>
                                             </td>
                                             <td>
                                                 <form action="${pageContext.request.contextPath}/main-menu/select-courses/delete-course" method="post">
+                                                    <%-- Hidden current URI --%>
+                                                    <input type="hidden" name="<%=FROM_URI%>" value="<%=(String)request.getAttribute(FROM_URI)%>"/>
                                                     <button class="btn btn-danger btn-block" type="submit" name="<%=COURSE_ID%>" value="${course.id}">Delete</button>
                                                 </form>
                                             </td>
@@ -172,6 +184,13 @@
                         </table>
                     </c:otherwise>
                 </c:choose>
+
+                <%-- Back to "My courses" button --%>
+                <hr/>
+                <form action="${pageContext.request.contextPath}/main-menu/select-courses" method="get">
+                    <input class="btn btn-lg btn-outline-success btn-block" type="submit" value="Back to My courses">
+                </form>
+
                 </div>
             </div>
         </div>

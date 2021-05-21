@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import static com.company.manager.constans.ApplicationConstants.APP_DOMAIN_NAME;
+import static com.company.manager.constans.ApplicationConstants.APP_NAME;
 import static com.company.manager.constans.UserAttrAndParamNames.*;
 
 @Slf4j
@@ -48,7 +48,7 @@ public class SignUpServlet extends HttpServlet {
         log.debug("Saving new user in DB");
         UserServiceImpl.getService().saveUser(newUser);
 
-        response.sendRedirect(String.format("/%s/login-page", APP_DOMAIN_NAME));
+        response.sendRedirect(String.format("/%s/login-page", APP_NAME));
     }
 
 }

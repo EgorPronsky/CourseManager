@@ -28,6 +28,7 @@ public class RegistrationFilter implements Filter {
         boolean isInputValid = true;
         Map<String, Object> respAttrs = new HashMap<>();
 
+        // Validating
         if (!password.equals(passwordConfirm)) {
             isInputValid = false;
             respAttrs.put(PASSWORD_MISMATCH_MESSAGE, "Password mismatch");

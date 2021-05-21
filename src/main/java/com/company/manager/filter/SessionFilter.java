@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Optional;
 
-import static com.company.manager.constans.ApplicationConstants.APP_DOMAIN_NAME;
+import static com.company.manager.constans.ApplicationConstants.APP_NAME;
 
 @Slf4j
 public class SessionFilter implements Filter {
@@ -35,7 +35,7 @@ public class SessionFilter implements Filter {
                     .filter(uri::endsWith).findAny();
 
             if (!allowedPath.isPresent()) {
-                httpResp.sendRedirect(String.format("/%s/login-page", APP_DOMAIN_NAME));
+                httpResp.sendRedirect(String.format("/%s/login-page", APP_NAME));
             } else {
                 chain.doFilter(req, resp);
             }

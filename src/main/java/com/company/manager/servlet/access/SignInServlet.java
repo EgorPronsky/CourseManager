@@ -8,9 +8,8 @@ import com.company.manager.domain.user.User;
 import javax.servlet.ServletException;
 import javax.servlet.http.*;
 import java.io.IOException;
-import java.util.Optional;
 
-import static com.company.manager.constans.ApplicationConstants.APP_DOMAIN_NAME;
+import static com.company.manager.constans.ApplicationConstants.APP_NAME;
 import static com.company.manager.constans.UserAttrAndParamNames.*;
 
 @Slf4j
@@ -40,9 +39,9 @@ public class SignInServlet extends HttpServlet {
         if (req.getParameter(REMEMBER_USER) != null) {
             log.debug("Adding user id cookie");
             CookieUtil.addCookie(USER_ID_COOKIE_NAME, String.valueOf(user.getId()),
-                    Integer.MAX_VALUE, resp);
+                    String.format("/%s", APP_NAME), Integer.MAX_VALUE, true, resp);
         }
 
-        resp.sendRedirect(String.format("/%s/main-menu", APP_DOMAIN_NAME));
+        resp.sendRedirect(String.format("/%s/main-menu", APP_NAME));
     }
 }

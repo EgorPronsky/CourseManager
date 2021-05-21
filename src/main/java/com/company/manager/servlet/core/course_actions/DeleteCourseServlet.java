@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import static com.company.manager.constans.ApplicationConstants.APP_DOMAIN_NAME;
+import static com.company.manager.constans.ApplicationConstants.FROM_URI;
 import static com.company.manager.constans.CourseAttrAndParamNames.COURSE_ID;
 
 @Slf4j
@@ -26,8 +26,8 @@ public class DeleteCourseServlet extends HttpServlet {
 
         log.debug("Deleting course from DB");
         CourseServiceImpl.getService().deleteCourse(course);
-        
-        response.sendRedirect(String.format("/%s/main-menu/select-courses", APP_DOMAIN_NAME));
+
+        response.sendRedirect(request.getParameter(FROM_URI));
     }
 
 }

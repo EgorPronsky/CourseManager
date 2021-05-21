@@ -16,7 +16,8 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
-import static com.company.manager.constans.ApplicationConstants.APP_DOMAIN_NAME;
+import static com.company.manager.constans.ApplicationConstants.APP_NAME;
+import static com.company.manager.constans.ApplicationConstants.FROM_URI;
 import static com.company.manager.constans.CourseAttrAndParamNames.*;
 import static com.company.manager.constans.UserAttrAndParamNames.CURRENT_USER_ID_SESSION;
 
@@ -61,6 +62,9 @@ public class SaveOrUpdateCourseServlet extends HttpServlet {
         log.debug("Saving or updating course");
         CourseServiceImpl.getService().saveOrUpdateCourse(courseToSaveOrUpdate);
 
-        response.sendRedirect(String.format("/%s/main-menu/select-courses", APP_DOMAIN_NAME));
+        String fromURI = request.getParameter(FROM_URI);
+        String redirectURI = fromURI != null ? fromURI : String.format("/%s/main-menu", APP_NAME);
+
+        response.sendRedirect(redirectURI);
     }
 }

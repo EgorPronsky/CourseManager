@@ -16,7 +16,7 @@ import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static com.company.manager.constans.ApplicationConstants.APP_DOMAIN_NAME;
+import static com.company.manager.constans.ApplicationConstants.APP_NAME;
 import static com.company.manager.constans.CourseAttrAndParamNames.COURSES_ID;
 import static com.company.manager.constans.UserAttrAndParamNames.CURRENT_USER_ID_SESSION;
 
@@ -53,6 +53,6 @@ public class JoinNewCoursesServlet extends HttpServlet {
             UserServiceImpl.getService().updateUser(currentStudent);
         }
 
-        response.sendRedirect(String.format("/%s/main-menu/select-courses", APP_DOMAIN_NAME));
+        response.sendRedirect(String.format("/%s/main-menu/select-courses", APP_NAME));
     }
 }

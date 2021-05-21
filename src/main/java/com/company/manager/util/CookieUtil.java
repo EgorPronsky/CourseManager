@@ -7,14 +7,15 @@ import java.util.Arrays;
 import java.util.Optional;
 import java.util.Set;
 
-import static com.company.manager.constans.ApplicationConstants.APP_DOMAIN_NAME;
-
 
 public class CookieUtil {
 
-    public static void addCookie(String name, String value, int lifeTime, HttpServletResponse resp) {
+    public static void addCookie(String name, String value, String path,
+                                 int lifeTime, boolean httpOnly , HttpServletResponse resp) {
         Cookie cookie = new Cookie(name, value);
+        cookie.setPath(path);
         cookie.setMaxAge(lifeTime);
+        cookie.setHttpOnly(httpOnly);
         resp.addCookie(cookie);
     }
 
@@ -26,22 +27,20 @@ public class CookieUtil {
                 .findAny();
     }
 
-    public static void deleteCookies(Set<String> cookieNames, HttpServletRequest req, HttpServletResponse resp) {
+    public static void deleteCookies(Set<String> cookieNames, String path, HttpServletRequest req, HttpServletResponse resp) {
         Cookie[] cookies = req.getCookies();
-        if (cookies != null) {
-            Arrays.stream(cookies)
-                    .forEach(cookie -> {
+        if (cookies != null)
+            Arrays.stream(cookies).forEach(cookie -> {
                         if (cookieNames.contains(cookie.getName())) {
-                            removeCookie(cookie.getName(), resp);
+                            removeCookie(cookie.getName(), path, resp);
                         }
                     });
-        }
     }
 
-    public static void removeCookie(String cookieName, HttpServletResponse resp) {
+    public static void removeCookie(String cookieName, String path, HttpServletResponse resp) {
         Cookie cookie = new Cookie(cookieName, "");
         cookie.setMaxAge(0);
-        cookie.setPath(String.format("/%s", APP_DOMAIN_NAME));
+        cookie.setPath(path);
         resp.addCookie(cookie);
     }
 }
