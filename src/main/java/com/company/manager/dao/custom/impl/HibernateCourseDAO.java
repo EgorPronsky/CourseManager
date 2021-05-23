@@ -12,6 +12,7 @@ import com.company.manager.domain.user.User_;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import com.company.manager.util.HibernateUtil;
 
@@ -26,14 +27,14 @@ import java.util.List;
 @Slf4j
 public class HibernateCourseDAO extends HibernateGenericDAO<Course> implements CourseDAO {
 
-    public HibernateCourseDAO() {
-        super(Course.class);
+    public HibernateCourseDAO(SessionFactory sessionFactory) {
+        super(Course.class, sessionFactory);
     }
 
     @Override
     public void saveOrUpdate(Course course) {
         Transaction tr = null;
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+        try (Session session = super.sessionFactory.openSession()) {
             tr = session.beginTransaction();
             session.saveOrUpdate(course);
             tr.commit();
@@ -48,7 +49,7 @@ public class HibernateCourseDAO extends HibernateGenericDAO<Course> implements C
         List<Course> courses = null;
         Transaction tr = null;
 
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+        try (Session session = super.sessionFactory.openSession()) {
             // Prepare
             CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
             CriteriaQuery<Course> query = criteriaBuilder.createQuery(Course.class);
@@ -73,7 +74,7 @@ public class HibernateCourseDAO extends HibernateGenericDAO<Course> implements C
         List<Course> courses = null;
         Transaction tr = null;
 
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+        try (Session session = super.sessionFactory.openSession()) {
             // Prepare
             CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
             CriteriaQuery<Course> query = criteriaBuilder.createQuery(Course.class);
@@ -108,7 +109,7 @@ public class HibernateCourseDAO extends HibernateGenericDAO<Course> implements C
         List<Course> courses = null;
         Transaction tr = null;
 
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+        try (Session session = super.sessionFactory.openSession()) {
             // Prepare
             CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
             CriteriaQuery<Course> query = criteriaBuilder.createQuery(Course.class);
@@ -146,7 +147,7 @@ public class HibernateCourseDAO extends HibernateGenericDAO<Course> implements C
         List<Course> courses = null;
         Transaction tr = null;
 
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+        try (Session session = super.sessionFactory.openSession()) {
             // Prepare
             CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
             CriteriaQuery<Course> rootQuery = criteriaBuilder.createQuery(Course.class);
@@ -190,7 +191,7 @@ public class HibernateCourseDAO extends HibernateGenericDAO<Course> implements C
         List<Course> courses = null;
         Transaction tr = null;
 
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+        try (Session session = super.sessionFactory.openSession()) {
             // Prepare
             CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
             CriteriaQuery<Course> query = criteriaBuilder.createQuery(Course.class);
@@ -223,7 +224,7 @@ public class HibernateCourseDAO extends HibernateGenericDAO<Course> implements C
         List<Course> courses = null;
         Transaction tr = null;
 
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+        try (Session session = super.sessionFactory.openSession()) {
             // Prepare
             CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
             CriteriaQuery<Course> query = criteriaBuilder.createQuery(Course.class);
@@ -259,7 +260,7 @@ public class HibernateCourseDAO extends HibernateGenericDAO<Course> implements C
         List<Course> courses = null;
         Transaction tr = null;
 
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+        try (Session session = super.sessionFactory.openSession()) {
             // Prepare
             CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
             CriteriaQuery<Course> rootQuery = criteriaBuilder.createQuery(Course.class);

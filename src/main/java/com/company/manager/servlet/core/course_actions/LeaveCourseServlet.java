@@ -3,6 +3,8 @@ package com.company.manager.servlet.core.course_actions;
 import com.company.manager.domain.archive.StudentCourseResult;
 import com.company.manager.domain.course.Course;
 import com.company.manager.domain.user.User;
+import com.company.manager.handlers.view_handlers.ViewHandler;
+import com.company.manager.handlers.view_handlers.impl.JspViewHandler;
 import com.company.manager.services.impl.StudentCourseResultServiceImpl;
 import com.company.manager.services.impl.UserServiceImpl;
 import com.company.manager.util.StudentCourseResultConverter;
@@ -14,12 +16,14 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 import static com.company.manager.constans.ApplicationConstants.FROM_URI;
-import static com.company.manager.constans.CourseAttrAndParamNames.COURSE_ID;
-import static com.company.manager.constans.CourseAttrAndParamNames.COURSE_STUDENT_ID;
+import static com.company.manager.constans.CourseAttrAndParamNames.*;
 import static com.company.manager.constans.UserAttrAndParamNames.CURRENT_USER_ID_SESSION;
+import static com.company.manager.servlet.core.students_actions.GetCourseStudentsServlet.GET_STUDENTS_TO_KICK;
 
 @Slf4j
 public class LeaveCourseServlet extends HttpServlet {
@@ -32,15 +36,20 @@ public class LeaveCourseServlet extends HttpServlet {
         Optional<Course> courseToLeaveOpt = CourseServiceImpl.getService()
                 .findCourseById(courseIdToLeave);
 
+        Map<String, Object> respAttrs = null;
+
         // Course could be already deleted
         if (courseToLeaveOpt.isPresent()) {
+            long studentId;
 
             // If teacher kicking student -> will receive student id
             String studentIdStr = request.getParameter(COURSE_STUDENT_ID);
-
-            long studentId;
             if (studentIdStr != null) {
                 studentId = Long.parseLong(studentIdStr);
+
+                // Attr to stay on the same page (if teacher kicking students)
+                respAttrs = new HashMap<>();
+                respAttrs.put(COURSE_STUDENTS_VIEW_TARGET, GET_STUDENTS_TO_KICK);
             } else {
                 // If student leaving course on his own -> getting his id from session
                 studentId = (Long)request.getSession(false)
@@ -60,6 +69,13 @@ public class LeaveCourseServlet extends HttpServlet {
                     .deleteStudentCourseResult(scrToLeave);
         }
 
-        response.sendRedirect(request.getParameter(FROM_URI));
+        if (respAttrs != null) {
+            ViewHandler viewHandler = new JspViewHandler();
+            viewHandler.renderView("/main-menu/select-courses/students",
+                    respAttrs, request, response);
+        } else {
+            response.sendRedirect(request.getParameter(FROM_URI));
+        }
+
     }
 }

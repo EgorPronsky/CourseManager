@@ -4,6 +4,7 @@ import com.company.manager.dao.generic.GenericDAO;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import com.company.manager.util.HibernateUtil;
 
@@ -12,16 +13,18 @@ import java.util.Optional;
 @Slf4j
 public class HibernateGenericDAO<T> implements GenericDAO<T> {
 
+    protected final SessionFactory sessionFactory;
     private final Class<T> type;
 
-    public HibernateGenericDAO(Class<T> type) {
+    public HibernateGenericDAO(Class<T> type, SessionFactory sessionFactory) {
         this.type = type;
+        this.sessionFactory = sessionFactory;
     }
 
     @Override
     public void save(T entity) {
         Transaction tr = null;
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+        try (Session session = sessionFactory.openSession()) {
             tr = session.beginTransaction();
             session.save(entity);
             tr.commit();
@@ -36,7 +39,7 @@ public class HibernateGenericDAO<T> implements GenericDAO<T> {
         T entity = null;
         Transaction tr = null;
 
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+        try (Session session = sessionFactory.openSession()) {
             tr = session.beginTransaction();
             entity = session.get(type, id);
             tr.commit();
@@ -50,7 +53,7 @@ public class HibernateGenericDAO<T> implements GenericDAO<T> {
     @Override
     public void update(T entity) {
         Transaction tr = null;
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+        try (Session session = sessionFactory.openSession()) {
             tr = session.beginTransaction();
             session.update(entity);
             tr.commit();
@@ -63,7 +66,7 @@ public class HibernateGenericDAO<T> implements GenericDAO<T> {
     @Override
     public void delete(T entity) {
         Transaction tr = null;
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+        try (Session session = sessionFactory.openSession()) {
             tr = session.beginTransaction();
             session.delete(entity);
             tr.commit();

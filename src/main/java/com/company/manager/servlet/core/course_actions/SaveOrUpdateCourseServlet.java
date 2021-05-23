@@ -4,6 +4,7 @@ import com.company.manager.domain.course.Course;
 import com.company.manager.domain.course.CourseInfo;
 import com.company.manager.domain.user.User;
 import com.company.manager.services.impl.UserServiceImpl;
+import com.company.manager.util.builders.CourseBuilder;
 import lombok.extern.slf4j.Slf4j;
 import com.company.manager.services.impl.CourseServiceImpl;
 import com.company.manager.handlers.input_handlers.CourseInputHandler;
@@ -35,23 +36,18 @@ public class SaveOrUpdateCourseServlet extends HttpServlet {
         String description  = request.getParameter(COURSE_DESCRIPTION);
         String timeTable    = CourseInputHandler.getTimeTableFromRequest(request);
 
-        // Converting string date values to local date
-        LocalDate startDate = LocalDate.parse(startDateStr, DateTimeFormatter.ofPattern(COURSE_DATE_PATTERN));
-        LocalDate endDate = LocalDate.parse(endDateStr, DateTimeFormatter.ofPattern(COURSE_DATE_PATTERN));
-
         log.debug("Getting current teacher from DB");
         Long teacherId = (Long)request.getSession(false)
                 .getAttribute(CURRENT_USER_ID_SESSION);
         User currentTeacher = UserServiceImpl.getService()
                 .getUserById(teacherId);
 
-        log.debug("Creating new course from received params");
-        Course courseToSaveOrUpdate = Course.builder()
-                .courseInfo(CourseInfo.builder()
-                        .name(name).description(description)
-                        .startDate(startDate).endDate(endDate)
-                        .timeTable(timeTable).uri(uri)
-                        .build()).teacher(currentTeacher).build();
+        log.debug("Building course");
+        Course courseToSaveOrUpdate = CourseBuilder.buildCourseFromStringValues(
+                name, description, uri, timeTable,
+                startDateStr, endDateStr, COURSE_DATE_PATTERN);
+
+        courseToSaveOrUpdate.setTeacher(currentTeacher);
 
         // Course id was received == course to update
         String courseIdStr = request.getParameter(COURSE_ID);

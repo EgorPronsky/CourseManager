@@ -6,6 +6,7 @@ import com.company.manager.domain.user.AccessInfo;
 import com.company.manager.domain.user.AccessInfo_;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import com.company.manager.util.HibernateUtil;
 
@@ -20,8 +21,9 @@ import java.util.Optional;
 @Slf4j
 public class HibernateAccessInfoDAO extends HibernateGenericDAO<AccessInfo> implements AccessInfoDAO {
 
-    public HibernateAccessInfoDAO() {
-        super(AccessInfo.class);
+
+    public HibernateAccessInfoDAO(SessionFactory sessionFactory) {
+        super(AccessInfo.class, sessionFactory);
     }
 
     @Override
@@ -29,7 +31,7 @@ public class HibernateAccessInfoDAO extends HibernateGenericDAO<AccessInfo> impl
         AccessInfo accessInfo = null;
         Transaction tr = null;
 
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+        try (Session session =  super.sessionFactory.openSession()) {
             // Prepare
             CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
             CriteriaQuery<AccessInfo> query = criteriaBuilder.createQuery(AccessInfo.class);

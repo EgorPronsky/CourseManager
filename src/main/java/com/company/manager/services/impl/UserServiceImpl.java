@@ -3,6 +3,7 @@ package com.company.manager.services.impl;
 import com.company.manager.dao.custom.UserDAO;
 import com.company.manager.dao.custom.impl.HibernateUserDAO;
 import com.company.manager.domain.user.User;
+import com.company.manager.util.HibernateUtil;
 import lombok.extern.slf4j.Slf4j;
 import com.company.manager.services.UserService;
 
@@ -18,7 +19,7 @@ public class UserServiceImpl implements UserService {
 
     private UserServiceImpl(){
         log.info("Initializing {}", UserServiceImpl.class.getName());
-        dao = new HibernateUserDAO();
+        dao = new HibernateUserDAO(HibernateUtil.getSessionFactory());
         log.info("{} was initialized", UserServiceImpl.class.getName());
     }
 

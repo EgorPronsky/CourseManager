@@ -4,12 +4,14 @@
 <%@ page import="com.company.manager.domain.user.UserRole" %>
 <%@ page import="static com.company.manager.constans.CourseAttrAndParamNames.*" %>
 <%@ page import="static com.company.manager.constans.UserAttrAndParamNames.CURRENT_USER_INFO_SESSION" %>
-<%@ page import="static com.company.manager.servlet.core.students_actions.GetCourseStudentsServlet.GET_STUDENTS_TO_SEE" %>
-<%@ page import="static com.company.manager.servlet.core.students_actions.GetCourseStudentsServlet.GET_STUDENTS_TO_GRADE" %>
 <%@ page import="com.company.manager.domain.course.Course" %>
 <%@ page import="java.time.format.DateTimeFormatter" %>
 <%@ page import="static com.company.manager.servlet.core.course_actions.SaveOrUpdateCourseServlet.COURSE_DATE_PATTERN" %>
 <%@ page import="static com.company.manager.constans.ApplicationConstants.FROM_URI" %>
+<%@ page
+        import="static com.company.manager.servlet.core.students_actions.GetCourseStudentsServlet.GET_STUDENTS_TO_GRADE" %>
+<%@ page
+        import="static com.company.manager.servlet.core.students_actions.GetCourseStudentsServlet.GET_STUDENTS_TO_KICK" %>
 <html>
 
 <%-- Prevent caching --%>
@@ -117,7 +119,9 @@
                                                     URI
                                                 </button>
                                                 <div class="dropdown-menu">
-                                                    <span class="dropdown-item-text">${course.courseInfo.uri}</span>
+                                                    <span class="dropdown-item-text">
+                                                        <a href="${course.courseInfo.uri}" target="_blank">${course.courseInfo.uri}</a>
+                                                    </span>
                                                 </div>
                                             </div>
                                         </td>
@@ -163,7 +167,7 @@
                                                     <%-- Hidden current URI --%>
                                                     <input type="hidden" name="<%=FROM_URI%>" value="<%=(String)request.getAttribute(FROM_URI)%>"/>
                                                     <%-- Hidden course students view target --%>
-                                                    <input type="hidden" name="<%=COURSE_STUDENTS_VIEW_TARGET%>" value="<%=GET_STUDENTS_TO_SEE%>"/>
+                                                    <input type="hidden" name="<%=COURSE_STUDENTS_VIEW_TARGET%>" value="<%=GET_STUDENTS_TO_KICK%>"/>
                                                     <button class="btn btn-primary btn-block" type="submit" name="<%=COURSE_ID%>" value="${course.id}">Students</button>
                                                 </form>
                                             </td>

@@ -4,6 +4,7 @@ import com.company.manager.dao.custom.AccessInfoDAO;
 import com.company.manager.dao.custom.impl.HibernateAccessInfoDAO;
 import com.company.manager.domain.user.AccessInfo;
 import com.company.manager.services.AccessInfoService;
+import com.company.manager.util.HibernateUtil;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Optional;
@@ -16,7 +17,7 @@ public class AccessInfoServiceImpl implements AccessInfoService {
 
     private AccessInfoServiceImpl(){
         log.info("Initializing {}", AccessInfoServiceImpl.class.getName());
-        dao = new HibernateAccessInfoDAO();
+        dao = new HibernateAccessInfoDAO(HibernateUtil.getSessionFactory());
         log.info("{} was initialized", AccessInfoServiceImpl.class.getName());
     }
 

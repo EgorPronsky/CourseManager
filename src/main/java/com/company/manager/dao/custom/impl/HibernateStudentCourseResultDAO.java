@@ -11,6 +11,7 @@ import com.company.manager.domain.user.User_;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import com.company.manager.util.HibernateUtil;
 
@@ -26,14 +27,15 @@ import java.util.List;
 @Slf4j
 public class HibernateStudentCourseResultDAO extends HibernateGenericDAO<StudentCourseResult> implements StudentCourseResultDAO {
 
-    public HibernateStudentCourseResultDAO() {
-        super(StudentCourseResult.class);
+
+    public HibernateStudentCourseResultDAO(SessionFactory sessionFactory) {
+        super(StudentCourseResult.class, sessionFactory);
     }
 
     @Override
     public void updateAll(Collection<StudentCourseResult> scrCollection) {
         Transaction tr = null;
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+        try (Session session = super.sessionFactory.openSession()) {
             tr = session.beginTransaction();
             scrCollection.forEach(session::update);
             tr.commit();
@@ -48,7 +50,7 @@ public class HibernateStudentCourseResultDAO extends HibernateGenericDAO<Student
         List<StudentCourseResult> scrList = null;
         Transaction tr = null;
 
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+        try (Session session = super.sessionFactory.openSession()) {
             // Prepare
             CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
             CriteriaQuery<StudentCourseResult> query = criteriaBuilder.createQuery(StudentCourseResult.class);
@@ -76,7 +78,7 @@ public class HibernateStudentCourseResultDAO extends HibernateGenericDAO<Student
         List<StudentCourseResult> scrList = null;
         Transaction tr = null;
 
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+        try (Session session = super.sessionFactory.openSession()) {
             // Prepare
             CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
             CriteriaQuery<StudentCourseResult> query = criteriaBuilder.createQuery(StudentCourseResult.class);

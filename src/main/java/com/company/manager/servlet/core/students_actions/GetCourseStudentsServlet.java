@@ -14,14 +14,18 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.company.manager.constans.ApplicationConstants.FROM_URI;
 import static com.company.manager.constans.CourseAttrAndParamNames.*;
 
 @Slf4j
 public class GetCourseStudentsServlet extends HttpServlet {
 
-    // Course students view targets
-    public static final String GET_STUDENTS_TO_SEE = "get_students_to_see";
+    public static final String GET_STUDENTS_TO_KICK = "get_students_to_kick";
     public static final String GET_STUDENTS_TO_GRADE = "get_students_to_grade";
+
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        doGet(req, resp);
+    }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         log.debug("Receiving course id and scope from request");

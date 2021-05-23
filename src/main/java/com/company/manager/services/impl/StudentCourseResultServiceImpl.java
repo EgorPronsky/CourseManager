@@ -6,6 +6,7 @@ import com.company.manager.domain.archive.CourseResult;
 import com.company.manager.domain.archive.StudentCourseResult;
 import com.company.manager.domain.course.Course;
 import com.company.manager.domain.user.User;
+import com.company.manager.util.HibernateUtil;
 import lombok.extern.slf4j.Slf4j;
 import com.company.manager.services.StudentCourseResultService;
 
@@ -21,7 +22,7 @@ public class StudentCourseResultServiceImpl implements StudentCourseResultServic
 
     private StudentCourseResultServiceImpl() {
         log.info("Initializing {}", StudentCourseResultService.class.getName());
-        dao = new HibernateStudentCourseResultDAO();
+        dao = new HibernateStudentCourseResultDAO(HibernateUtil.getSessionFactory());
         log.info("{} was initialized", StudentCourseResultService.class.getName());
     }
 

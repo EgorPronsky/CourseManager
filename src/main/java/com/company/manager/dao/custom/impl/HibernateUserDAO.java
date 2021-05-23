@@ -8,6 +8,7 @@ import com.company.manager.domain.user.User_;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import com.company.manager.util.HibernateUtil;
 
@@ -25,8 +26,8 @@ import java.util.Optional;
 @Slf4j
 public class HibernateUserDAO extends HibernateGenericDAO<User> implements UserDAO {
 
-    public HibernateUserDAO() {
-        super(User.class);
+    public HibernateUserDAO(SessionFactory sessionFactory) {
+        super(User.class, sessionFactory);
     }
 
     @Override
@@ -34,7 +35,7 @@ public class HibernateUserDAO extends HibernateGenericDAO<User> implements UserD
         User requiredUser = null;
         Transaction tr = null;
 
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+        try (Session session = super.sessionFactory.openSession()) {
             // Prepare
             CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
             CriteriaQuery<User> query = criteriaBuilder.createQuery(User.class);

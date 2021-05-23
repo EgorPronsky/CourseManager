@@ -1,9 +1,8 @@
 package com.company.manager.servlet.access;
 
-import com.company.manager.domain.user.AccessInfo;
-import com.company.manager.domain.user.UserInfo;
 import com.company.manager.domain.user.UserRole;
 import com.company.manager.services.impl.UserServiceImpl;
+import com.company.manager.util.builders.UserBuilder;
 import lombok.extern.slf4j.Slf4j;
 import com.company.manager.domain.user.User;
 
@@ -19,8 +18,6 @@ import static com.company.manager.constans.UserAttrAndParamNames.*;
 @Slf4j
 public class SignUpServlet extends HttpServlet {
 
-
-
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         log.debug("Receiving parameters from request");
         String firstName = request.getParameter(FIRST_NAME);
@@ -33,17 +30,8 @@ public class SignUpServlet extends HttpServlet {
         UserRole userRole = isTeacher == null ? UserRole.STUDENT : UserRole.TEACHER;
 
         log.debug("Creating new user from received params");
-        User newUser = User.builder()
-                .accessInfo(AccessInfo.builder()
-                        .email(email)
-                        .passwordHash(password.hashCode())
-                        .build())
-                .userInfo(UserInfo.builder()
-                        .firstName(firstName)
-                        .lastName(lastName)
-                        .userRole(userRole)
-                        .build())
-                .build();
+        User newUser = UserBuilder.buildUser(firstName, lastName, userRole,
+                email, password.hashCode());
 
         log.debug("Saving new user in DB");
         UserServiceImpl.getService().saveUser(newUser);

@@ -2,18 +2,18 @@
 <%@ page import="com.company.manager.domain.archive.CourseResult" %>
 <%@ page import="static com.company.manager.constans.CourseAttrAndParamNames.COURSE_ID" %>
 <%@ page import="static com.company.manager.constans.CourseAttrAndParamNames.COURSE" %>
-<%@ page import="static com.company.manager.servlet.core.students_actions.GetCourseStudentsServlet.GET_STUDENTS_TO_SEE" %>
-<%@ page import="static com.company.manager.servlet.core.students_actions.GetCourseStudentsServlet.GET_STUDENTS_TO_GRADE" %>
 <%@ page import="static com.company.manager.constans.CourseAttrAndParamNames.*" %>
 <%@ page import="com.company.manager.domain.course.Course" %>
 <%@ page import="com.company.manager.domain.archive.StudentCourseResult" %>
 <%@ page import="java.util.Comparator" %>
-<%@ page import="java.util.stream.Collectors" %>
-<%@ page import="com.company.manager.domain.user.User" %>
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="java.util.Collections" %>
 <%@ page import="static com.company.manager.constans.ApplicationConstants.FROM_URI" %>
+<%@ page
+        import="static com.company.manager.servlet.core.students_actions.GetCourseStudentsServlet.GET_STUDENTS_TO_KICK" %>
+<%@ page
+        import="static com.company.manager.servlet.core.students_actions.GetCourseStudentsServlet.GET_STUDENTS_TO_GRADE" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 
@@ -32,10 +32,14 @@
 
 <%-- Prepare variables --%>
 <c:set var="course" value="<%=request.getAttribute(COURSE)%>" />
-<c:set var="course_students_view_target" value="<%=request.getParameter(COURSE_STUDENTS_VIEW_TARGET)%>" />
+<%
+String target = request.getParameter(COURSE_STUDENTS_VIEW_TARGET);
+if (target == null) target = (String)request.getAttribute(COURSE_STUDENTS_VIEW_TARGET);
+%>
+<c:set var="course_students_view_target" value="<%=target%>" />
 
 <c:set var="course_id" value="<%=COURSE_ID%>" />
-<c:set var="target_get_students_to_see" value="<%=GET_STUDENTS_TO_SEE%>" />
+<c:set var="target_get_students_to_see" value="<%=GET_STUDENTS_TO_KICK%>" />
 <c:set var="target_get_students_to_grade" value="<%=GET_STUDENTS_TO_GRADE%>" />
 
 <%-- Sorting students --%>
@@ -111,7 +115,6 @@
                                                 <td>${scr.student.userInfo.lastName}</td>
 
                                                 <c:if test="${course_students_view_target == target_get_students_to_see}">
-
                                                     <td>
                                                         <button class="btn btn-primary btn-danger" type="submit"  name="<%=COURSE_STUDENT_ID%>" value="${scr.student.id}">Kick out</button>
                                                     </td>

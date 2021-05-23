@@ -18,9 +18,6 @@ import static com.company.manager.constans.UserAttrAndParamNames.*;
 @Slf4j
 public class LogoutServlet extends HttpServlet {
 
-    @Override
-    public void init() throws ServletException { }
-
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         log.debug("Logout...");
 

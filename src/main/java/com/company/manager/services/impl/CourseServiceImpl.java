@@ -4,6 +4,7 @@ import com.company.manager.dao.custom.CourseDAO;
 import com.company.manager.dao.custom.impl.HibernateCourseDAO;
 import com.company.manager.domain.course.Course;
 import com.company.manager.services.CourseService;
+import com.company.manager.util.HibernateUtil;
 import lombok.extern.slf4j.Slf4j;
 
 import java.security.InvalidParameterException;
@@ -18,7 +19,7 @@ public class CourseServiceImpl implements CourseService {
 
     private CourseServiceImpl() {
         log.info("Initializing {}", CourseServiceImpl.class.getName());
-        dao = new HibernateCourseDAO();
+        dao = new HibernateCourseDAO(HibernateUtil.getSessionFactory());
         log.info("{} was initialized", CourseServiceImpl.class.getName());
     }
 

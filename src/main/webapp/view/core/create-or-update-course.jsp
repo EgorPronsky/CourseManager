@@ -134,7 +134,7 @@
                                                     value="${course.courseInfo.uri}"
                                                 </c:if>
                                                 <c:if test="${empty course}">
-                                                    value="http://www.random.com/random-uri/abc"
+                                                    value="https://zoom.us/meetings"
                                                 </c:if>
                                                 required>
                                     </div>
