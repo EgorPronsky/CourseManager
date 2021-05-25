@@ -2,17 +2,13 @@ package com.company.manager.services.impl;
 
 import com.company.manager.dao.custom.StudentCourseResultDAO;
 import com.company.manager.dao.custom.impl.HibernateStudentCourseResultDAO;
-import com.company.manager.domain.archive.CourseResult;
 import com.company.manager.domain.archive.StudentCourseResult;
-import com.company.manager.domain.course.Course;
-import com.company.manager.domain.user.User;
 import com.company.manager.util.HibernateUtil;
 import lombok.extern.slf4j.Slf4j;
 import com.company.manager.services.StudentCourseResultService;
 
 import java.time.LocalDate;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Slf4j
 public class StudentCourseResultServiceImpl implements StudentCourseResultService {

@@ -1,4 +1,4 @@
-package com.company.manager.constans;
+package com.company.manager.string_constans;
 
 public class ApplicationConstants {
 

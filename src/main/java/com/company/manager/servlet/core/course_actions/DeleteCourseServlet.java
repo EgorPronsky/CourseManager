@@ -10,8 +10,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import static com.company.manager.constans.ApplicationConstants.FROM_URI;
-import static com.company.manager.constans.CourseAttrAndParamNames.COURSE_ID;
+import static com.company.manager.string_constans.ApplicationConstants.FROM_URI;
+import static com.company.manager.string_constans.CourseAttrAndParamNames.COURSE_ID;
 
 @Slf4j
 public class DeleteCourseServlet extends HttpServlet {

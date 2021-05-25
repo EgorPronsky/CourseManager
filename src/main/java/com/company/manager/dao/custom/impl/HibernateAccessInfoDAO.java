@@ -8,7 +8,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import com.company.manager.util.HibernateUtil;
 
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceException;
@@ -20,7 +19,6 @@ import java.util.Optional;
 
 @Slf4j
 public class HibernateAccessInfoDAO extends HibernateGenericDAO<AccessInfo> implements AccessInfoDAO {
-
 
     public HibernateAccessInfoDAO(SessionFactory sessionFactory) {
         super(AccessInfo.class, sessionFactory);

@@ -1,9 +1,9 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ page import="static com.company.manager.constans.CourseAttrAndParamNames.*" %>
+<%@ page import="static com.company.manager.string_constans.CourseAttrAndParamNames.*" %>
 <%@ page import="static com.company.manager.servlet.core.course_actions.SaveOrUpdateCourseServlet.COURSE_DATE_PATTERN" %>
 <%@ page import="com.company.manager.domain.course.Course" %>
 <%@ page import="java.time.format.DateTimeFormatter" %>
-<%@ page import="static com.company.manager.constans.ApplicationConstants.FROM_URI" %>
+<%@ page import="static com.company.manager.string_constans.ApplicationConstants.FROM_URI" %>
 <html>
 
 <head>
@@ -100,6 +100,7 @@
                                                     <c:if test="${empty course}">
                                                         value="01-01-2022"
                                                     </c:if>
+                                                    pattern="[0-9]{2}-[0-9]{2}-[0-9]{4}$"
                                                     required>
                                         </div>
 
@@ -118,6 +119,7 @@
                                                     <c:if test="${empty course}">
                                                             value="31-12-2023"
                                                     </c:if>
+                                                    pattern="[0-9]{2}-[0-9]{2}-[0-9]{4}$"
                                                     required>
                                         </div>
                                     </div>
@@ -136,7 +138,7 @@
                                                 <c:if test="${empty course}">
                                                     value="https://zoom.us/meetings"
                                                 </c:if>
-                                                required>
+                                                >
                                     </div>
 
                                     <!--Description-->

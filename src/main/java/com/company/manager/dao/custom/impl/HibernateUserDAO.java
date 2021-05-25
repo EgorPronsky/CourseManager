@@ -6,11 +6,9 @@ import com.company.manager.domain.user.AccessInfo_;
 import com.company.manager.domain.user.User;
 import com.company.manager.domain.user.User_;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import com.company.manager.util.HibernateUtil;
 
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceException;
@@ -18,9 +16,6 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 import java.util.Optional;
 
 @Slf4j

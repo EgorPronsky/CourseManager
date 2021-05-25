@@ -7,8 +7,6 @@ import com.company.manager.util.HibernateUtil;
 import lombok.extern.slf4j.Slf4j;
 import com.company.manager.services.UserService;
 
-import java.util.Collection;
-import java.util.List;
 import java.util.Optional;
 
 @Slf4j

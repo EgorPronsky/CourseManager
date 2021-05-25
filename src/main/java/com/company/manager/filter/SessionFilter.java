@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Optional;
 
-import static com.company.manager.constans.ApplicationConstants.APP_NAME;
+import static com.company.manager.string_constans.ApplicationConstants.APP_NAME;
 
 @Slf4j
 public class SessionFilter implements Filter {

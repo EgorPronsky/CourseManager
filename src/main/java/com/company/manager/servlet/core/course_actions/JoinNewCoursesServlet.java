@@ -16,9 +16,9 @@ import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static com.company.manager.constans.ApplicationConstants.APP_NAME;
-import static com.company.manager.constans.CourseAttrAndParamNames.COURSES_ID;
-import static com.company.manager.constans.UserAttrAndParamNames.CURRENT_USER_ID_SESSION;
+import static com.company.manager.string_constans.ApplicationConstants.APP_NAME;
+import static com.company.manager.string_constans.CourseAttrAndParamNames.COURSES_ID;
+import static com.company.manager.string_constans.UserAttrAndParamNames.CURRENT_USER_ID_SESSION;
 
 @Slf4j
 public class JoinNewCoursesServlet extends HttpServlet {

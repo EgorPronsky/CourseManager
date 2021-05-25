@@ -15,8 +15,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.company.manager.constans.CourseAttrAndParamNames.COURSES;
-import static com.company.manager.constans.UserAttrAndParamNames.CURRENT_USER_ID_SESSION;
+import static com.company.manager.string_constans.CourseAttrAndParamNames.COURSES;
+import static com.company.manager.string_constans.UserAttrAndParamNames.CURRENT_USER_ID_SESSION;
 
 @Slf4j
 public class GetAvailableCoursesServlet extends HttpServlet {

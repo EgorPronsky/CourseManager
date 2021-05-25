@@ -1,6 +1,6 @@
 <%@ page import="com.company.manager.domain.user.UserRole" %>
-<%@ page import="static com.company.manager.constans.UserAttrAndParamNames.CURRENT_USER_INFO_SESSION" %>
-<%@ page import="static com.company.manager.constans.ApplicationConstants.FROM_URI" %>
+<%@ page import="static com.company.manager.string_constans.UserAttrAndParamNames.CURRENT_USER_INFO_SESSION" %>
+<%@ page import="static com.company.manager.string_constans.ApplicationConstants.FROM_URI" %>
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 

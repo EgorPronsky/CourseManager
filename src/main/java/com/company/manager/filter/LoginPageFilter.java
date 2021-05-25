@@ -10,8 +10,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Optional;
 
-import static com.company.manager.constans.ApplicationConstants.APP_NAME;
-import static com.company.manager.constans.UserAttrAndParamNames.USER_ID_COOKIE_NAME;
+import static com.company.manager.string_constans.ApplicationConstants.APP_NAME;
+import static com.company.manager.string_constans.UserAttrAndParamNames.USER_ID_COOKIE_NAME;
 
 @Slf4j
 public class LoginPageFilter implements Filter {

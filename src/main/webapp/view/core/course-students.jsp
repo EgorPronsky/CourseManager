@@ -1,15 +1,15 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page import="com.company.manager.domain.archive.CourseResult" %>
-<%@ page import="static com.company.manager.constans.CourseAttrAndParamNames.COURSE_ID" %>
-<%@ page import="static com.company.manager.constans.CourseAttrAndParamNames.COURSE" %>
-<%@ page import="static com.company.manager.constans.CourseAttrAndParamNames.*" %>
+<%@ page import="static com.company.manager.string_constans.CourseAttrAndParamNames.COURSE_ID" %>
+<%@ page import="static com.company.manager.string_constans.CourseAttrAndParamNames.COURSE" %>
+<%@ page import="static com.company.manager.string_constans.CourseAttrAndParamNames.*" %>
 <%@ page import="com.company.manager.domain.course.Course" %>
 <%@ page import="com.company.manager.domain.archive.StudentCourseResult" %>
 <%@ page import="java.util.Comparator" %>
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="java.util.Collections" %>
-<%@ page import="static com.company.manager.constans.ApplicationConstants.FROM_URI" %>
+<%@ page import="static com.company.manager.string_constans.ApplicationConstants.FROM_URI" %>
 <%@ page
         import="static com.company.manager.servlet.core.students_actions.GetCourseStudentsServlet.GET_STUDENTS_TO_KICK" %>
 <%@ page
@@ -94,7 +94,7 @@ if (target == null) target = (String)request.getAttribute(COURSE_STUDENTS_VIEW_T
                                 <%-- Hidden URI to redirect --%>
                                 <input type="hidden" name="<%=FROM_URI%>" value="<%=request.getParameter(FROM_URI)%>"/>
 
-                                <table class="table">
+                                <table class="table table-striped">
                                     <thead class="thead-dark">
                                     <tr>
                                         <th scope="col">First name</th>

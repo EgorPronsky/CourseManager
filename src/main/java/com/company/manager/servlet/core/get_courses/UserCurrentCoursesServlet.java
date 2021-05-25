@@ -16,12 +16,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.company.manager.constans.ApplicationConstants.APP_NAME;
-import static com.company.manager.constans.ApplicationConstants.FROM_URI;
-import static com.company.manager.constans.CourseAttrAndParamNames.COURSES;
-import static com.company.manager.constans.CourseAttrAndParamNames.COURSES_STATE;
-import static com.company.manager.constans.UserAttrAndParamNames.CURRENT_USER_ID_SESSION;
-import static com.company.manager.constans.UserAttrAndParamNames.CURRENT_USER_INFO_SESSION;
+import static com.company.manager.string_constans.ApplicationConstants.APP_NAME;
+import static com.company.manager.string_constans.ApplicationConstants.FROM_URI;
+import static com.company.manager.string_constans.CourseAttrAndParamNames.COURSES;
+import static com.company.manager.string_constans.CourseAttrAndParamNames.COURSES_STATE;
+import static com.company.manager.string_constans.UserAttrAndParamNames.CURRENT_USER_ID_SESSION;
+import static com.company.manager.string_constans.UserAttrAndParamNames.CURRENT_USER_INFO_SESSION;
 
 @Slf4j
 public class UserCurrentCoursesServlet extends HttpServlet {

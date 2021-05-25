@@ -1,7 +1,6 @@
 package com.company.manager.servlet.core.course_actions;
 
 import com.company.manager.domain.course.Course;
-import com.company.manager.domain.course.CourseInfo;
 import com.company.manager.domain.user.User;
 import com.company.manager.services.impl.UserServiceImpl;
 import com.company.manager.util.builders.CourseBuilder;
@@ -14,13 +13,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 
-import static com.company.manager.constans.ApplicationConstants.APP_NAME;
-import static com.company.manager.constans.ApplicationConstants.FROM_URI;
-import static com.company.manager.constans.CourseAttrAndParamNames.*;
-import static com.company.manager.constans.UserAttrAndParamNames.CURRENT_USER_ID_SESSION;
+import static com.company.manager.string_constans.ApplicationConstants.APP_NAME;
+import static com.company.manager.string_constans.ApplicationConstants.FROM_URI;
+import static com.company.manager.string_constans.CourseAttrAndParamNames.*;
+import static com.company.manager.string_constans.UserAttrAndParamNames.CURRENT_USER_ID_SESSION;
 
 @Slf4j
 public class SaveOrUpdateCourseServlet extends HttpServlet {

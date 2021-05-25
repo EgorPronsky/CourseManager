@@ -7,21 +7,17 @@ import com.company.manager.domain.archive.StudentCourseResult_;
 import com.company.manager.domain.course.Course;
 import com.company.manager.domain.course.CourseInfo_;
 import com.company.manager.domain.course.Course_;
-import com.company.manager.domain.user.User;
 import com.company.manager.domain.user.User_;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import com.company.manager.util.HibernateUtil;
 
 import javax.persistence.PersistenceException;
 import javax.persistence.criteria.*;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 @Slf4j

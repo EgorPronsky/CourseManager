@@ -14,9 +14,8 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.company.manager.constans.ApplicationConstants.FROM_URI;
-import static com.company.manager.constans.CourseAttrAndParamNames.COURSE;
-import static com.company.manager.constans.CourseAttrAndParamNames.COURSE_ID;
+import static com.company.manager.string_constans.CourseAttrAndParamNames.COURSE;
+import static com.company.manager.string_constans.CourseAttrAndParamNames.COURSE_ID;
 
 @Slf4j
 public class GetCourseToEditServlet extends HttpServlet {

@@ -1,5 +1,5 @@
 <%@ page import="com.company.manager.domain.user.UserRole" %>
-<%@ page import="static com.company.manager.constans.UserAttrAndParamNames.CURRENT_USER_INFO_SESSION" %>
+<%@ page import="static com.company.manager.string_constans.UserAttrAndParamNames.CURRENT_USER_INFO_SESSION" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 

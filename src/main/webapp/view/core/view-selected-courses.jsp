@@ -2,12 +2,12 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ page import="static com.company.manager.servlet.core.get_courses.TeacherNotGradedCoursesServlet.*" %>
 <%@ page import="com.company.manager.domain.user.UserRole" %>
-<%@ page import="static com.company.manager.constans.CourseAttrAndParamNames.*" %>
-<%@ page import="static com.company.manager.constans.UserAttrAndParamNames.CURRENT_USER_INFO_SESSION" %>
+<%@ page import="static com.company.manager.string_constans.CourseAttrAndParamNames.*" %>
+<%@ page import="static com.company.manager.string_constans.UserAttrAndParamNames.CURRENT_USER_INFO_SESSION" %>
 <%@ page import="com.company.manager.domain.course.Course" %>
 <%@ page import="java.time.format.DateTimeFormatter" %>
 <%@ page import="static com.company.manager.servlet.core.course_actions.SaveOrUpdateCourseServlet.COURSE_DATE_PATTERN" %>
-<%@ page import="static com.company.manager.constans.ApplicationConstants.FROM_URI" %>
+<%@ page import="static com.company.manager.string_constans.ApplicationConstants.FROM_URI" %>
 <%@ page
         import="static com.company.manager.servlet.core.students_actions.GetCourseStudentsServlet.GET_STUDENTS_TO_GRADE" %>
 <%@ page
@@ -57,7 +57,7 @@
                     </c:when>
 
                     <c:otherwise>
-                        <table class="table">
+                        <table class="table table-striped">
 
                             <thead class="thead-dark">
                                 <tr>
@@ -120,7 +120,12 @@
                                                 </button>
                                                 <div class="dropdown-menu">
                                                     <span class="dropdown-item-text">
-                                                        <a href="${course.courseInfo.uri}" target="_blank">${course.courseInfo.uri}</a>
+                                                        <c:if test="${empty course.courseInfo.uri}">
+                                                            <span class="dropdown-item-text">No uri yet</span>
+                                                        </c:if>
+                                                        <c:if test="${not empty course.courseInfo.uri}">
+                                                            <a href="${course.courseInfo.uri}" target="_blank">${course.courseInfo.uri}</a>
+                                                        </c:if>
                                                     </span>
                                                 </div>
                                             </div>

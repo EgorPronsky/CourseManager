@@ -1,4 +1,4 @@
-<%@ page import="static com.company.manager.constans.UserAttrAndParamNames.*" %>
+<%@ page import="static com.company.manager.string_constans.UserAttrAndParamNames.*" %>
 <%@ page session="false" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 

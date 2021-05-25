@@ -1,8 +1,8 @@
-<%@ page import="static com.company.manager.constans.CourseAttrAndParamNames.COURSES" %>
+<%@ page import="static com.company.manager.string_constans.CourseAttrAndParamNames.COURSES" %>
 <%@ page import="java.time.format.DateTimeFormatter" %>
 <%@ page import="static com.company.manager.servlet.core.course_actions.SaveOrUpdateCourseServlet.COURSE_DATE_PATTERN" %>
 <%@ page import="com.company.manager.domain.course.Course" %>
-<%@ page import="static com.company.manager.constans.CourseAttrAndParamNames.COURSES_ID" %>
+<%@ page import="static com.company.manager.string_constans.CourseAttrAndParamNames.COURSES_ID" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
@@ -53,7 +53,7 @@
 
                         <c:otherwise>
                             <form action="${pageContext.request.contextPath}/main-menu/join-new-courses/join-selected-courses" method="post">
-                                <table class="table">
+                                <table class="table table-striped">
 
                                     <thead class="thead-dark">
                                     <tr>

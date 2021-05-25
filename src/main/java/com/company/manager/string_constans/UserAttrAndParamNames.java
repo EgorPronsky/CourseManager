@@ -1,9 +1,8 @@
-package com.company.manager.constans;
+package com.company.manager.string_constans;
 
 public class UserAttrAndParamNames {
 
     // Cookie names
-    public static final String USER_SESSION_ID_COOKIE_NAME = "JSESSIONID";
     public static final String USER_ID_COOKIE_NAME = "user_id_cookie";
 
     // Session attr names

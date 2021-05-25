@@ -1,4 +1,4 @@
-<%@ page import="static com.company.manager.constans.CourseAttrAndParamNames.COURSES_RESULTS" %>
+<%@ page import="static com.company.manager.string_constans.CourseAttrAndParamNames.COURSES_RESULTS" %>
 <%@ page import="com.company.manager.domain.archive.CourseResult" %>
 <%@ page import="com.company.manager.domain.archive.StudentCourseResult" %>
 <%@ page import="java.time.format.DateTimeFormatter" %>
@@ -39,7 +39,7 @@
                         </c:when>
 
                         <c:otherwise>
-                            <table class="table">
+                            <table class="table table-striped">
 
                                 <thead class="thead-dark">
                                     <tr>

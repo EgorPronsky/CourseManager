@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.company.manager.constans.CourseAttrAndParamNames.*;
+import static com.company.manager.string_constans.CourseAttrAndParamNames.*;
 
 public class CourseInputHandler {
 

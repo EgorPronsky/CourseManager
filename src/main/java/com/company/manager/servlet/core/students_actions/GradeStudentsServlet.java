@@ -15,12 +15,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import static com.company.manager.constans.ApplicationConstants.FROM_URI;
-import static com.company.manager.constans.CourseAttrAndParamNames.COURSE_ID;
+import static com.company.manager.string_constans.ApplicationConstants.FROM_URI;
+import static com.company.manager.string_constans.CourseAttrAndParamNames.COURSE_ID;
 
 @Slf4j
 public class GradeStudentsServlet extends HttpServlet {

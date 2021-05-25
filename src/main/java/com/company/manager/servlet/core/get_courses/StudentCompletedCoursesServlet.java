@@ -1,8 +1,6 @@
 package com.company.manager.servlet.core.get_courses;
 
 import com.company.manager.domain.archive.StudentCourseResult;
-import com.company.manager.domain.user.User;
-import com.company.manager.services.impl.UserServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import com.company.manager.services.impl.StudentCourseResultServiceImpl;
 import com.company.manager.handlers.view_handlers.impl.JspViewHandler;
@@ -15,8 +13,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.*;
 
-import static com.company.manager.constans.CourseAttrAndParamNames.COURSES_RESULTS;
-import static com.company.manager.constans.UserAttrAndParamNames.CURRENT_USER_ID_SESSION;
+import static com.company.manager.string_constans.CourseAttrAndParamNames.COURSES_RESULTS;
+import static com.company.manager.string_constans.UserAttrAndParamNames.CURRENT_USER_ID_SESSION;
 
 @Slf4j
 public class StudentCompletedCoursesServlet extends HttpServlet {

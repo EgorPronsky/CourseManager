@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-import static com.company.manager.constans.UserAttrAndParamNames.*;
+import static com.company.manager.string_constans.UserAttrAndParamNames.*;
 
 @Slf4j
 public class TrySignInServlet extends HttpServlet {
