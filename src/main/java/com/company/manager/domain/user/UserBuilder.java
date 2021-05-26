@@ -1,9 +1,4 @@
-package com.company.manager.util.builders;
-
-import com.company.manager.domain.user.AccessInfo;
-import com.company.manager.domain.user.User;
-import com.company.manager.domain.user.UserInfo;
-import com.company.manager.domain.user.UserRole;
+package com.company.manager.domain.user;
 
 public class UserBuilder {
 

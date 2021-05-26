@@ -29,7 +29,7 @@ public class HibernateAccessInfoDAO extends HibernateGenericDAO<AccessInfo> impl
         AccessInfo accessInfo = null;
         Transaction tr = null;
 
-        try (Session session =  super.sessionFactory.openSession()) {
+        try (Session session = super.sessionFactory.openSession()) {
             // Prepare
             CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
             CriteriaQuery<AccessInfo> query = criteriaBuilder.createQuery(AccessInfo.class);

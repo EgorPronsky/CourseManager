@@ -3,7 +3,7 @@ package com.company.manager.servlet.core.course_actions;
 import com.company.manager.domain.course.Course;
 import com.company.manager.domain.user.User;
 import com.company.manager.services.impl.UserServiceImpl;
-import com.company.manager.util.builders.CourseBuilder;
+import com.company.manager.domain.course.CourseBuilder;
 import lombok.extern.slf4j.Slf4j;
 import com.company.manager.services.impl.CourseServiceImpl;
 import com.company.manager.handlers.input_handlers.CourseInputHandler;

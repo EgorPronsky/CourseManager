@@ -2,7 +2,7 @@ package com.company.manager.servlet.access;
 
 import com.company.manager.domain.user.UserRole;
 import com.company.manager.services.impl.UserServiceImpl;
-import com.company.manager.util.builders.UserBuilder;
+import com.company.manager.domain.user.UserBuilder;
 import lombok.extern.slf4j.Slf4j;
 import com.company.manager.domain.user.User;
 

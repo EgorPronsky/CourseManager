@@ -10,7 +10,7 @@ import javax.persistence.*;
 @Table(name = "archive")
 
 @Builder
-@Getter
+@Getter @Setter
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @NoArgsConstructor
 @AllArgsConstructor

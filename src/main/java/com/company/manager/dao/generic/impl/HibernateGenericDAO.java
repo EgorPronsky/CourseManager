@@ -7,6 +7,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 
+import java.io.Serializable;
 import java.util.Optional;
 
 @Slf4j
@@ -34,7 +35,7 @@ public class HibernateGenericDAO<T> implements GenericDAO<T> {
     }
 
     @Override
-    public Optional<T> findById(long id) {
+    public Optional<T> findById(Serializable id) {
         T entity = null;
         Transaction tr = null;
 

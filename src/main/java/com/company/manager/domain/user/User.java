@@ -11,7 +11,7 @@ import java.util.Set;
 @Table(name = "users")
 
 @Builder
-@Getter
+@Getter @Setter
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @NoArgsConstructor
 @AllArgsConstructor

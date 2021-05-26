@@ -9,7 +9,7 @@ import javax.persistence.*;
 @Table(name = "access_info")
 
 @Builder
-@Getter
+@Getter @Setter
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @NoArgsConstructor
 @AllArgsConstructor
@@ -20,6 +20,7 @@ public class AccessInfo {
     @EqualsAndHashCode.Include
     private long id;
 
+    @Column(unique = true)
     private String email;
 
     @Column(name = "password_hash")

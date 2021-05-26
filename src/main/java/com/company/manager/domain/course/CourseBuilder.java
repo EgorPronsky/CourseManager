@@ -1,7 +1,4 @@
-package com.company.manager.util.builders;
-
-import com.company.manager.domain.course.Course;
-import com.company.manager.domain.course.CourseInfo;
+package com.company.manager.domain.course;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -27,6 +24,5 @@ public class CourseBuilder {
                         .timeTable(timeTable).uri(uri)
                         .build()).build();
     }
-
 
 }
