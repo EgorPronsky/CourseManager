@@ -6,14 +6,25 @@
 <%@ page import="static com.company.manager.string_constans.ApplicationConstants.FROM_URI" %>
 <%@ page import="static com.company.manager.string_constans.UserAttrAndParamNames.WEB_PAGE_CURRENT_USER_ID" %>
 <%@ page import="static com.company.manager.string_constans.UserAttrAndParamNames.SESSION_CURRENT_USER_ID" %>
-<html>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 
+<%-- Prepare variables --%>
+<c:set var="course_title" value="<%=COURSE_TITLE%>" />
+<c:set var="course_description" value="<%=COURSE_DESCRIPTION%>" />
+<c:set var="course_start_date" value="<%=COURSE_START_DATE%>" />
+<c:set var="course_end_date" value="<%=COURSE_END_DATE%>" />
+<c:set var="course_uri" value="<%=COURSE_URI%>" />
+<c:set var="course_id" value="<%=COURSE_ID%>" />
+<c:set var="course_date_pattern" value="<%=COURSE_DATE_PATTERN%>" />
+
+<c:set var="course" value="<%=request.getAttribute(COURSE)%>" />
+
+<html>
 <head>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-
     <script type = "text/javascript">
         function validateCourseInput() {
-            const datePattern = 'DD-MM-YYYY';
+            const datePattern = '${course_date_pattern}'.toUpperCase();
 
             const courseStartDateStr = document.getElementById("start_date").value;
             const courseEndDateStr = document.getElementById("end_date").value;
@@ -30,11 +41,11 @@
                 return false;
             }
 
-            const startDate = moment(courseStartDateStr, 'DD-MM-YYYY');
-            const endDate = moment(courseEndDateStr, 'DD-MM-YYYY');
+            const startDate = moment(courseStartDateStr, datePattern);
+            const endDate = moment(courseEndDateStr, datePattern);
 
             if (endDate <= startDate) {
-                alert( "End date should be greater then start date" );
+                alert( "End date should be greater than start date" );
                 event.preventDefault();
                 return false;
             }
@@ -45,20 +56,8 @@
             return moment(courseStartDateStr, datePattern, true).isValid();
         }
     </script>
-
     <title>Create or update course</title>
 </head>
-
-<%-- Prepare variables --%>
-<c:set var="course_title" value="<%=COURSE_TITLE%>" />
-<c:set var="course_description" value="<%=COURSE_DESCRIPTION%>" />
-<c:set var="course_start_date" value="<%=COURSE_START_DATE%>" />
-<c:set var="course_end_date" value="<%=COURSE_END_DATE%>" />
-<c:set var="course_uri" value="<%=COURSE_URI%>" />
-<c:set var="course_id" value="<%=COURSE_ID%>" />
-<c:set var="course_date_pattern" value="<%=COURSE_DATE_PATTERN%>" />
-
-<c:set var="course" value="<%=request.getAttribute(COURSE)%>" />
 
 <c:if test="${not empty course}">
     <%-- Formatting dates --%>

@@ -1,5 +1,4 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ page contentType="text/html;charset=UTF-8" %>
 <%@ page import="static com.company.manager.servlet.core.get_courses.TeacherNotGradedCoursesServlet.*" %>
 <%@ page import="com.company.manager.domain.user.UserRole" %>
 <%@ page import="static com.company.manager.string_constans.CourseAttrAndParamNames.*" %>
@@ -12,10 +11,23 @@
 <%@ page import="static com.company.manager.servlet.core.students_actions.GetCourseStudentsServlet.GET_STUDENTS_TO_KICK" %>
 <%@ page import="static com.company.manager.string_constans.UserAttrAndParamNames.WEB_PAGE_CURRENT_USER_ID" %>
 <%@ page import="static com.company.manager.string_constans.UserAttrAndParamNames.*" %>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+
+<%-- Prevent caching --%>
+<%
+    response.setHeader("Pragma", "No-cache");
+    response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+    response.setDateHeader("Expires", -1);
+%>
 
 <html>
 <head>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <style>
+        .tableFixHead { overflow: auto; max-height: 500px; }
+        .tableFixHead thead th { position: sticky; top: 0; z-index: 1; }
+        td, th {text-align: center;}
+    </style>
     <title>My courses</title>
 </head>
 
@@ -68,36 +80,37 @@
 
 
                     <c:otherwise>
+                    <div class="tableFixHead">
                     <table class="table table-striped">
 
                         <%-- Table header --%>
                         <thead class="thead-dark">
                         <tr>
-                            <th><center>Title</center></th>
-                            <th><center>Start date</center></th>
-                            <th><center>End date</center></th>
+                            <th>Title</th>
+                            <th>Start date</th>
+                            <th>End date</th>
 
                             <c:if test="${courses_state != not_graded_course_state}">
-                                <th><center>Timetable</center></th>
-                                <th><center>URI</center></th>
+                                <th>Timetable</th>
+                                <th>URI</th>
                             </c:if>
 
-                            <th><center>Description</center></th>
+                            <th>Description</th>
 
                             <%-- Special columns for students --%>
                             <c:if test="${current_user_info.userRole == UserRole.STUDENT}">
-                                <th><center>Teacher</center></th>
-                                <th><center>Leave course</center></th>
+                                <th>Teacher</th>
+                                <th>Leave course</th>
                             </c:if>
 
                             <%-- Speacial columns for teachers --%>
                             <c:if test="${current_user_info.userRole == UserRole.TEACHER && courses_state == not_graded_course_state}">
-                                <th><center>Grade students</center></th>
+                                <th>Grade students</th>
                             </c:if>
                             <c:if test="${current_user_info.userRole == UserRole.TEACHER && courses_state != not_graded_course_state}">
-                                <th><center>Subscribed students</center></th>
-                                <th><center>Edit course</center></th>
-                                <th><center>Delete course</center></th>
+                                <th>Subscribed students</th>
+                                <th>Edit course</th>
+                                <th>Delete course</th>
                             </c:if>
                         </tr>
                         </thead>
@@ -272,6 +285,7 @@
                         </tbody>
 
                     </table>
+                    </div>
                     </c:otherwise>
                 </c:choose>
 

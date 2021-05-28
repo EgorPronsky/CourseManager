@@ -14,11 +14,23 @@
 <%@ page import="static com.company.manager.servlet.core.students_actions.GetCourseStudentsServlet.GET_STUDENTS_TO_GRADE" %>
 <%@ page import="static com.company.manager.string_constans.UserAttrAndParamNames.WEB_PAGE_CURRENT_USER_ID" %>
 <%@ page import="static com.company.manager.string_constans.UserAttrAndParamNames.SESSION_CURRENT_USER_ID" %>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+
+<%-- Prevent caching --%>
+<%
+    response.setHeader("Pragma", "No-cache");
+    response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+    response.setDateHeader("Expires", -1);
+%>
 
 <html>
 <head>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <style>
+        .tableFixHead { overflow: auto; max-height: 500px; }
+        .tableFixHead thead th { position: sticky; top: 0; z-index: 1; }
+        td, th {text-align: center;}
+    </style>
     <title>Course students</title>
 </head>
 
@@ -34,7 +46,7 @@
 <c:set var="target_get_students_to_see" value="<%=GET_STUDENTS_TO_KICK%>" />
 <c:set var="target_get_students_to_grade" value="<%=GET_STUDENTS_TO_GRADE%>" />
 
-<%-- Sorting students --%>
+<%-- Sorting students by last name then by first name --%>
 <%
     List<StudentCourseResult> sortedStudentsInSCR = new ArrayList<>(((Course)pageContext.getAttribute("course")).getStudentResults());
     Collections.sort(sortedStudentsInSCR, new Comparator<StudentCourseResult>() {
@@ -43,7 +55,13 @@
             return o1.getStudent().getUserInfo().getLastName()
                     .compareTo(o2.getStudent().getUserInfo().getLastName());
         }
-    });
+    }.thenComparing(new Comparator<StudentCourseResult>() {
+        @Override
+        public int compare(StudentCourseResult  o1, StudentCourseResult o2) {
+            return o1.getStudent().getUserInfo().getFirstName()
+                    .compareTo(o2.getStudent().getUserInfo().getFirstName());
+        }
+    }));
 %>
 <c:set var="sorted_students_in_scr" value="<%=sortedStudentsInSCR%>" />
 
@@ -97,16 +115,17 @@
                                 <%-- Hidden URI to redirect --%>
                                 <input type="hidden" name="<%=FROM_URI%>" value="<%=request.getParameter(FROM_URI)%>"/>
 
+                                <div class="tableFixHead">
                                 <table class="table table-striped">
                                     <thead class="thead-dark">
                                     <tr>
-                                        <th scope="col"><center>First name</center></th>
-                                        <th scope="col"><center>Last name</center></th>
+                                        <th scope="col">First name</th>
+                                        <th scope="col">Last name</th>
                                         <c:if test="${course_students_view_target == target_get_students_to_see}">
-                                            <th scope="col"><center>Kick student</center></th>
+                                            <th scope="col">Kick student</th>
                                         </c:if>
                                         <c:if test="${course_students_view_target == target_get_students_to_grade}">
-                                            <th scope="col"><center>Result</center></th>
+                                            <th scope="col">Result</th>
                                         </c:if>
                                     </tr>
                                     </thead>
@@ -114,16 +133,15 @@
                                     <tbody>
                                         <c:forEach var="scr" items="${sorted_students_in_scr}">
                                             <tr>
-                                                <td><center>${scr.student.userInfo.firstName}</center></td>
-                                                <td><center>${scr.student.userInfo.lastName}</center></td>
+                                                <td>${scr.student.userInfo.firstName}</td>
+                                                <td>${scr.student.userInfo.lastName}</td>
 
                                                 <c:if test="${course_students_view_target == target_get_students_to_see}">
-                                                    <td><center>
+                                                    <td>
                                                         <button class="btn btn-primary btn-danger"
                                                                 type="submit"
                                                                 name="<%=COURSE_STUDENT_ID%>"
                                                                 value="${scr.student.id}">Kick out</button>
-                                                        </center>
                                                     </td>
                                                 </c:if>
 
@@ -163,6 +181,7 @@
 
                                     </tbody>
                                 </table>
+                                </div>
 
                                 <hr/>
                                 <c:if test="${course_students_view_target == target_get_students_to_grade}">

@@ -6,11 +6,16 @@
 <%@ page import="static com.company.manager.string_constans.UserAttrAndParamNames.WEB_PAGE_CURRENT_USER_ID" %>
 <%@ page import="static com.company.manager.string_constans.UserAttrAndParamNames.SESSION_CURRENT_USER_ID" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ page contentType="text/html;charset=UTF-8"%>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 
 <html>
 <head>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <style>
+        .tableFixHead { overflow: auto; max-height: 500px; }
+        .tableFixHead thead th { position: sticky; top: 0; z-index: 1; }
+        td, th {text-align: center;}
+    </style>
     <title>My courses</title>
 </head>
 
@@ -49,16 +54,17 @@
                         </c:when>
 
                         <c:otherwise>
+                        <div class="tableFixHead">
                             <table class="table table-striped">
 
                                 <thead class="thead-dark">
                                     <tr>
-                                        <th><center>Title</center></th>
-                                        <th><center>Start date</center></th>
-                                        <th><center>End date</center></th>
-                                        <th><center>Description</center></th>
-                                        <th><center>Teacher</center></th>
-                                        <th><center>Result</center></th>
+                                        <th>Title</th>
+                                        <th>Start date</th>
+                                        <th>End date</th>
+                                        <th>Description</th>
+                                        <th>Teacher</th>
+                                        <th>Result</th>
                                     </tr>
                                 </thead>
 
@@ -112,6 +118,7 @@
                                 </tbody>
 
                             </table>
+                        </div>
                         </c:otherwise>
 
                     </c:choose>

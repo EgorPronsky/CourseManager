@@ -22,13 +22,11 @@ public class DeleteCourseServlet extends HttpServlet {
         long courseId = Long.parseLong(request.getParameter(COURSE_ID));
 
         log.debug("Getting course by id from DB");
-        Optional<Course> course = CourseServiceImpl.getService()
-                .findCourseById(courseId);
+        Course course = CourseServiceImpl.getService()
+                .getCourseById(courseId);
 
-        if (course.isPresent()) {
-            log.debug("Deleting course from DB");
-            CourseServiceImpl.getService().deleteCourse(course.get());
-        }
+        log.debug("Deleting course from DB");
+        CourseServiceImpl.getService().deleteCourse(course);
 
         response.sendRedirect(request.getParameter(FROM_URI));
     }

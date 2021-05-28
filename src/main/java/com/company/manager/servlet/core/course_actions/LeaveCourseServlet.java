@@ -7,7 +7,7 @@ import com.company.manager.handlers.view_handlers.ViewHandler;
 import com.company.manager.handlers.view_handlers.impl.JspViewHandler;
 import com.company.manager.services.impl.StudentCourseResultServiceImpl;
 import com.company.manager.services.impl.UserServiceImpl;
-import com.company.manager.util.StudentCourseResultConverter;
+import com.company.manager.domain.archive.StudentCourseResultConverter;
 import lombok.extern.slf4j.Slf4j;
 import com.company.manager.services.impl.CourseServiceImpl;
 

@@ -2,8 +2,8 @@
 <%@ page import="static com.company.manager.string_constans.UserAttrAndParamNames.*" %>
 <%@ page import="static com.company.manager.filter.RegistrationFilter.EMAIL_EXISTS_MESSAGE_ATTR_NAME" %>
 <%@ page session="false" %>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <html>
-
 <head>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
   <script>
@@ -20,9 +20,7 @@
       return true;
     }
   </script>
-
   <title>Registration</title>
-
 </head>
 
 <%-- Prepare variables --%>

@@ -1,6 +1,7 @@
 <%@ page import="static com.company.manager.string_constans.UserAttrAndParamNames.*" %>
 <%@ page session="false" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 
 <html>
 <head>

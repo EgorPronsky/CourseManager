@@ -5,7 +5,7 @@ import com.company.manager.domain.archive.StudentCourseResult;
 import com.company.manager.domain.course.Course;
 import com.company.manager.domain.user.User;
 import com.company.manager.handlers.input_handlers.CourseInputHandler;
-import com.company.manager.util.StudentCourseResultConverter;
+import com.company.manager.domain.archive.StudentCourseResultConverter;
 import lombok.extern.slf4j.Slf4j;
 import com.company.manager.services.impl.CourseServiceImpl;
 import com.company.manager.services.impl.StudentCourseResultServiceImpl;

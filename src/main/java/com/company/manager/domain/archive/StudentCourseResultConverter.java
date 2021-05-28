@@ -1,7 +1,5 @@
-package com.company.manager.util;
+package com.company.manager.domain.archive;
 
-import com.company.manager.domain.archive.CourseResult;
-import com.company.manager.domain.archive.StudentCourseResult;
 import com.company.manager.domain.course.Course;
 import com.company.manager.domain.user.User;
 
