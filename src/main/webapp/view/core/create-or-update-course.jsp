@@ -4,10 +4,48 @@
 <%@ page import="com.company.manager.domain.course.Course" %>
 <%@ page import="java.time.format.DateTimeFormatter" %>
 <%@ page import="static com.company.manager.string_constans.ApplicationConstants.FROM_URI" %>
+<%@ page import="static com.company.manager.string_constans.UserAttrAndParamNames.WEB_PAGE_CURRENT_USER_ID" %>
+<%@ page import="static com.company.manager.string_constans.UserAttrAndParamNames.SESSION_CURRENT_USER_ID" %>
 <html>
 
 <head>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+    <script type = "text/javascript">
+        function validateCourseInput() {
+            const datePattern = 'DD-MM-YYYY';
+
+            const courseStartDateStr = document.getElementById("start_date").value;
+            const courseEndDateStr = document.getElementById("end_date").value;
+
+            // Date validation
+            if (!isDateValid(courseStartDateStr, datePattern)) {
+                alert( "Please provide existing start date" );
+                event.preventDefault();
+                return false;
+            }
+            if (!isDateValid(courseEndDateStr, datePattern)) {
+                alert( "Please provide existing end date" );
+                event.preventDefault();
+                return false;
+            }
+
+            const startDate = moment(courseStartDateStr, 'DD-MM-YYYY');
+            const endDate = moment(courseEndDateStr, 'DD-MM-YYYY');
+
+            if (endDate <= startDate) {
+                alert( "End date should be greater then start date" );
+                event.preventDefault();
+                return false;
+            }
+            return true;
+        }
+
+        function isDateValid(courseStartDateStr, datePattern) {
+            return moment(courseStartDateStr, datePattern, true).isValid();
+        }
+    </script>
+
     <title>Create or update course</title>
 </head>
 
@@ -39,17 +77,30 @@
         <div class="col-lg-10">
             <div class="card">
 
+                <%-- Header --%>
                 <div class="card-header">
-                    <c:if test="${empty course}">
-                        <h3 class="panel-title">Create a new course</h3>
-                    </c:if>
-                    <c:if test="${not empty course}">
-                        <h3 class="panel-title">Edit the course</h3>
-                    </c:if>
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a href="${pageContext.request.contextPath}/main-menu?<%=WEB_PAGE_CURRENT_USER_ID%>=<%=session.getAttribute(SESSION_CURRENT_USER_ID)%>" style="font-size: large">Home</a>
+                        </li>
+                        <c:if test="${empty course}">
+                            <li class="breadcrumb-item active" aria-current="page" style="font-size: large">Create a new course</li>
+                        </c:if>
+                        <c:if test="${not empty course}">
+                            <li class="breadcrumb-item">
+                                <a href="${pageContext.request.contextPath}/main-menu/select-courses?<%=WEB_PAGE_CURRENT_USER_ID%>=<%=session.getAttribute(SESSION_CURRENT_USER_ID)%>" style="font-size: large">Select my courses</a>
+                            </li>
+                            <li class="breadcrumb-item">
+                                <a href="<%=request.getParameter(FROM_URI)%>?<%=WEB_PAGE_CURRENT_USER_ID%>=<%=session.getAttribute(SESSION_CURRENT_USER_ID)%>" style="font-size: large">Back to courses</a>
+                            </li>
+                            <li class="breadcrumb-item active" aria-current="page" style="font-size: large">Edit course</li>
+                        </c:if>
+                    </ol>
                 </div>
 
+                <%-- Body --%>
                 <div class="card-body">
-                    <form accept-charset="UTF-8" role="form" action="${pageContext.request.contextPath}/main-menu/create-or-update-course" method="post">
+                    <form accept-charset="UTF-8" name="courseForm" onsubmit="return(validateCourseInput());" action="${pageContext.request.contextPath}/main-menu/create-or-update-course" method="post">
                         <fieldset>
 
                             <div class="row">
@@ -180,12 +231,12 @@
                                             <td>Monday</td>
                                             <td>
                                                 <div class="checkbox">
-                                                    <input class="form-control form-control-sm" placeholder="12:00" name="${monday_start_time}" value="12:00" type="text">
+                                                    <input class="form-control form-control-sm" placeholder="12:00" name="${monday_start_time}" value="12:00" pattern="^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$" type="text">
                                                 </div>
                                             </td>
                                             <td>
                                                 <div class="checkbox">
-                                                    <input class="form-control form-control-sm" placeholder="14:00" name="${monday_end_time}" value="14:00" type="text">
+                                                    <input class="form-control form-control-sm" placeholder="14:00" id="monday_end" name="${monday_end_time}" pattern="^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$" value="14:00" type="text">
                                                 </div>
                                             </td>
                                         </tr>
@@ -201,12 +252,12 @@
                                             <td>Tuesday</td>
                                             <td>
                                                 <div class="checkbox">
-                                                    <input class="form-control form-control-sm" placeholder="12:00" name="${tuesday_start_time}" value="12:00" type="text">
+                                                    <input class="form-control form-control-sm" placeholder="12:00" pattern="^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$" name="${tuesday_start_time}" value="12:00" type="text">
                                                 </div>
                                             </td>
                                             <td>
                                                 <div class="checkbox">
-                                                    <input class="form-control form-control-sm" placeholder="14:00" name="${tuesday_end_time}" value="14:00" type="text">
+                                                    <input class="form-control form-control-sm" placeholder="14:00" pattern="^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$" name="${tuesday_end_time}" value="14:00" type="text">
                                                 </div>
                                             </td>
                                         </tr>
@@ -217,17 +268,17 @@
                                         <c:set var="wednesday_end_time" value="<%=WEDNESDAY_END_TIME%>" />
                                         <tr>
                                             <td>
-                                                <input name="${wednesday}" type="checkbox" value="wednesday">
+                                                <input name="${wednesday}" id="wednesday" type="checkbox" value="wednesday">
                                             </td>
                                             <td>Wednesday</td>
                                             <td>
                                                 <div class="checkbox">
-                                                    <input class="form-control form-control-sm" placeholder="12:00" name="${wednesday_start_time}" value="12:00" type="text">
+                                                    <input class="form-control form-control-sm" placeholder="12:00" pattern="^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$" name="${wednesday_start_time}" value="12:00" type="text">
                                                 </div>
                                             </td>
                                             <td>
                                                 <div class="checkbox">
-                                                    <input class="form-control form-control-sm" placeholder="14:00" name="${wednesday_end_time}" value="14:00" type="text">
+                                                    <input class="form-control form-control-sm" placeholder="14:00" pattern="^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$" name="${wednesday_end_time}" value="14:00" type="text">
                                                 </div>
                                             </td>
                                         </tr>
@@ -243,12 +294,12 @@
                                             <td>Thursday</td>
                                             <td>
                                                 <div class="checkbox">
-                                                    <input class="form-control form-control-sm" placeholder="12:00" name="${thursday_start_time}" value="12:00" type="text">
+                                                    <input class="form-control form-control-sm" placeholder="12:00" pattern="^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$" name="${thursday_start_time}" value="12:00" type="text">
                                                 </div>
                                             </td>
                                             <td>
                                                 <div class="checkbox">
-                                                    <input class="form-control form-control-sm" placeholder="14:00" name="${thursday_end_time}" value="14:00" type="text">
+                                                    <input class="form-control form-control-sm" placeholder="14:00" pattern="^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$" name="${thursday_end_time}" value="14:00" type="text">
                                                 </div>
                                             </td>
                                         </tr>
@@ -264,12 +315,12 @@
                                             <td>Friday</td>
                                             <td>
                                                 <div class="checkbox">
-                                                    <input class="form-control form-control-sm" placeholder="12:00" name="${friday_start_time}" value="12:00" type="text">
+                                                    <input class="form-control form-control-sm" placeholder="12:00" pattern="^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$" name="${friday_start_time}" value="12:00" type="text">
                                                 </div>
                                             </td>
                                             <td>
                                                 <div class="checkbox">
-                                                    <input class="form-control form-control-sm" placeholder="14:00" name="${friday_end_time}" value="14:00" type="text">
+                                                    <input class="form-control form-control-sm" placeholder="14:00" pattern="^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$" name="${friday_end_time}" value="14:00" type="text">
                                                 </div>
                                             </td>
                                         </tr>
@@ -285,12 +336,12 @@
                                             <td>Saturday</td>
                                             <td>
                                                 <div class="checkbox">
-                                                    <input class="form-control form-control-sm" placeholder="12:00" name="${saturday_start_time}" value="12:00" type="text">
+                                                    <input class="form-control form-control-sm" placeholder="12:00" pattern="^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$" name="${saturday_start_time}" value="12:00" type="text">
                                                 </div>
                                             </td>
                                             <td>
                                                 <div class="checkbox">
-                                                    <input class="form-control form-control-sm" placeholder="14:00" name="${saturday_end_time}" value="14:00" type="text">
+                                                    <input class="form-control form-control-sm" placeholder="14:00" pattern="^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$" name="${saturday_end_time}" value="14:00" type="text">
                                                 </div>
                                             </td>
                                         </tr>
@@ -306,12 +357,12 @@
                                             <td>Sunday</td>
                                             <td>
                                                 <div class="checkbox">
-                                                    <input class="form-control form-control-sm" placeholder="12:00" name="${sunday_start_time}" value="12:00" type="text">
+                                                    <input class="form-control form-control-sm" placeholder="12:00" pattern="^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$" name="${sunday_start_time}" value="12:00" type="text">
                                                 </div>
                                             </td>
                                             <td>
                                                 <div class="checkbox">
-                                                    <input class="form-control form-control-sm" placeholder="14:00" name="${sunday_end_time}" value="14:00" type="text">
+                                                    <input class="form-control form-control-sm" placeholder="14:00" pattern="^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$" name="${sunday_end_time}" value="14:00" type="text">
                                                 </div>
                                             </td>
                                         </tr>
@@ -323,25 +374,30 @@
 
                             <%-- Hidden course id --%>
                             <c:if test="${not empty course}">
-                                <input type="hidden" name="${course_id}" value="${course.id}"/>
+                                <input type="hidden" name="${course_id}" value="${course.id}">
                             </c:if>
 
                             <%-- Hidden uri to redirect --%>
                             <c:if test="${not empty course}">
-                                <input type="hidden" name="<%=FROM_URI%>" value="<%=request.getParameter(FROM_URI)%>"/>
+                                <input type="hidden" name="<%=FROM_URI%>" value="<%=request.getParameter(FROM_URI)%>">
                             </c:if>
+
+                            <%-- Hidden current user id --%>
+                            <input type="hidden"
+                                   name="<%=WEB_PAGE_CURRENT_USER_ID%>"
+                                   value="<%=session.getAttribute(SESSION_CURRENT_USER_ID) %>">
 
                             <%-- Submit button --%>
                             <hr/>
                             <input
-                                    class="btn btn-lg btn-success btn-block"
-                                    type="submit"
-                                    <c:if test="${empty course}">
-                                        value="Submit"
-                                    </c:if>
-                                    <c:if test="${not empty course}">
-                                        value="Save changes"
-                                    </c:if>>
+                                class="btn btn-lg btn-success btn-block"
+                                type="submit"
+                                <c:if test="${empty course}">
+                                    value="Submit"
+                                </c:if>
+                                <c:if test="${not empty course}">
+                                    value="Save changes"
+                                </c:if>>
 
                         </fieldset>
                     </form>
@@ -354,6 +410,7 @@
 <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+<script src="https://momentjs.com/downloads/moment.js"></script>
 
 </body>
 </html>

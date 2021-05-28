@@ -2,12 +2,13 @@
 <%@ page import="com.company.manager.domain.archive.CourseResult" %>
 <%@ page import="com.company.manager.domain.archive.StudentCourseResult" %>
 <%@ page import="java.time.format.DateTimeFormatter" %>
-<%@ page
-        import="static com.company.manager.servlet.core.course_actions.SaveOrUpdateCourseServlet.COURSE_DATE_PATTERN" %>
+<%@ page import="static com.company.manager.servlet.core.course_actions.SaveOrUpdateCourseServlet.COURSE_DATE_PATTERN" %>
+<%@ page import="static com.company.manager.string_constans.UserAttrAndParamNames.WEB_PAGE_CURRENT_USER_ID" %>
+<%@ page import="static com.company.manager.string_constans.UserAttrAndParamNames.SESSION_CURRENT_USER_ID" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page contentType="text/html;charset=UTF-8"%>
-<html>
 
+<html>
 <head>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <title>My courses</title>
@@ -24,7 +25,16 @@
 
                 <%-- Header --%>
                 <div class="card-header">
-                    <h3 class="panel-title">My completed courses</h3>
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a href="${pageContext.request.contextPath}/main-menu?<%=WEB_PAGE_CURRENT_USER_ID%>=<%=session.getAttribute(SESSION_CURRENT_USER_ID)%>"
+                               style="font-size: large">Home</a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <a href="${pageContext.request.contextPath}/main-menu/select-courses?<%=WEB_PAGE_CURRENT_USER_ID%>=<%=session.getAttribute(SESSION_CURRENT_USER_ID)%>" style="font-size: large">Select my courses</a>
+                        </li>
+                        <li class="breadcrumb-item active" aria-current="page" style="font-size: large">My completed courses</li>
+                    </ol>
                 </div>
 
                 <%-- Body --%>
@@ -43,12 +53,12 @@
 
                                 <thead class="thead-dark">
                                     <tr>
-                                        <th scope="col">Title</th>
-                                        <th scope="col">Start date</th>
-                                        <th scope="col">End date</th>
-                                        <th scope="col">Description</th>
-                                        <th scope="col">Teacher</th>
-                                        <th scope="col">Result</th>
+                                        <th><center>Title</center></th>
+                                        <th><center>Start date</center></th>
+                                        <th><center>End date</center></th>
+                                        <th><center>Description</center></th>
+                                        <th><center>Teacher</center></th>
+                                        <th><center>Result</center></th>
                                     </tr>
                                 </thead>
 
@@ -105,12 +115,6 @@
                         </c:otherwise>
 
                     </c:choose>
-
-                    <%-- Back to "My courses" button --%>
-                    <hr/>
-                    <form action="${pageContext.request.contextPath}/main-menu/select-courses" method="get">
-                        <input class="btn btn-lg btn-outline-success btn-block" type="submit" value="Back to My courses">
-                    </form>
 
                 </div>
             </div>

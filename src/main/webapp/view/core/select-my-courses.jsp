@@ -1,6 +1,8 @@
 <%@ page import="com.company.manager.domain.user.UserRole" %>
-<%@ page import="static com.company.manager.string_constans.UserAttrAndParamNames.CURRENT_USER_INFO_SESSION" %>
+<%@ page import="static com.company.manager.string_constans.UserAttrAndParamNames.SESSION_CURRENT_USER_INFO" %>
 <%@ page import="static com.company.manager.string_constans.ApplicationConstants.FROM_URI" %>
+<%@ page import="static com.company.manager.string_constans.UserAttrAndParamNames.SESSION_CURRENT_USER_ID" %>
+<%@ page import="static com.company.manager.string_constans.UserAttrAndParamNames.*" %>
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
@@ -12,7 +14,7 @@
 </head>
 
 <%-- Prepare variables --%>
-<c:set var="current_user_info" value="<%=session.getAttribute(CURRENT_USER_INFO_SESSION)%>" />
+<c:set var="current_user_info" value="<%=session.getAttribute(SESSION_CURRENT_USER_INFO)%>" />
 
 <body>
 <div class="container">
@@ -20,17 +22,32 @@
         <div class="col-md-7">
             <div class="card">
 
+                <%-- Header --%>
                 <div class="card-header">
-                    <h3 class="panel-title">My courses</h3>
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a href="${pageContext.request.contextPath}/main-menu?<%=WEB_PAGE_CURRENT_USER_ID%>=<%=session.getAttribute(SESSION_CURRENT_USER_ID)%>" style="font-size: large">Home</a>
+                        </li>
+                        <li class="breadcrumb-item active" aria-current="page" style="font-size: large">Select my courses</li>
+                    </ol>
                 </div>
 
+                <%-- Body --%>
                 <div class="card-body">
                     <form action="${pageContext.request.requestURI}/my-current-courses" method="get">
+                        <%-- Hidden current user id --%>
+                        <input type="hidden"
+                               name="<%=WEB_PAGE_CURRENT_USER_ID%>"
+                               value="<%=session.getAttribute(SESSION_CURRENT_USER_ID) %>"/>
                         <input class="btn btn-lg btn-primary btn-block" type="submit" value="Current courses">
                     </form>
                     <hr/>
 
                     <form action="${pageContext.request.requestURI}/my-future-courses" method="get">
+                        <%-- Hidden current user id --%>
+                        <input type="hidden"
+                               name="<%=WEB_PAGE_CURRENT_USER_ID%>"
+                               value="<%=session.getAttribute(SESSION_CURRENT_USER_ID) %>"/>
                         <input class="btn btn-lg btn-primary btn-block" type="submit" value="Future courses">
                     </form>
                     <hr/>
@@ -39,6 +56,10 @@
                         <%--Special button for students--%>
                         <c:when test="${current_user_info.userRole == UserRole.STUDENT}">
                             <form action="${pageContext.request.requestURI}/my-completed-courses" method="get">
+                                <%-- Hidden current user id --%>
+                                <input type="hidden"
+                                       name="<%=WEB_PAGE_CURRENT_USER_ID%>"
+                                       value="<%=session.getAttribute(SESSION_CURRENT_USER_ID) %>"/>
                                 <input class="btn btn-lg btn-primary btn-block" type="submit" value="Completed courses">
                             </form>
                         </c:when>
@@ -46,6 +67,10 @@
                         <%--Special button for teachers--%>
                         <c:when test="${current_user_info.userRole == UserRole.TEACHER}">
                             <form action="${pageContext.request.requestURI}/my-not-graded-courses" method="get">
+                                <%-- Hidden current user id --%>
+                                <input type="hidden"
+                                       name="<%=WEB_PAGE_CURRENT_USER_ID%>"
+                                       value="<%=session.getAttribute(SESSION_CURRENT_USER_ID) %>"/>
                                 <input class="btn btn-lg btn-primary btn-block" type="submit" value="Not graded courses">
                             </form>
                         </c:when>
@@ -55,11 +80,6 @@
                         </c:otherwise>
                     </c:choose>
 
-                    <%-- Back to main menu button --%>
-                    <hr/>
-                    <form action="${pageContext.request.contextPath}/main-menu" method="get">
-                        <input class="btn btn-lg btn-outline-success btn-block" type="submit" value="Back to main menu">
-                    </form>
                 </div>
 
             </div>

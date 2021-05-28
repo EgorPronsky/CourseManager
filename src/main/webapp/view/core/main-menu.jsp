@@ -1,10 +1,11 @@
 <%@ page import="com.company.manager.domain.user.UserRole" %>
-<%@ page import="static com.company.manager.string_constans.UserAttrAndParamNames.CURRENT_USER_INFO_SESSION" %>
+<%@ page import="static com.company.manager.string_constans.UserAttrAndParamNames.SESSION_CURRENT_USER_INFO" %>
+<%@ page import="static com.company.manager.string_constans.UserAttrAndParamNames.SESSION_CURRENT_USER_ID" %>
+<%@ page import="static com.company.manager.string_constans.UserAttrAndParamNames.*" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <html>
-
 <head>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 
@@ -12,7 +13,7 @@
 </head>
 
 <%-- Prepare variables --%>
-<c:set var="current_user_info" value="<%=session.getAttribute(CURRENT_USER_INFO_SESSION)%>" />
+<c:set var="current_user_info" value="<%=session.getAttribute(SESSION_CURRENT_USER_INFO)%>" />
 
 <body>
 <div class="container">
@@ -22,12 +23,16 @@
 
                 <%-- Header --%>
                 <div class="card-header">
-                    <h3 class="panel-title">Welcome, ${current_user_info.firstName}!</h3>
+                    <h4>Welcome, ${current_user_info.firstName}!</h4>
                 </div>
 
                 <%-- Body--%>
                 <div class="card-body">
                     <form action="${pageContext.request.requestURI}/select-courses" method="get">
+                        <%-- Hidden current user id --%>
+                        <input type="hidden"
+                               name="<%=WEB_PAGE_CURRENT_USER_ID%>"
+                               value="<%=session.getAttribute(SESSION_CURRENT_USER_ID) %>">
                         <input class="btn btn-lg btn-primary btn-block" type="submit" value="View my courses">
                     </form>
                     <hr/>
@@ -36,6 +41,10 @@
                         <%--Special button for students--%>
                         <c:when test="${current_user_info.userRole == UserRole.STUDENT}">
                             <form action="${pageContext.request.requestURI}/join-new-courses" method="get">
+                                <%-- Hidden current user id --%>
+                                <input type="hidden"
+                                       name="<%=WEB_PAGE_CURRENT_USER_ID%>"
+                                       value="<%=session.getAttribute(SESSION_CURRENT_USER_ID) %>">
                                 <input class="btn btn-lg btn-primary btn-block" type="submit" value="Join new courses">
                             </form>
                         </c:when>
@@ -43,6 +52,10 @@
                         <%--Special button for teachers--%>
                         <c:when test="${current_user_info.userRole == UserRole.TEACHER}">
                             <form action="${pageContext.request.requestURI}/create-new-course" method="get">
+                                <%-- Hidden current user id --%>
+                                <input type="hidden"
+                                       name="<%=WEB_PAGE_CURRENT_USER_ID%>"
+                                       value="<%=session.getAttribute(SESSION_CURRENT_USER_ID) %>">
                                 <input class="btn btn-lg btn-primary btn-block" type="submit" value="Create a new course">
                             </form>
                         </c:when>
@@ -55,6 +68,10 @@
                     <%-- Log out button --%>
                     <hr/>
                     <form action="${pageContext.request.requestURI}/log-out" method="get">
+                        <%-- Hidden current user id --%>
+                        <input type="hidden"
+                               name="<%=WEB_PAGE_CURRENT_USER_ID%>"
+                               value="<%=session.getAttribute(SESSION_CURRENT_USER_ID) %>">
                         <input class="btn btn-lg btn-outline-success btn-block" type="submit" value="Log out">
                     </form>
 

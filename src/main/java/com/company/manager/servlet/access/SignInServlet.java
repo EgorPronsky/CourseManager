@@ -32,8 +32,8 @@ public class SignInServlet extends HttpServlet {
 
         log.debug("Setting attributes into session");
         HttpSession session = req.getSession();
-        session.setAttribute(CURRENT_USER_ID_SESSION, user.getId());
-        session.setAttribute(CURRENT_USER_INFO_SESSION, user.getUserInfo());
+        session.setAttribute(SESSION_CURRENT_USER_ID, user.getId());
+        session.setAttribute(SESSION_CURRENT_USER_INFO, user.getUserInfo());
 
         // Handling "Remember me" checkbox
         if (req.getParameter(REMEMBER_USER) != null) {

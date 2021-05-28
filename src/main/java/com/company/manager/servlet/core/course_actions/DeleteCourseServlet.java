@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Optional;
 
 import static com.company.manager.string_constans.ApplicationConstants.FROM_URI;
 import static com.company.manager.string_constans.CourseAttrAndParamNames.COURSE_ID;
@@ -21,11 +22,13 @@ public class DeleteCourseServlet extends HttpServlet {
         long courseId = Long.parseLong(request.getParameter(COURSE_ID));
 
         log.debug("Getting course by id from DB");
-        Course course = CourseServiceImpl.getService()
-                .getCourseById(courseId);
+        Optional<Course> course = CourseServiceImpl.getService()
+                .findCourseById(courseId);
 
-        log.debug("Deleting course from DB");
-        CourseServiceImpl.getService().deleteCourse(course);
+        if (course.isPresent()) {
+            log.debug("Deleting course from DB");
+            CourseServiceImpl.getService().deleteCourse(course.get());
+        }
 
         response.sendRedirect(request.getParameter(FROM_URI));
     }

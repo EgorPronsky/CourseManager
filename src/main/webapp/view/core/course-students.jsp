@@ -10,21 +10,13 @@
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="java.util.Collections" %>
 <%@ page import="static com.company.manager.string_constans.ApplicationConstants.FROM_URI" %>
-<%@ page
-        import="static com.company.manager.servlet.core.students_actions.GetCourseStudentsServlet.GET_STUDENTS_TO_KICK" %>
-<%@ page
-        import="static com.company.manager.servlet.core.students_actions.GetCourseStudentsServlet.GET_STUDENTS_TO_GRADE" %>
+<%@ page import="static com.company.manager.servlet.core.students_actions.GetCourseStudentsServlet.GET_STUDENTS_TO_KICK" %>
+<%@ page import="static com.company.manager.servlet.core.students_actions.GetCourseStudentsServlet.GET_STUDENTS_TO_GRADE" %>
+<%@ page import="static com.company.manager.string_constans.UserAttrAndParamNames.WEB_PAGE_CURRENT_USER_ID" %>
+<%@ page import="static com.company.manager.string_constans.UserAttrAndParamNames.SESSION_CURRENT_USER_ID" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+
 <html>
-
-<%-- Prevent caching --%>
-<%
-    response.addHeader("Pragma", "no-cache");
-    response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
-    response.addHeader("Cache-Control", "pre-check=0, post-check=0");
-    response.setDateHeader("Expires", 0);
-%>
-
 <head>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <title>Course students</title>
@@ -33,8 +25,8 @@
 <%-- Prepare variables --%>
 <c:set var="course" value="<%=request.getAttribute(COURSE)%>" />
 <%
-String target = request.getParameter(COURSE_STUDENTS_VIEW_TARGET);
-if (target == null) target = (String)request.getAttribute(COURSE_STUDENTS_VIEW_TARGET);
+    String target = request.getParameter(COURSE_STUDENTS_VIEW_TARGET);
+    if (target == null) target = (String)request.getAttribute(COURSE_STUDENTS_VIEW_TARGET);
 %>
 <c:set var="course_students_view_target" value="<%=target%>" />
 
@@ -64,7 +56,18 @@ if (target == null) target = (String)request.getAttribute(COURSE_STUDENTS_VIEW_T
 
                 <%-- Header --%>
                 <div class="card-header">
-                    <h3 class="panel-title">${course.courseInfo.name} students</h3>
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a href="${pageContext.request.contextPath}/main-menu?<%=WEB_PAGE_CURRENT_USER_ID%>=<%=session.getAttribute(SESSION_CURRENT_USER_ID)%>" style="font-size: large">Home</a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <a href="${pageContext.request.contextPath}/main-menu/select-courses?<%=WEB_PAGE_CURRENT_USER_ID%>=<%=session.getAttribute(SESSION_CURRENT_USER_ID)%>" style="font-size: large">Select courses</a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <a href="<%=request.getParameter(FROM_URI)%>?<%=WEB_PAGE_CURRENT_USER_ID%>=<%=session.getAttribute(SESSION_CURRENT_USER_ID)%>" style="font-size: large">Back to courses</a>
+                        </li>
+                        <li class="breadcrumb-item active" aria-current="page" style="font-size: large">${course.courseInfo.name} students</li>
+                    </ol>
                 </div>
 
                 <%-- Body --%>
@@ -97,13 +100,13 @@ if (target == null) target = (String)request.getAttribute(COURSE_STUDENTS_VIEW_T
                                 <table class="table table-striped">
                                     <thead class="thead-dark">
                                     <tr>
-                                        <th scope="col">First name</th>
-                                        <th scope="col">Last name</th>
+                                        <th scope="col"><center>First name</center></th>
+                                        <th scope="col"><center>Last name</center></th>
                                         <c:if test="${course_students_view_target == target_get_students_to_see}">
-                                            <th scope="col">Kick student</th>
+                                            <th scope="col"><center>Kick student</center></th>
                                         </c:if>
                                         <c:if test="${course_students_view_target == target_get_students_to_grade}">
-                                            <th scope="col">Result</th>
+                                            <th scope="col"><center>Result</center></th>
                                         </c:if>
                                     </tr>
                                     </thead>
@@ -111,28 +114,47 @@ if (target == null) target = (String)request.getAttribute(COURSE_STUDENTS_VIEW_T
                                     <tbody>
                                         <c:forEach var="scr" items="${sorted_students_in_scr}">
                                             <tr>
-                                                <td>${scr.student.userInfo.firstName}</td>
-                                                <td>${scr.student.userInfo.lastName}</td>
+                                                <td><center>${scr.student.userInfo.firstName}</center></td>
+                                                <td><center>${scr.student.userInfo.lastName}</center></td>
 
                                                 <c:if test="${course_students_view_target == target_get_students_to_see}">
-                                                    <td>
-                                                        <button class="btn btn-primary btn-danger" type="submit"  name="<%=COURSE_STUDENT_ID%>" value="${scr.student.id}">Kick out</button>
+                                                    <td><center>
+                                                        <button class="btn btn-primary btn-danger"
+                                                                type="submit"
+                                                                name="<%=COURSE_STUDENT_ID%>"
+                                                                value="${scr.student.id}">Kick out</button>
+                                                        </center>
                                                     </td>
                                                 </c:if>
 
                                                 <c:if test="${course_students_view_target == target_get_students_to_grade}">
                                                     <td>
                                                         <div class="form-check form-check-inline">
-                                                            <input class="form-check-input" type="radio" name="${scr.student.id}" id="result_bad${scr.student.id}" value="${CourseResult.BAD}">
-                                                            <label class="form-check-label" for="result_bad${scr.student.id}">${CourseResult.BAD.toString()}</label>
+                                                            <input class="form-check-input"
+                                                                   type="radio"
+                                                                   name="${scr.student.id}"
+                                                                   id="result_bad${scr.student.id}"
+                                                                   value="${CourseResult.BAD}">
+                                                            <label class="form-check-label"
+                                                                   for="result_bad${scr.student.id}">${CourseResult.BAD.toString()}</label>
                                                         </div>
                                                         <div class="form-check form-check-inline">
-                                                            <input class="form-check-input" type="radio" name="${scr.student.id}" id="result_ok${scr.student.id}" value="${CourseResult.OK}" checked>
-                                                            <label class="form-check-label" for="result_ok${scr.student.id}">${CourseResult.OK.toString()}</label>
+                                                            <input class="form-check-input"
+                                                                   type="radio"
+                                                                   name="${scr.student.id}"
+                                                                   id="result_ok${scr.student.id}"
+                                                                   value="${CourseResult.OK}" checked>
+                                                            <label class="form-check-label"
+                                                                   for="result_ok${scr.student.id}">${CourseResult.OK.toString()}</label>
                                                         </div>
                                                         <div class="form-check form-check-inline">
-                                                            <input class="form-check-input" type="radio" name="${scr.student.id}" id="result_perfect${scr.student.id}" value="${CourseResult.EXCELLENT}" >
-                                                            <label class="form-check-label" for="result_perfect${scr.student.id}">${CourseResult.EXCELLENT.toString()}</label>
+                                                            <input class="form-check-input"
+                                                                   type="radio"
+                                                                   name="${scr.student.id}"
+                                                                   id="result_perfect${scr.student.id}"
+                                                                   value="${CourseResult.EXCELLENT}" >
+                                                            <label class="form-check-label"
+                                                                   for="result_perfect${scr.student.id}">${CourseResult.EXCELLENT.toString()}</label>
                                                         </div>
                                                     </td>
                                                 </c:if>
@@ -147,17 +169,16 @@ if (target == null) target = (String)request.getAttribute(COURSE_STUDENTS_VIEW_T
                                     <button class="btn btn-lg btn-primary btn-block" type="submit">Submit</button>
                                     <hr/>
                                 </c:if>
+
+                                <%-- Hidden current user id --%>
+                                <input type="hidden"
+                                       name="<%=WEB_PAGE_CURRENT_USER_ID%>"
+                                       value="<%=session.getAttribute(SESSION_CURRENT_USER_ID) %>"/>
                             </form>
 
                         </div>
                     </c:otherwise>
                 </c:choose>
-
-                <c:if test="${course_students_view_target == target_get_students_to_see}">
-                    <form action="<%=request.getParameter(FROM_URI)%>" method="get">
-                        <input class="btn btn-lg btn-outline-success btn-block" type="submit" value="Back to courses">
-                    </form>
-                </c:if>
 
             </div>
         </div>

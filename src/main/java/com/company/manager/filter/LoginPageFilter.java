@@ -35,7 +35,8 @@ public class LoginPageFilter implements Filter {
                 // Updating cookie
                 Cookie userIdCookie = userIdCookieOpt.get();
                 CookieUtil.addCookie(userIdCookie.getName(), userIdCookie.getValue(),
-                        String.format("/%s/login-page", APP_NAME), Integer.MAX_VALUE, true, httpResp);
+                        String.format("/%s/login-page", APP_NAME),
+                        Integer.MAX_VALUE, true, httpResp);
 
                 req.setAttribute(USER_ID_COOKIE_NAME, Long.parseLong(userIdCookie.getValue()));
                 req.getRequestDispatcher("/sign-in").forward(req, resp);

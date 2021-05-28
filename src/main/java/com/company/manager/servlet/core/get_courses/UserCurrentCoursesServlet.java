@@ -20,8 +20,8 @@ import static com.company.manager.string_constans.ApplicationConstants.APP_NAME;
 import static com.company.manager.string_constans.ApplicationConstants.FROM_URI;
 import static com.company.manager.string_constans.CourseAttrAndParamNames.COURSES;
 import static com.company.manager.string_constans.CourseAttrAndParamNames.COURSES_STATE;
-import static com.company.manager.string_constans.UserAttrAndParamNames.CURRENT_USER_ID_SESSION;
-import static com.company.manager.string_constans.UserAttrAndParamNames.CURRENT_USER_INFO_SESSION;
+import static com.company.manager.string_constans.UserAttrAndParamNames.SESSION_CURRENT_USER_ID;
+import static com.company.manager.string_constans.UserAttrAndParamNames.SESSION_CURRENT_USER_INFO;
 
 @Slf4j
 public class UserCurrentCoursesServlet extends HttpServlet {
@@ -31,9 +31,9 @@ public class UserCurrentCoursesServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         log.debug("Receiving current user id and info from session");
         Long currentUserId = (Long) request.getSession(false)
-                .getAttribute(CURRENT_USER_ID_SESSION);
+                .getAttribute(SESSION_CURRENT_USER_ID);
         UserInfo currentUserInfo = (UserInfo) request.getSession(false)
-                .getAttribute(CURRENT_USER_INFO_SESSION);
+                .getAttribute(SESSION_CURRENT_USER_INFO);
 
         List<Course> userCurrentCourses;
         switch (currentUserInfo.getUserRole()) {

@@ -3,32 +3,24 @@
 <%@ page import="static com.company.manager.servlet.core.get_courses.TeacherNotGradedCoursesServlet.*" %>
 <%@ page import="com.company.manager.domain.user.UserRole" %>
 <%@ page import="static com.company.manager.string_constans.CourseAttrAndParamNames.*" %>
-<%@ page import="static com.company.manager.string_constans.UserAttrAndParamNames.CURRENT_USER_INFO_SESSION" %>
+<%@ page import="static com.company.manager.string_constans.UserAttrAndParamNames.SESSION_CURRENT_USER_INFO" %>
 <%@ page import="com.company.manager.domain.course.Course" %>
 <%@ page import="java.time.format.DateTimeFormatter" %>
 <%@ page import="static com.company.manager.servlet.core.course_actions.SaveOrUpdateCourseServlet.COURSE_DATE_PATTERN" %>
 <%@ page import="static com.company.manager.string_constans.ApplicationConstants.FROM_URI" %>
-<%@ page
-        import="static com.company.manager.servlet.core.students_actions.GetCourseStudentsServlet.GET_STUDENTS_TO_GRADE" %>
-<%@ page
-        import="static com.company.manager.servlet.core.students_actions.GetCourseStudentsServlet.GET_STUDENTS_TO_KICK" %>
+<%@ page import="static com.company.manager.servlet.core.students_actions.GetCourseStudentsServlet.GET_STUDENTS_TO_GRADE" %>
+<%@ page import="static com.company.manager.servlet.core.students_actions.GetCourseStudentsServlet.GET_STUDENTS_TO_KICK" %>
+<%@ page import="static com.company.manager.string_constans.UserAttrAndParamNames.WEB_PAGE_CURRENT_USER_ID" %>
+<%@ page import="static com.company.manager.string_constans.UserAttrAndParamNames.*" %>
+
 <html>
-
-<%-- Prevent caching --%>
-<%
-    response.addHeader("Pragma", "no-cache");
-    response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
-    response.addHeader("Cache-Control", "pre-check=0, post-check=0");
-    response.setDateHeader("Expires", 0);
-%>
-
 <head>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <title>My courses</title>
 </head>
 
 <%-- Prepare variables --%>
-<c:set var="current_user_info" value="<%=session.getAttribute(CURRENT_USER_INFO_SESSION)%>" />
+<c:set var="current_user_info" value="<%=session.getAttribute(SESSION_CURRENT_USER_INFO)%>" />
 <c:set var="courses_state" value="<%=request.getAttribute(COURSES_STATE)%>" />
 <c:set var="selected_courses" value="<%=request.getAttribute(COURSES)%>" />
 <c:set var="not_graded_course_state" value="<%=NOT_GRADED_COURSES_STATE_ATTR_VALUE%>" />
@@ -42,7 +34,25 @@
 
                 <%-- Header --%>
                 <div class="card-header">
-                    <h3 class="panel-title">My ${courses_state} courses</h3>
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a href="${pageContext.request.contextPath}/main-menu?<%=WEB_PAGE_CURRENT_USER_ID%>=<%=session.getAttribute(SESSION_CURRENT_USER_ID)%>"
+                               style="font-size: large">
+                                Home
+                            </a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <a href="${pageContext.request.contextPath}/main-menu/select-courses?<%=WEB_PAGE_CURRENT_USER_ID%>=<%=session.getAttribute(SESSION_CURRENT_USER_ID)%>"
+                               style="font-size: large">
+                                Select my courses
+                            </a>
+                        </li>
+                        <li class="breadcrumb-item active"
+                            aria-current="page"
+                            style="font-size: large">
+                            My ${courses_state} courses
+                        </li>
+                    </ol>
                 </div>
 
                 <%-- Body --%>
@@ -56,156 +66,216 @@
                         <hr/>
                     </c:when>
 
-                    <c:otherwise>
-                        <table class="table table-striped">
 
-                            <thead class="thead-dark">
+                    <c:otherwise>
+                    <table class="table table-striped">
+
+                        <%-- Table header --%>
+                        <thead class="thead-dark">
+                        <tr>
+                            <th><center>Title</center></th>
+                            <th><center>Start date</center></th>
+                            <th><center>End date</center></th>
+
+                            <c:if test="${courses_state != not_graded_course_state}">
+                                <th><center>Timetable</center></th>
+                                <th><center>URI</center></th>
+                            </c:if>
+
+                            <th><center>Description</center></th>
+
+                            <%-- Special columns for students --%>
+                            <c:if test="${current_user_info.userRole == UserRole.STUDENT}">
+                                <th><center>Teacher</center></th>
+                                <th><center>Leave course</center></th>
+                            </c:if>
+
+                            <%-- Speacial columns for teachers --%>
+                            <c:if test="${current_user_info.userRole == UserRole.TEACHER && courses_state == not_graded_course_state}">
+                                <th><center>Grade students</center></th>
+                            </c:if>
+                            <c:if test="${current_user_info.userRole == UserRole.TEACHER && courses_state != not_graded_course_state}">
+                                <th><center>Subscribed students</center></th>
+                                <th><center>Edit course</center></th>
+                                <th><center>Delete course</center></th>
+                            </c:if>
+                        </tr>
+                        </thead>
+
+                        <%-- Table body --%>
+                        <tbody>
+                            <%-- Prepare to format dates --%>
+                            <% DateTimeFormatter formatter = DateTimeFormatter.ofPattern(COURSE_DATE_PATTERN); %>
+                            <c:forEach var="course" items="${selected_courses}">
                                 <tr>
-                                    <th scope="col">Title</th>
-                                    <th scope="col">Start date</th>
-                                    <th scope="col">End date</th>
+                                    <th>${course.courseInfo.name}</th>
+
+                                    <%-- Formatting dates --%>
+                                    <%Course course = (Course) pageContext.getAttribute("course");%>
+                                    <td><%=course.getCourseInfo().getStartDate().format(formatter)%></td>
+                                    <td><%=course.getCourseInfo().getEndDate().format(formatter)%></td>
 
                                     <c:if test="${courses_state != not_graded_course_state}">
-                                        <th scope="col">Timetable</th>
-                                        <th scope="col">URI</th>
+                                    <td>
+                                        <div class="dropdown">
+                                            <button type="button"
+                                                    class="btn btn-default dropdown-toggle"
+                                                    data-toggle="dropdown">
+                                                Timetable
+                                            </button>
+                                            <div class="dropdown-menu">
+                                                <span class="dropdown-item-text"><c:if test="${empty course.courseInfo.timeTable}">No timetable yet</c:if>${course.courseInfo.timeTable}</span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="dropdown">
+                                            <button type="button"
+                                                    class="btn btn-default dropdown-toggle"
+                                                    data-toggle="dropdown">
+                                                URI
+                                            </button>
+                                            <div class="dropdown-menu">
+                                                <span class="dropdown-item-text">
+                                                    <c:if test="${empty course.courseInfo.uri}">
+                                                        <span class="dropdown-item-text">No uri yet</span>
+                                                    </c:if>
+                                                    <c:if test="${not empty course.courseInfo.uri}">
+                                                        <a href="${course.courseInfo.uri}" target="_blank">${course.courseInfo.uri}</a>
+                                                    </c:if>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </td>
                                     </c:if>
+                                    <td>
+                                        <div class="dropdown">
+                                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                                                Description
+                                            </button>
+                                            <div class="dropdown-menu">
+                                                <span class="dropdown-item-text">${course.courseInfo.description}</span>
+                                            </div>
+                                        </div>
+                                    </td>
 
-                                    <th scope="col">Description</th>
-
-                                    <%-- Special columns for students --%>
+                                    <%-- Special for students --%>
                                     <c:if test="${current_user_info.userRole == UserRole.STUDENT}">
-                                        <th scope="col">Teacher</th>
-                                        <th scope="col">Leave course</th>
+                                        <td>${course.teacher.userInfo.firstName} ${course.teacher.userInfo.lastName}</td>
+                                        <td>
+                                            <form action="${pageContext.request.contextPath}/main-menu/select-courses/leave-course" method="post">
+                                                <%-- Hidden current user id --%>
+                                                <input type="hidden"
+                                                       name="<%=WEB_PAGE_CURRENT_USER_ID%>"
+                                                       value="<%=session.getAttribute(SESSION_CURRENT_USER_ID) %>"/>
+                                                <%-- Hidden current URI --%>
+                                                <input type="hidden" name="<%=FROM_URI%>"
+                                                       value="<%=(String)request.getAttribute(FROM_URI)%>"/>
+                                                <button class="btn btn-warning btn-block"
+                                                        type="submit"
+                                                        name="<%=COURSE_ID%>"
+                                                        value="${course.id}">
+                                                    Leave
+                                                </button>
+                                            </form>
+                                        </td>
                                     </c:if>
 
-                                    <%-- Speacial columns for teachers --%>
-                                    <c:if test="${current_user_info.userRole == UserRole.TEACHER && courses_state == not_graded_course_state}">
-                                        <th scope="col">Grade students</th>
+                                    <%-- Special actions for teachers --%>
+                                    <c:if test="${courses_state == not_graded_course_state}">
+                                        <td>
+                                            <form action="${pageContext.request.contextPath}/main-menu/select-courses/students" method="get">
+                                                <%-- Hidden current user id --%>
+                                                <input type="hidden"
+                                                       name="<%=WEB_PAGE_CURRENT_USER_ID%>"
+                                                       value="<%=session.getAttribute(SESSION_CURRENT_USER_ID) %>"/>
+                                                <%-- Hidden current URI --%>
+                                                <input type="hidden"
+                                                       name="<%=FROM_URI%>"
+                                                       value="<%=(String)request.getAttribute(FROM_URI)%>"/>
+                                                <%-- Hidden course students view target --%>
+                                                <input type="hidden"
+                                                       name="<%=COURSE_STUDENTS_VIEW_TARGET%>"
+                                                       value="<%=GET_STUDENTS_TO_GRADE%>"/>
+                                                <button class="btn btn-primary btn-block"
+                                                        type="submit"
+                                                        name="<%=COURSE_ID%>"
+                                                        value="${course.id}">
+                                                    Grade
+                                                </button>
+                                            </form>
+                                        </td>
                                     </c:if>
                                     <c:if test="${current_user_info.userRole == UserRole.TEACHER && courses_state != not_graded_course_state}">
-                                        <th scope="col">Subscribed students</th>
-                                        <th scope="col">Edit course</th>
-                                        <th scope="col">Delete course</th>
+                                        <td>
+                                            <form action="${pageContext.request.contextPath}/main-menu/select-courses/students" method="get">
+                                                <%-- Hidden current user id --%>
+                                                <input type="hidden"
+                                                       name="<%=WEB_PAGE_CURRENT_USER_ID%>"
+                                                       value="<%=session.getAttribute(SESSION_CURRENT_USER_ID) %>"/>
+                                                <%-- Hidden current URI --%>
+                                                <input type="hidden"
+                                                       name="<%=FROM_URI%>"
+                                                       value="<%=(String)request.getAttribute(FROM_URI)%>"/>
+                                                <%-- Hidden course students view target --%>
+                                                <input type="hidden"
+                                                       name="<%=COURSE_STUDENTS_VIEW_TARGET%>"
+                                                       value="<%=GET_STUDENTS_TO_KICK%>"/>
+                                                <button class="btn btn-primary btn-block"
+                                                        type="submit"
+                                                        name="<%=COURSE_ID%>"
+                                                        value="${course.id}">
+                                                    Students
+                                                </button>
+                                            </form>
+                                        </td>
+                                        <td>
+                                            <form action="${pageContext.request.contextPath}/main-menu/select-courses/edit-course" method="get">
+                                                <%-- Hidden current user id --%>
+                                                <input type="hidden"
+                                                       name="<%=WEB_PAGE_CURRENT_USER_ID%>"
+                                                       value="<%=session.getAttribute(SESSION_CURRENT_USER_ID) %>"/>
+                                                <%-- Hidden current URI --%>
+                                                <input type="hidden"
+                                                       name="<%=FROM_URI%>"
+                                                       value="<%=(String)request.getAttribute(FROM_URI)%>"/>
+                                                <button class="btn btn-success btn-block"
+                                                        type="submit"
+                                                        name="<%=COURSE_ID%>"
+                                                        value="${course.id}">
+                                                    Edit
+                                                </button>
+                                            </form>
+                                        </td>
+                                        <td>
+                                            <form action="${pageContext.request.contextPath}/main-menu/select-courses/delete-course" method="post">
+                                                <%-- Hidden current user id --%>
+                                                <input type="hidden"
+                                                       name="<%=WEB_PAGE_CURRENT_USER_ID%>"
+                                                       value="<%=session.getAttribute(SESSION_CURRENT_USER_ID) %>"/>
+                                                <%-- Hidden current URI --%>
+                                                <input type="hidden"
+                                                       name="<%=FROM_URI%>"
+                                                       value="<%=(String)request.getAttribute(FROM_URI)%>"/>
+                                                <button class="btn btn-danger btn-block"
+                                                        type="submit"
+                                                        name="<%=COURSE_ID%>"
+                                                        value="${course.id}">
+                                                    Delete
+                                                </button>
+                                            </form>
+                                        </td>
                                     </c:if>
+
                                 </tr>
-                            </thead>
+                            </c:forEach>
+                        </tbody>
 
-                            <tbody>
-                                <%-- Prepare to format dates --%>
-                                <% DateTimeFormatter formatter = DateTimeFormatter.ofPattern(COURSE_DATE_PATTERN); %>
-                                <c:forEach var="course" items="${selected_courses}">
-                                    <tr>
-                                        <th>${course.courseInfo.name}</th>
-
-                                        <%-- Formatting dates --%>
-                                        <%Course course = (Course) pageContext.getAttribute("course");%>
-                                        <td><%=course.getCourseInfo().getStartDate().format(formatter)%></td>
-                                        <td><%=course.getCourseInfo().getEndDate().format(formatter)%></td>
-
-                                        <c:if test="${courses_state != not_graded_course_state}">
-                                        <td>
-                                            <div class="dropdown">
-                                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                                                    Timetable
-                                                </button>
-                                                <div class="dropdown-menu">
-                                                    <span class="dropdown-item-text"><c:if test="${empty course.courseInfo.timeTable}">No timetable yet</c:if>${course.courseInfo.timeTable}</span>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div class="dropdown">
-                                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                                                    URI
-                                                </button>
-                                                <div class="dropdown-menu">
-                                                    <span class="dropdown-item-text">
-                                                        <c:if test="${empty course.courseInfo.uri}">
-                                                            <span class="dropdown-item-text">No uri yet</span>
-                                                        </c:if>
-                                                        <c:if test="${not empty course.courseInfo.uri}">
-                                                            <a href="${course.courseInfo.uri}" target="_blank">${course.courseInfo.uri}</a>
-                                                        </c:if>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        </c:if>
-                                        <td>
-                                            <div class="dropdown">
-                                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                                                    Description
-                                                </button>
-                                                <div class="dropdown-menu">
-                                                    <span class="dropdown-item-text">${course.courseInfo.description}</span>
-                                                </div>
-                                            </div>
-                                        </td>
-
-                                        <%-- Special for students --%>
-                                        <c:if test="${current_user_info.userRole == UserRole.STUDENT}">
-                                            <td>${course.teacher.userInfo.firstName} ${course.teacher.userInfo.lastName}</td>
-                                            <td>
-                                                <form action="${pageContext.request.contextPath}/main-menu/select-courses/leave-course" method="post">
-                                                    <%-- Hidden current URI --%>
-                                                    <input type="hidden" name="<%=FROM_URI%>" value="<%=(String)request.getAttribute(FROM_URI)%>"/>
-                                                    <button class="btn btn-warning btn-block" type="submit" name="<%=COURSE_ID%>" value="${course.id}">Leave</button>
-                                                </form>
-                                            </td>
-                                        </c:if>
-
-                                        <%-- Special actions for teachers --%>
-                                        <c:if test="${courses_state == not_graded_course_state}">
-                                            <td>
-                                                <form action="${pageContext.request.contextPath}/main-menu/select-courses/students" method="get">
-                                                    <%-- Hidden current URI --%>
-                                                    <input type="hidden" name="<%=FROM_URI%>" value="<%=(String)request.getAttribute(FROM_URI)%>"/>
-                                                    <%-- Hidden course students view target --%>
-                                                    <input type="hidden" name="<%=COURSE_STUDENTS_VIEW_TARGET%>" value="<%=GET_STUDENTS_TO_GRADE%>"/>
-                                                    <button class="btn btn-primary btn-block" type="submit" name="<%=COURSE_ID%>" value="${course.id}">Grade</button>
-                                                </form>
-                                            </td>
-                                        </c:if>
-                                        <c:if test="${current_user_info.userRole == UserRole.TEACHER && courses_state != not_graded_course_state}">
-                                            <td>
-                                                <form action="${pageContext.request.contextPath}/main-menu/select-courses/students" method="get">
-                                                    <%-- Hidden current URI --%>
-                                                    <input type="hidden" name="<%=FROM_URI%>" value="<%=(String)request.getAttribute(FROM_URI)%>"/>
-                                                    <%-- Hidden course students view target --%>
-                                                    <input type="hidden" name="<%=COURSE_STUDENTS_VIEW_TARGET%>" value="<%=GET_STUDENTS_TO_KICK%>"/>
-                                                    <button class="btn btn-primary btn-block" type="submit" name="<%=COURSE_ID%>" value="${course.id}">Students</button>
-                                                </form>
-                                            </td>
-                                            <td>
-                                                <form action="${pageContext.request.contextPath}/main-menu/select-courses/edit-course" method="get">
-                                                    <%-- Hidden current URI --%>
-                                                    <input type="hidden" name="<%=FROM_URI%>" value="<%=(String)request.getAttribute(FROM_URI)%>"/>
-                                                    <button class="btn btn-success btn-block" type="submit" name="<%=COURSE_ID%>" value="${course.id}">Edit</button>
-                                                </form>
-                                            </td>
-                                            <td>
-                                                <form action="${pageContext.request.contextPath}/main-menu/select-courses/delete-course" method="post">
-                                                    <%-- Hidden current URI --%>
-                                                    <input type="hidden" name="<%=FROM_URI%>" value="<%=(String)request.getAttribute(FROM_URI)%>"/>
-                                                    <button class="btn btn-danger btn-block" type="submit" name="<%=COURSE_ID%>" value="${course.id}">Delete</button>
-                                                </form>
-                                            </td>
-                                        </c:if>
-
-                                    </tr>
-                                </c:forEach>
-                            </tbody>
-
-                        </table>
+                    </table>
                     </c:otherwise>
                 </c:choose>
 
-                <%-- Back to "My courses" button --%>
                 <hr/>
-                <form action="${pageContext.request.contextPath}/main-menu/select-courses" method="get">
-                    <input class="btn btn-lg btn-outline-success btn-block" type="submit" value="Back to My courses">
-                </form>
-
                 </div>
             </div>
         </div>

@@ -3,18 +3,11 @@
 <%@ page import="static com.company.manager.servlet.core.course_actions.SaveOrUpdateCourseServlet.COURSE_DATE_PATTERN" %>
 <%@ page import="com.company.manager.domain.course.Course" %>
 <%@ page import="static com.company.manager.string_constans.CourseAttrAndParamNames.COURSES_ID" %>
+<%@ page import="static com.company.manager.string_constans.UserAttrAndParamNames.WEB_PAGE_CURRENT_USER_ID" %>
+<%@ page import="static com.company.manager.string_constans.UserAttrAndParamNames.SESSION_CURRENT_USER_ID" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
-
-<%-- Prevent caching --%>
-<%
-    response.addHeader("Pragma", "no-cache");
-    response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
-    response.addHeader("Cache-Control", "pre-check=0, post-check=0");
-    response.setDateHeader("Expires", 0);
-%>
-
 <head>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <title>Join courses</title>
@@ -32,7 +25,12 @@
 
                 <%-- Header --%>
                 <div class="card-header">
-                    <h3>Choose courses you want to join</h3>
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a href="${pageContext.request.contextPath}/main-menu?<%=WEB_PAGE_CURRENT_USER_ID%>=<%=session.getAttribute(SESSION_CURRENT_USER_ID)%>" style="font-size: large">Home</a>
+                        </li>
+                        <li class="breadcrumb-item active" aria-current="page" style="font-size: large">Join new courses</li>
+                    </ol>
                 </div>
 
                 <%-- Body --%>
@@ -57,13 +55,13 @@
 
                                     <thead class="thead-dark">
                                     <tr>
-                                        <th scope="col">Add</th>
-                                        <th scope="col">Title</th>
-                                        <th scope="col">Start date</th>
-                                        <th scope="col">End date</th>
-                                        <th scope="col">Timetable</th>
-                                        <th scope="col">Teacher</th>
-                                        <th scope="col">Description</th>
+                                        <th><center>Add</center></th>
+                                        <th><center>Title</center></th>
+                                        <th><center>Start date</center></th>
+                                        <th><center>End date</center></th>
+                                        <th><center>Timetable</center></th>
+                                        <th><center>Teacher</center></th>
+                                        <th><center>Description</center></th>
                                     </tr>
                                     </thead>
 
@@ -119,6 +117,11 @@
                                 <hr/>
                                 <input class="btn btn-lg btn-primary btn-block" type="submit" value="Submit">
                                 <hr/>
+
+                                <%-- Hidden current user id --%>
+                                <input type="hidden"
+                                       name="<%=WEB_PAGE_CURRENT_USER_ID%>"
+                                       value="<%=session.getAttribute(SESSION_CURRENT_USER_ID) %>"/>
 
                             </form>
                         </c:otherwise>

@@ -14,7 +14,7 @@ import java.io.IOException;
 import java.util.*;
 
 import static com.company.manager.string_constans.CourseAttrAndParamNames.COURSES_RESULTS;
-import static com.company.manager.string_constans.UserAttrAndParamNames.CURRENT_USER_ID_SESSION;
+import static com.company.manager.string_constans.UserAttrAndParamNames.SESSION_CURRENT_USER_ID;
 
 @Slf4j
 public class StudentCompletedCoursesServlet extends HttpServlet {
@@ -22,7 +22,7 @@ public class StudentCompletedCoursesServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         log.debug("Getting current student id");
         Long studentId = (Long)request.getSession(false)
-                .getAttribute(CURRENT_USER_ID_SESSION);
+                .getAttribute(SESSION_CURRENT_USER_ID);
 
         log.debug("Getting student completed courses");
         List<StudentCourseResult> completedCourses =

@@ -2,12 +2,15 @@ package com.company.manager.string_constans;
 
 public class UserAttrAndParamNames {
 
+    // Hidden param
+    public static final String WEB_PAGE_CURRENT_USER_ID = "web_page_current_user_id";
+
     // Cookie names
     public static final String USER_ID_COOKIE_NAME = "user_id_cookie";
 
     // Session attr names
-    public static final String CURRENT_USER_ID_SESSION = "current_user_id";
-    public static final String CURRENT_USER_INFO_SESSION = "current_user_info";
+    public static final String SESSION_CURRENT_USER_ID = "session_current_user_id";
+    public static final String SESSION_CURRENT_USER_INFO = "session_current_user_info";
 
     // For sign in
     public static final String SIGN_IN_USER = "sign_in_user";
@@ -20,11 +23,5 @@ public class UserAttrAndParamNames {
     public static final String IS_TEACHER = "is_teacher";
     public static final String EMAIL = "email";
     public static final String PASSWORD = "password";
-    public static final String PASSWORD_CONFIRM = "password_confirm";
-    public static final String PASSWORD_MISMATCH_MESSAGE = "password_mismatch_message";
-    public static final String EMAIL_EXISTS_MESSAGE = "email_exists_message";
-
-
-
 
 }

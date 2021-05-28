@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 import static com.company.manager.string_constans.CourseAttrAndParamNames.COURSES;
-import static com.company.manager.string_constans.UserAttrAndParamNames.CURRENT_USER_ID_SESSION;
+import static com.company.manager.string_constans.UserAttrAndParamNames.SESSION_CURRENT_USER_ID;
 
 @Slf4j
 public class GetAvailableCoursesServlet extends HttpServlet {
@@ -24,7 +24,7 @@ public class GetAvailableCoursesServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         log.debug("Receiving current student id from session");
         Long studentId = (Long)request.getSession(false)
-                .getAttribute(CURRENT_USER_ID_SESSION);
+                .getAttribute(SESSION_CURRENT_USER_ID);
 
         log.debug("Getting available courses for the student");
         List<Course> availableCourses = CourseServiceImpl.getService()

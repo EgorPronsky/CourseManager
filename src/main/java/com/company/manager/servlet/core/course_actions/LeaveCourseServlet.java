@@ -22,7 +22,7 @@ import java.util.Optional;
 
 import static com.company.manager.string_constans.ApplicationConstants.FROM_URI;
 import static com.company.manager.string_constans.CourseAttrAndParamNames.*;
-import static com.company.manager.string_constans.UserAttrAndParamNames.CURRENT_USER_ID_SESSION;
+import static com.company.manager.string_constans.UserAttrAndParamNames.SESSION_CURRENT_USER_ID;
 import static com.company.manager.servlet.core.students_actions.GetCourseStudentsServlet.GET_STUDENTS_TO_KICK;
 
 @Slf4j
@@ -53,7 +53,7 @@ public class LeaveCourseServlet extends HttpServlet {
             } else {
                 // If student leaving course on his own -> getting his id from session
                 studentId = (Long)request.getSession(false)
-                        .getAttribute(CURRENT_USER_ID_SESSION);
+                        .getAttribute(SESSION_CURRENT_USER_ID);
             }
 
             log.debug("Getting current student by id from DB");

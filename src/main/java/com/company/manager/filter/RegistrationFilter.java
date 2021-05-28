@@ -15,34 +15,23 @@ import static com.company.manager.string_constans.UserAttrAndParamNames.*;
 @Slf4j
 public class RegistrationFilter implements Filter {
 
+    public static final String EMAIL_EXISTS_MESSAGE_ATTR_NAME = "email_exists_message";
+
     public void init(FilterConfig config) throws ServletException {}
 
     public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain)
             throws ServletException, IOException {
         log.debug("Receiving user input");
         String email = req.getParameter(EMAIL);
-        String password = req.getParameter(PASSWORD);
-        String passwordConfirm = req.getParameter(PASSWORD_CONFIRM);
 
-        log.debug("Checking user input on validity");
-        boolean isInputValid = true;
-        Map<String, Object> respAttrs = new HashMap<>();
-
-        // Validating
-        if (!password.equals(passwordConfirm)) {
-            isInputValid = false;
-            respAttrs.put(PASSWORD_MISMATCH_MESSAGE, "Password mismatch");
-        }
-        if (AccessInfoServiceImpl.getService().isEmailExists(email)) {
-            isInputValid = false;
-            respAttrs.put(EMAIL_EXISTS_MESSAGE, "This email already exists");
-        }
-
-        if (isInputValid) {
+        log.debug("Checking user entered email on existence");
+        if (!AccessInfoServiceImpl.getService().isEmailExists(email)) {
             log.debug("User input is valid");
             chain.doFilter(req, resp);
         } else {
-            log.debug("User input invalid");
+            log.debug("Entered email already exists");
+            Map<String, Object> respAttrs = new HashMap<>();
+            respAttrs.put(EMAIL_EXISTS_MESSAGE_ATTR_NAME, "This email already exists");
             ViewHandler viewHandler = new JspViewHandler();
             viewHandler.renderView("/view/access/registration.jsp", respAttrs, req, resp);
         }

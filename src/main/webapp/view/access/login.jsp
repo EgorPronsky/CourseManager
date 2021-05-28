@@ -2,14 +2,6 @@
 <%@ page session="false" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-<%-- Prevent caching --%>
-<%
-    response.addHeader("Pragma", "no-cache");
-    response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
-    response.addHeader("Cache-Control", "pre-check=0, post-check=0");
-    response.setDateHeader("Expires", 0);
-%>
-
 <html>
 <head>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
@@ -32,7 +24,7 @@
 
                 <%-- Header --%>
                 <div class="card-header">
-                    <h3 class="panel-title">Login</h3>
+                    <h4>Login</h4>
                 </div>
 
                 <%-- Body --%>
@@ -85,7 +77,11 @@
 
                             <%--"Remember me" checkbox--%>
                             <div class="form-check mb-3">
-                                <input class="form-check-input" name="${remember_user}" id="remember_me" type="checkbox" value="Remember me">
+                                <input class="form-check-input"
+                                       name="${remember_user}"
+                                       id="remember_me"
+                                       type="checkbox"
+                                       value="Remember me">
                                 <label class="form-check-label" for="remember_me">Remember me</label>
                             </div>
 

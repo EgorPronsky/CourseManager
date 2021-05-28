@@ -8,6 +8,7 @@
         <entry key="file://$PROJECT_DIR$/src/main/webapp/view/core/create-new-course.html" value="file://$PROJECT_DIR$/src/main/webapp/view/core" />
         <entry key="file://$PROJECT_DIR$/src/main/webapp/view/core/create-new-course.jsp" value="file://$PROJECT_DIR$/src/main/webapp/view/core" />
         <entry key="file://$PROJECT_DIR$/src/main/webapp/view/core/create-or-update-course.jsp" value="file://$PROJECT_DIR$/src/main/webapp/view/core" />
+        <entry key="file://$PROJECT_DIR$/src/main/webapp/view/core/join-new-courses.jsp" value="file://$PROJECT_DIR$/src/main/webapp/view/core" />
         <entry key="file://$PROJECT_DIR$/src/main/webapp/view/core/view-selected-courses.jsp" value="file://$PROJECT_DIR$/src/main/webapp/view/core" />
       </map>
     </option>

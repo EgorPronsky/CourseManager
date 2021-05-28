@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 
 import static com.company.manager.string_constans.ApplicationConstants.APP_NAME;
 import static com.company.manager.string_constans.CourseAttrAndParamNames.COURSES_ID;
-import static com.company.manager.string_constans.UserAttrAndParamNames.CURRENT_USER_ID_SESSION;
+import static com.company.manager.string_constans.UserAttrAndParamNames.SESSION_CURRENT_USER_ID;
 
 @Slf4j
 public class JoinNewCoursesServlet extends HttpServlet {
@@ -40,7 +40,7 @@ public class JoinNewCoursesServlet extends HttpServlet {
 
             log.debug("Getting current student from DB");
             Long studentId = (Long) request.getSession(false)
-                    .getAttribute(CURRENT_USER_ID_SESSION);
+                    .getAttribute(SESSION_CURRENT_USER_ID);
             User currentStudent = UserServiceImpl.getService()
                     .getUserById(studentId);
 

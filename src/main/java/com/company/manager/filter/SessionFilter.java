@@ -10,6 +10,8 @@ import java.util.Arrays;
 import java.util.Optional;
 
 import static com.company.manager.string_constans.ApplicationConstants.APP_NAME;
+import static com.company.manager.string_constans.UserAttrAndParamNames.WEB_PAGE_CURRENT_USER_ID;
+import static com.company.manager.string_constans.UserAttrAndParamNames.SESSION_CURRENT_USER_ID;
 
 @Slf4j
 public class SessionFilter implements Filter {
@@ -29,6 +31,7 @@ public class SessionFilter implements Filter {
         HttpServletResponse httpResp = (HttpServletResponse)resp;
 
         if (httpReq.getSession(false) == null) {
+
             log.debug("No active session is attached");
             String uri = httpReq.getRequestURI();
             Optional<String> allowedPath = Arrays.stream(allowedPathsWithNoActiveSession)
@@ -40,7 +43,23 @@ public class SessionFilter implements Filter {
                 chain.doFilter(req, resp);
             }
         } else {
-            chain.doFilter(req, resp);
+            // Checking for new user logged in (at the same browser)
+            String userIdFromWebPageStr = httpReq.getParameter(WEB_PAGE_CURRENT_USER_ID);
+            if (userIdFromWebPageStr != null) {
+
+                long userIdFromSession = (Long)httpReq.getSession(false)
+                        .getAttribute(SESSION_CURRENT_USER_ID);
+                long userIdFromWebPage = Long.parseLong(userIdFromWebPageStr);
+
+                if (userIdFromSession != userIdFromWebPage) {
+                    log.debug("New user logged in, this page is no longer available, redirecting");
+                    httpResp.sendRedirect(String.format("/%s/new-user-logged-in", APP_NAME));
+                } else {
+                    chain.doFilter(req, resp);
+                }
+            } else {
+                chain.doFilter(req, resp);
+            }
         }
 
     }

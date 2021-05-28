@@ -18,7 +18,7 @@ import java.util.Map;
 import static com.company.manager.string_constans.ApplicationConstants.APP_NAME;
 import static com.company.manager.string_constans.ApplicationConstants.FROM_URI;
 import static com.company.manager.string_constans.CourseAttrAndParamNames.*;
-import static com.company.manager.string_constans.UserAttrAndParamNames.CURRENT_USER_ID_SESSION;
+import static com.company.manager.string_constans.UserAttrAndParamNames.SESSION_CURRENT_USER_ID;
 
 @Slf4j
 public class TeacherNotGradedCoursesServlet extends HttpServlet {
@@ -28,7 +28,7 @@ public class TeacherNotGradedCoursesServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         log.debug("Receiving current teacher id from session");
         Long teacherId = (Long)request.getSession(false)
-                .getAttribute(CURRENT_USER_ID_SESSION);
+                .getAttribute(SESSION_CURRENT_USER_ID);
 
         log.debug("Getting teacher not graded courses");
         List<Course> notGradedCourses = CourseServiceImpl.getService()

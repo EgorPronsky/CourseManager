@@ -17,7 +17,7 @@ import java.io.IOException;
 import static com.company.manager.string_constans.ApplicationConstants.APP_NAME;
 import static com.company.manager.string_constans.ApplicationConstants.FROM_URI;
 import static com.company.manager.string_constans.CourseAttrAndParamNames.*;
-import static com.company.manager.string_constans.UserAttrAndParamNames.CURRENT_USER_ID_SESSION;
+import static com.company.manager.string_constans.UserAttrAndParamNames.SESSION_CURRENT_USER_ID;
 
 @Slf4j
 public class SaveOrUpdateCourseServlet extends HttpServlet {
@@ -35,7 +35,7 @@ public class SaveOrUpdateCourseServlet extends HttpServlet {
 
         log.debug("Getting current teacher from DB");
         Long teacherId = (Long)request.getSession(false)
-                .getAttribute(CURRENT_USER_ID_SESSION);
+                .getAttribute(SESSION_CURRENT_USER_ID);
         User currentTeacher = UserServiceImpl.getService()
                 .getUserById(teacherId);
 
