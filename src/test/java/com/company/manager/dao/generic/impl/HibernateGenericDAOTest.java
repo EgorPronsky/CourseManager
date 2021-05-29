@@ -16,8 +16,13 @@ import java.util.Optional;
 
 public class HibernateGenericDAOTest {
 
-    private final SessionFactory sessionFactory =
-            HibernateUtilForTest.getSessionFactory();
+    private static SessionFactory sessionFactory;
+
+    // Entity DAOs
+    private static GenericDAO<AccessInfo> accessInfDAO;
+    private static GenericDAO<User> usDAO;
+    private static GenericDAO<Course> crsDAO;
+    private static GenericDAO<StudentCourseResult> scrDAO;
 
     // Entities for tests
     private AccessInfo accessInf;
@@ -25,15 +30,21 @@ public class HibernateGenericDAOTest {
     private Course crs;
     private StudentCourseResult scr;
 
-    // Entity DAOs
-    private GenericDAO<AccessInfo> accessInfDAO;
-    private GenericDAO<User> usDAO;
-    private GenericDAO<Course> crsDAO;
-    private GenericDAO<StudentCourseResult> scrDAO;
+    private static void initDAOs() {
+        accessInfDAO = new HibernateGenericDAO<>(AccessInfo.class, sessionFactory);
+        usDAO = new HibernateGenericDAO<>(User.class, sessionFactory);
+        crsDAO = new HibernateGenericDAO<>(Course.class, sessionFactory);
+        scrDAO = new HibernateGenericDAO<>(StudentCourseResult.class, sessionFactory);
+    }
 
+    @BeforeAll
+    public static void prepareForTest() {
+        HibernateUtilForTest.clearDBTables();
+        sessionFactory = HibernateUtilForTest.getSessionFactory();
+        initDAOs();
+    }
 
-    // Init entities
-    {
+    private void initEntities() {
         accessInf = AccessInfo.builder().
                 email("email").passwordHash("password".hashCode())
                 .build();
@@ -47,29 +58,21 @@ public class HibernateGenericDAOTest {
                 .student(us).course(crs).build();
     }
 
-    // Init DAOs
-    {
-        accessInfDAO = new HibernateGenericDAO<>(AccessInfo.class, sessionFactory);
-        usDAO = new HibernateGenericDAO<>(User.class, sessionFactory);
-        crsDAO = new HibernateGenericDAO<>(Course.class, sessionFactory);
-        scrDAO = new HibernateGenericDAO<>(StudentCourseResult.class, sessionFactory);
-    }
-
-    @BeforeAll
-    public static void clearBeforeTest() {
-        HibernateUtilForTest.clearDBTables();
-    }
-
-    @BeforeEach
-    public void saveEntities() {
+    private void saveEntities() {
         accessInfDAO.save(accessInf);
         usDAO.save(us);
         crsDAO.save(crs);
         scrDAO.save(scr);
     }
 
+    @BeforeEach
+    public void prepareBeforeEachTest() {
+        initEntities();
+        saveEntities();
+    }
+
     @AfterEach
-    public void clearAfterTest() {
+    public void clearAfterEachTest() {
         HibernateUtilForTest.clearDBTables();
     }
 

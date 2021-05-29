@@ -5,71 +5,41 @@ import com.company.manager.dao.custom.StudentCourseResultDAO;
 import com.company.manager.dao.custom.UserDAO;
 import com.company.manager.domain.archive.CourseResult;
 import com.company.manager.domain.archive.StudentCourseResult;
-import com.company.manager.domain.archive.StudentCourseResultId;
 import com.company.manager.domain.course.Course;
 import com.company.manager.domain.course.CourseInfo;
 import com.company.manager.domain.user.AccessInfo;
 import com.company.manager.domain.user.User;
 import com.company.manager.util.HibernateUtilForTest;
+import com.company.manager.util.TestUtil;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.junit.jupiter.api.*;
 
 import javax.persistence.TypedQuery;
 import java.time.LocalDate;
-import java.time.temporal.TemporalAmount;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
 public class HibernateStudentCourseResultDAOTest {
 
-    private final SessionFactory sessionFactory =
-            HibernateUtilForTest.getSessionFactory();
-
-    // Entities for tests
-    private AccessInfo accessInf1;
-    private AccessInfo accessInf2;
-    private User student1;
-    private User student2;
-    private Course crs1;
-    private Course crs2;
-    private StudentCourseResult scr1_1;
-    private StudentCourseResult scr1_2;
-    private StudentCourseResult scr2_1;
-    private StudentCourseResult scr2_2;
+    private static SessionFactory sessionFactory;
 
     // DAOs
-    private UserDAO usDAO;
-    private CourseDAO crsDAO;
-    private StudentCourseResultDAO scrDAO;
+    private static UserDAO usDAO;
+    private static CourseDAO crsDAO;
+    private static StudentCourseResultDAO scrDAO;
 
-    // Init entities
-    {
-        accessInf1 = AccessInfo.builder()
-                .email("email1").passwordHash("password1".hashCode())
-                .build();
-        accessInf2 = AccessInfo.builder()
-                .email("email2").passwordHash("password2".hashCode())
-                .build();
-        student1 = User.builder().accessInfo(accessInf1).build();
-        student2 = User.builder().accessInfo(accessInf2).build();
+    // Entities for tests
+    private User student1;
+    private User student2;
+    private Course endedCrs;
+    private Course activeCrs;
+    private StudentCourseResult scrSt1EndedCrs;
+    private StudentCourseResult scrSt1ActiveCrs;
+    private StudentCourseResult scrSt2EndedCrs;
+    private StudentCourseResult scrSt2ActiveCrs;
 
-        crs1 = Course.builder().courseInfo(
-                CourseInfo.builder().name("crs1").endDate(LocalDate.now().minusDays(2))
-                        .build()).build();
-        crs2 = Course.builder().courseInfo(
-                CourseInfo.builder().name("crs2").endDate(LocalDate.now().plusDays(2))
-                        .build()).build();
-
-        scr1_1 = StudentCourseResult.builder().student(student1).course(crs1).build();
-        scr1_2 = StudentCourseResult.builder().student(student1).course(crs2).build();
-        scr2_1 = StudentCourseResult.builder().student(student2).course(crs1).build();
-        scr2_2 = StudentCourseResult.builder().student(student2).course(crs2).build();
-    }
-
-    // Init DAOs
-    {
+    private static void initDAOs() {
         usDAO = new HibernateUserDAO(sessionFactory);
         crsDAO = new HibernateCourseDAO(sessionFactory);
         scrDAO = new HibernateStudentCourseResultDAO(sessionFactory);
@@ -78,41 +48,74 @@ public class HibernateStudentCourseResultDAOTest {
     @BeforeAll
     public static void prepareForTest() {
         HibernateUtilForTest.clearDBTables();
+        sessionFactory = HibernateUtilForTest.getSessionFactory();
+        initDAOs();
     }
 
-    @BeforeEach
-    public void saveEntities() {
+    private void initEntities() {
+        // Init students
+        AccessInfo accessInf1 = AccessInfo.builder()
+                .email("email1").passwordHash("password1".hashCode())
+                .build();
+        AccessInfo accessInf2 = AccessInfo.builder()
+                .email("email2").passwordHash("password2".hashCode())
+                .build();
+        student1 = User.builder().accessInfo(accessInf1).build();
+        student2 = User.builder().accessInfo(accessInf2).build();
+
+        // Init courses
+        endedCrs = Course.builder().courseInfo(
+                CourseInfo.builder().name("endedCrs").endDate(LocalDate.now().minusDays(2))
+                        .build()).build();
+        activeCrs = Course.builder().courseInfo(
+                CourseInfo.builder().name("activeCrs").endDate(LocalDate.now().plusDays(2))
+                        .build()).build();
+
+        // Init SCR entities
+        scrSt1EndedCrs = StudentCourseResult.builder().student(student1).course(endedCrs).build();
+        scrSt1ActiveCrs = StudentCourseResult.builder().student(student1).course(activeCrs).build();
+        scrSt2EndedCrs = StudentCourseResult.builder().student(student2).course(endedCrs).build();
+        scrSt2ActiveCrs = StudentCourseResult.builder().student(student2).course(activeCrs).build();
+    }
+
+    private void saveEntities() {
         // Saving students
         usDAO.save(student1);
         usDAO.save(student2);
 
         // Saving courses
-        crsDAO.save(crs1);
-        crsDAO.save(crs2);
+        crsDAO.save(endedCrs);
+        crsDAO.save(activeCrs);
 
         // Saving SCR entities
-        scrDAO.save(scr1_1);
-        scrDAO.save(scr1_2);
-        scrDAO.save(scr2_1);
-        scrDAO.save(scr2_2);
+        scrDAO.save(scrSt1EndedCrs);
+        scrDAO.save(scrSt1ActiveCrs);
+        scrDAO.save(scrSt2EndedCrs);
+        scrDAO.save(scrSt2ActiveCrs);
+    }
+
+    @BeforeEach
+    public void prepareBeforeEachTest() {
+        initEntities();
+        saveEntities();
     }
 
     @AfterEach
-    public void clearAfterTest() {
+    public void clearAfterEachTest() {
         HibernateUtilForTest.clearDBTables();
     }
 
     @Test
     public void updateAllTest() {
         // Updating
-        scr1_1.setResult(CourseResult.EXCELLENT);
-        scr1_2.setResult(CourseResult.EXCELLENT);
-        scr2_1.setResult(CourseResult.EXCELLENT);
-        scr2_2.setResult(CourseResult.EXCELLENT);
+        scrSt1EndedCrs.setResult(CourseResult.EXCELLENT);
+        scrSt1ActiveCrs.setResult(CourseResult.EXCELLENT);
+        scrSt2EndedCrs.setResult(CourseResult.EXCELLENT);
+        scrSt2ActiveCrs.setResult(CourseResult.EXCELLENT);
 
-        List<StudentCourseResult> scrList =
-                Arrays.asList(scr1_1, scr1_2, scr2_1, scr2_2);
-        scrDAO.updateAll(scrList);
+        List<StudentCourseResult> expectedSCRList =
+                Arrays.asList(scrSt1EndedCrs, scrSt1ActiveCrs, scrSt2EndedCrs, scrSt2ActiveCrs);
+        scrDAO.updateAll(expectedSCRList);
 
         // Retrieving updated SCR entities from DB
         Session session = sessionFactory.openSession();
@@ -123,28 +126,28 @@ public class HibernateStudentCourseResultDAOTest {
         session.close();
 
         // Testing
-        Assertions.assertTrue(scrList.size() == scrListFromDB.size() &&
-                scrList.containsAll(scrListFromDB) && scrListFromDB.containsAll(scrList),
+        Assertions.assertTrue(
+                TestUtil.areListsEqualIgnoringOrder(expectedSCRList, scrListFromDB),
                 "Method should update all SCR entities correctly");
     }
 
     @Test
     public void getStudentsResultsByCourseIdTest() {
         // Retrieving SCR entities from DB
-        List<StudentCourseResult> scr1 = Arrays.asList(scr1_1, scr2_1);
-        List<StudentCourseResult> scr1FromDB =
-                scrDAO.getStudentsResultsByCourseId(crs1.getId());
+        List<StudentCourseResult> expectedSCRListStudent1 = Arrays.asList(scrSt1EndedCrs, scrSt2EndedCrs);
+        List<StudentCourseResult> scrListFromDBStudent1 =
+                scrDAO.getStudentsResultsByCourseId(endedCrs.getId());
 
-        List<StudentCourseResult> scr2 = Arrays.asList(scr1_2, scr2_2);
-        List<StudentCourseResult> scr2FromDB =
-                scrDAO.getStudentsResultsByCourseId(crs2.getId());
+        List<StudentCourseResult> expectedSCRListStudent2 = Arrays.asList(scrSt1ActiveCrs, scrSt2ActiveCrs);
+        List<StudentCourseResult> scrListFromDBStudent2 =
+                scrDAO.getStudentsResultsByCourseId(activeCrs.getId());
 
         // Testing
-        Assertions.assertTrue(scr1.size() == scr1FromDB.size() &&
-                        scr1.containsAll(scr1FromDB) && scr1.containsAll(scr1FromDB),
+        Assertions.assertTrue(
+                TestUtil.areListsEqualIgnoringOrder(expectedSCRListStudent1, scrListFromDBStudent1),
                 "Method should find all SCR entities with required course id");
-        Assertions.assertTrue(scr2.size() == scr2FromDB.size() &&
-                        scr2.containsAll(scr2FromDB) && scr2.containsAll(scr2FromDB),
+        Assertions.assertTrue(
+                TestUtil.areListsEqualIgnoringOrder(expectedSCRListStudent2, scrListFromDBStudent2),
                 "Method should find all SCR entities with required course id");
     }
 
@@ -156,7 +159,7 @@ public class HibernateStudentCourseResultDAOTest {
                         student1.getId(), LocalDate.now());
 
         // Testing
-        Assertions.assertTrue(scrFromDB.size() == 1 && scrFromDB.contains(scr1_1),
+        Assertions.assertTrue(scrFromDB.size() == 1 && scrFromDB.contains(scrSt1EndedCrs),
                 "Should return SCR entities with given student id and course ended before given date");
     }
 

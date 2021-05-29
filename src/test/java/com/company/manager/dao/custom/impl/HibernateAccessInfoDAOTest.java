@@ -1,6 +1,7 @@
 package com.company.manager.dao.custom.impl;
 
 import com.company.manager.dao.custom.AccessInfoDAO;
+import com.company.manager.domain.course.Course;
 import com.company.manager.domain.user.AccessInfo;
 import com.company.manager.util.HibernateUtilForTest;
 import org.hibernate.SessionFactory;
@@ -10,39 +11,43 @@ import java.util.Optional;
 
 public class HibernateAccessInfoDAOTest {
 
-    private final SessionFactory sessionFactory =
-            HibernateUtilForTest.getSessionFactory();
+    private static SessionFactory sessionFactory;
+
+    // DAOs
+    private static AccessInfoDAO accessInfDAO;
 
     // Entities for tests
     private AccessInfo accessInf;
 
-    // DAOs
-    private AccessInfoDAO accessInfDAO;
-
-    // Init entities
-    {
-        accessInf = AccessInfo.builder()
-                .email("email").passwordHash("password".hashCode())
-                .build();
-    }
-
-    // Init DAOs
-    {
+    private static void initDAOs() {
         accessInfDAO = new HibernateAccessInfoDAO(sessionFactory);
     }
 
     @BeforeAll
     public static void prepareForTest() {
         HibernateUtilForTest.clearDBTables();
+        sessionFactory = HibernateUtilForTest.getSessionFactory();
+        initDAOs();
     }
 
-    @BeforeEach
-    public void saveEntities() {
+    private void initEntities() {
+        accessInf = AccessInfo.builder()
+                .email("email").passwordHash("password".hashCode())
+                .build();
+    }
+
+    private void saveEntities() {
         accessInfDAO.save(accessInf);
     }
 
+    @BeforeEach
+    public void prepareBeforeEachTest() {
+        initEntities();
+        saveEntities();
+    }
+
     @AfterEach
-    public void clearAfterTest() {
+    public void clearAfterEachTest() {
         HibernateUtilForTest.clearDBTables();
     }
 

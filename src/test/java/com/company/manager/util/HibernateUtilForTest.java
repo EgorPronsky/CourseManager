@@ -26,9 +26,9 @@ public class HibernateUtilForTest {
             try (Session session = sessionFactory.openSession()) {
                 tr = session.beginTransaction();
                 session.createQuery("DELETE FROM StudentCourseResult").executeUpdate();
+                session.createQuery("DELETE FROM Course").executeUpdate();
                 session.createQuery("DELETE FROM User").executeUpdate();
                 session.createQuery("DELETE FROM AccessInfo ").executeUpdate();
-                session.createQuery("DELETE FROM Course").executeUpdate();
                 tr.commit();
             } catch (PersistenceException e) {
                 e.printStackTrace();
