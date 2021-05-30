@@ -21,7 +21,7 @@ public class SignInFilter implements Filter {
         HttpServletResponse httpResp = (HttpServletResponse)resp;
 
         if (httpReq.getSession(false) != null) {
-            log.debug("Log out before sign in");
+            log.debug("User trying to sign in, without logging out");
             httpResp.sendRedirect(String.format("/%s/sign-in-declined", APP_NAME));
         } else {
             chain.doFilter(req, resp);

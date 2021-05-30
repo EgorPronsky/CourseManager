@@ -56,7 +56,7 @@ public class LeaveCourseServlet extends HttpServlet {
                         .getAttribute(SESSION_CURRENT_USER_ID);
             }
 
-            log.debug("Getting current student by id from DB");
+            log.debug("Getting leaving student by id from DB");
             User currentStudent = UserServiceImpl.getService()
                     .getUserById(studentId);
 
@@ -64,7 +64,7 @@ public class LeaveCourseServlet extends HttpServlet {
             StudentCourseResult scrToLeave = StudentCourseResultConverter
                     .convertToStudentCourseResult(courseToLeaveOpt.get(), currentStudent, null);
 
-            log.debug("Deleting user from course");
+            log.debug("Deleting student from course");
             StudentCourseResultServiceImpl.getService()
                     .deleteStudentCourseResult(scrToLeave);
         }

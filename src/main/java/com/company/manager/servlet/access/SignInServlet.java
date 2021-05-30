@@ -16,7 +16,7 @@ import static com.company.manager.string_constans.UserAttrAndParamNames.*;
 public class SignInServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        log.debug("Receiving user id from request");
+        log.debug("Receiving user id");
         long userId = (Long)req.getAttribute(USER_ID_COOKIE_NAME);
 
         log.debug("Getting user by received id");
@@ -27,7 +27,7 @@ public class SignInServlet extends HttpServlet {
     }
 
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        log.debug("Receiving user from request");
+        log.debug("Receiving user");
         User user = (User) req.getAttribute(SIGN_IN_USER);
 
         log.debug("Setting attributes into session");

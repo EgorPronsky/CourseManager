@@ -52,7 +52,7 @@ public class SessionFilter implements Filter {
                 long userIdFromWebPage = Long.parseLong(userIdFromWebPageStr);
 
                 if (userIdFromSession != userIdFromWebPage) {
-                    log.debug("New user logged in, this page is no longer available, redirecting");
+                    log.debug("New user logged in, requested page is no longer available, redirecting");
                     httpResp.sendRedirect(String.format("/%s/new-user-logged-in", APP_NAME));
                 } else {
                     chain.doFilter(req, resp);

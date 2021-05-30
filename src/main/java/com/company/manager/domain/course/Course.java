@@ -31,10 +31,7 @@ public class Course {
     private User teacher;
 
     @Builder.Default
-    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "course", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     private final Set<StudentCourseResult> studentResults = new HashSet<>();
-
-
-
 
 }

@@ -3,6 +3,7 @@ package com.company.manager.domain.user;
 import com.company.manager.domain.archive.StudentCourseResult;
 import lombok.*;
 
+import org.hibernate.annotations.Cascade;
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
@@ -31,7 +32,8 @@ public class User {
     private AccessInfo accessInfo;
 
     @Builder.Default
-    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE, org.hibernate.annotations.CascadeType.REMOVE})
+    @OneToMany(mappedBy = "student", fetch = FetchType.LAZY)
     private final Set<StudentCourseResult> courseResults = new HashSet<>();
 
 }

@@ -55,11 +55,6 @@
                             <hr/>
                             <center><h1>No courses available right now</h1></center>
                             <hr/>
-                            <%-- Back to main menu button --%>
-                            <hr/>
-                            <form action="${pageContext.request.contextPath}/main-menu" method="get">
-                                <input class="btn btn-lg btn-outline-success btn-block" type="submit" value="Back to main menu">
-                            </form>
                         </c:when>
 
                         <c:otherwise>

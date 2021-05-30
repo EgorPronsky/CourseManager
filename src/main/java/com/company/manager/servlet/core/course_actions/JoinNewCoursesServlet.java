@@ -53,6 +53,6 @@ public class JoinNewCoursesServlet extends HttpServlet {
             UserServiceImpl.getService().updateUser(currentStudent);
         }
 
-        response.sendRedirect(String.format("/%s/main-menu/select-courses", APP_NAME));
+        response.sendRedirect(String.format("/%s/main-menu", APP_NAME));
     }
 }

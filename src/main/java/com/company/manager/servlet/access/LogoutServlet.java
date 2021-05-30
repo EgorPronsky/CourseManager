@@ -16,7 +16,7 @@ import static com.company.manager.string_constans.UserAttrAndParamNames.*;
 public class LogoutServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        log.debug("Logout...");
+        log.debug("User logging out...");
 
         // Invalidating session
         req.getSession().invalidate();
