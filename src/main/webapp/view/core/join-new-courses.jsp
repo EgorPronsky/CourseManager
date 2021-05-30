@@ -8,16 +8,20 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 
-<%-- Prevent caching --%>
-<%
-    response.setHeader("Pragma", "No-cache");
-    response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
-    response.setDateHeader("Expires", -1);
-%>
-
 <html>
 <head>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <script>
+        window.addEventListener( "pageshow", function ( event ) {
+            var historyTraversal = event.persisted ||
+                ( typeof window.performance != "undefined" &&
+                    window.performance.navigation.type === 2 );
+            if ( historyTraversal ) {
+                // Handle page restore.
+                window.location.reload();
+            }
+        });
+    </script>
     <style>
         .tableFixHead { overflow: auto; max-height: 500px; }
         .tableFixHead thead th { position: sticky; top: 0; z-index: 1; }
