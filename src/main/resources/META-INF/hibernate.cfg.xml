@@ -7,7 +7,7 @@
         <property name="connection.url">jdbc:postgresql://localhost/postgres</property> <!-- DB Name -->
         <property name="connection.driver_class">org.postgresql.Driver</property> <!-- DB Driver -->
         <property name="connection.username">postgres</property> <!-- DB User -->
-        <property name="connection.password">roooooot</property> <!-- DB Password -->
+        <property name="connection.password">12345</property> <!-- DB Password -->
 
         <property name="dialect">org.hibernate.dialect.PostgreSQL10Dialect</property> <!-- DB Dialect -->
         <property name="hbm2ddl.auto">update</property> <!-- create / create-drop / update -->
